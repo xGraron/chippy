@@ -100,7 +100,7 @@ async function main(interaction, bet, userStats, UID)
 		points 		= await player_draw(UID, hand, points, hand_em)
 		hand_str 	= hand_em.join("")
 
-		embed.setDescription(`Your hand: **${hand_str}** *(${points}p)* \nDealer's hand: **${dealer_hand[0]}, ??**`)
+		embed.setDescription(`Your hand: **${hand_str}** *(${points}p)* \nDealer's hand: **${dealer_hand_str.split('>')[0]}>, ??**`)
 
 		try 	{ await interaction.editReply({ embeds: [embed] }) }
 		catch 	{ dev.log("Failed to respond \n GameID: 4, Error: 2", 2) }
@@ -232,6 +232,11 @@ async function dealer_draw(UID, dealer_hand, dealer_points, dealer_hand_em)
 	dealer_hand.push(drawn.card)
 	dealer_hand_em.push(drawn.emoji)
 
+	//this line shouldnt matter
+	//dealer point need to be equal to whatever "calculate" function returns
+	//according to what I see, thats the case
+	//so setting dealer points in here has no impact since it seems
+	//a) wrong, b) to get overwritten anyway?
 	dealer_points 	+= values[drawn.card] || drawn.card
 
 	return calculate(dealer_hand)
