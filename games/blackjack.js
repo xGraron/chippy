@@ -237,7 +237,7 @@ async function dealer_draw(UID, dealer_hand, dealer_points, dealer_hand_em)
 	//according to what I see, thats the case
 	//so setting dealer points in here has no impact since it seems
 	//a) wrong, b) to get overwritten anyway?
-	dealer_points 	+= values[drawn.card] || drawn.card
+	//dealer_points 	+= values[drawn.card] || drawn.card
 
 	return calculate(dealer_hand)
 }
