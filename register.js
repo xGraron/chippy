@@ -5,7 +5,6 @@ const { REST, Routes } 							= require("discord.js")
 const fs 										= require("node:fs")
 const path 										= require("node:path")
 
-
 const cmds 			= []
 const cmdPath		= path.join(__dirname, "commands")
 const cmdFiles		= fs.readdirSync(cmdPath).filter((file) => file.endsWith(".js"))

@@ -1,55 +1,30 @@
-const { SlashCommandBuilder, EmbedBuilder, } = require("discord.js")    
-const { Random }                             = require("random-js")
-const fs    = require('fs')
-const path  = require('path')
-const xh    = require('../handlers/xpHandler.js')
-const eh    = require('../handlers/errorHandler.js')    
-const dh    = require('../handlers/dataHandler.js')
+const { SlashCommandBuilder, EmbedBuilder, } = require("discord.js")
 const dev   = require('../handlers/dev.js')
 
-const filePath      = path.join("database/", 'beg.txt')   
-const fileContent   = fs.readFileSync(filePath, 'utf-8')   
-const lines         = fileContent.split('\n')  
-const array         = []
-
-for(i = 0; i < lines.length; i += 2)
+module.exports =
 {
-    const first     = lines[i]
-    const second    = lines[i + 1] 
-
-    array.push(`${first}\n${second}`)
-}
-
-module.exports = {
     data: new SlashCommandBuilder()
-        .setName("beg")
-        .setDescription("Broke? Beg for money"),
+    .setName("beg")
+    .setDescription("Broke? Beg for money"),
                     
     async execute(interaction, userStats)
     {
         await interaction.deferReply()
 
-        if((Date.now() - userStats.lastbeg) < 300000) return eh.error(interaction, "Give it a bit until you can beg again");
+        const button = new ButtonBuilder()
+        .setLabel("Take the survey!")
+		.setURL("https://forms.gle/PNerFHLpQb7ha9NE9")
+        .setStyle(ButtonStyle.Link)
 
-        const random    = new Random()
-        const lucky     = random.integer(1, 10)
-        const r         = random.integer(0, array.length - 1)
-        const response  = array[r]
-
-        let n               = random.integer(10, 100)
-        if(lucky === 7) n   = n*2;
-        
-        userStats.chips     = userStats.chips + n
-        userStats.lastbeg   = Date.now()
+        const row = new ActionRowBuilder().addComponents(button)
 
         const embed = new EmbedBuilder()
-        .setTitle(`Brokey...`)
-        .setDescription(`${response} \n-# Gained **${n}** Chips`)
+        .setTitle(`${interaction.user.displayName}, hey there!`)
+        .setDescription(`Chippy has reached EoL a while ago, but I am currently **planning to revive it!** \n
+        However, for that to happen **I need your help.** \n`)
+        .setFooter({ text: `Please take two minutes to fill out this survey!` })
 
-        await xh.leveling(userStats, 5)
-        await dh.userSave(userStats)
-
-        try     { await interaction.editReply({ embeds: [embed] }) }
+        try     { await interaction.editReply({ embeds: [embed], components: [row] }) }
         catch   { dev.log("Failed to respond \n cmdID: 3, Error: 1", 2) }
     }
 }
