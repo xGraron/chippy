@@ -5,6 +5,7 @@ const dev        				= require('../handlers/dev.js')
 const random	= new Random()
 const statuses 	= 
 [
+	{ name: "you go take the survey!"					type: ActivityType.Watching},
 	{ name: "Ranked gambling.", 						type: ActivityType.Custom },
 	{ name: "Never give up.", 							type: ActivityType.Custom },
 	{ name: "Not rigged, probably...", 					type: ActivityType.Custom },
@@ -51,9 +52,9 @@ module.exports =
 	        { 
 	        	activities: 
 	        	[
-	        		status
+	        		statuses[0]
 	        	], 
-	        	status: 'dnd' 
+	        	status: 'online'
 	    	});
 
 	    	dev.log("Status: " + s_log, 1)
