@@ -5,7 +5,7 @@ const dev        				= require('../handlers/dev.js')
 const random	= new Random()
 const statuses 	= 
 [
-	{ name: "you go take the survey!",					type: ActivityType.Watching},
+	{ name: "work starting",					type: ActivityType.Watching},
 ]
 
 const types		=
