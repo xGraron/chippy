@@ -1,4 +1,4 @@
-const { EmbedBuilder, ActionRowBuilder } 	= require("discord.js")
+const { SlashCommandBuilder, EmbedBuilder, MessageAttachment, ButtonBuilder, ButtonStyle, ActionRowBuilder } = require("discord.js")
 const jsonfile  = require("jsonfile")
 const fs 		= require("fs")
 const dev       = require('../handlers/dev.js')
@@ -18,7 +18,7 @@ async function respond(interaction, logIDs)
     .setFooter({ text: `Please keep in mind that this will take time!` })
 
     try     { await interaction.editReply({ embeds: [embed] }) }
-    catch   { dev.log(`failed to respond \n cmdID: ${logIDs[0]}, Error: ${logIDs[1]}, 2)` }
+    catch   { dev.log(`failed to respond \n cmdID: ${logIDs[0]}, Error: ${logIDs[1]}, 2)`) }
 }
 
 module.exports =
