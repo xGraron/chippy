@@ -26,14 +26,13 @@ const multipliers =
 {
 	"Royal Flush": 		100,
 	"Straight Flush": 	20,
-	"Four Of A Kind": 	10,
-	"Full House": 		3,
-	"Flush":  			2,
-	"Straight":  		1,
-	"Three Of A Kind":  1,
-	"Two Pair": 		1,
+	"Four Of A Kind": 	15,
+	"Full House": 		10,
+	"Flush":  			8,
+	"Straight":  		5,
+	"Three Of A Kind":  3,
+	"Two Pair": 		2,
 	"Pair":             1,
-	"High Card": 		1,
 }
 
 async function main(interaction, bet, userStats, UID)
