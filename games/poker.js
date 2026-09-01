@@ -38,7 +38,7 @@ const multipliers =
 
 async function main(interaction, bet, userStats, UID)
 {
-	if(userStats.chips < bet * 2) 
+	if(userStats.chips < bet * 2)
 	{
 		userStats.chips 		+= bet
 		userStats.active_game 	= false
@@ -163,7 +163,7 @@ async function main(interaction, bet, userStats, UID)
 
 			const final = await wincon(interaction, player_cards, dealer_cards)
 
-			if(final.won === 0)
+			if(final.won === 0) //lost, dealer had better hand
 			{
 				embed 	
 				.setColor('#e80400')
@@ -173,7 +173,7 @@ async function main(interaction, bet, userStats, UID)
 
 				await xh.achievements(userStats, userStats.chips + (bet * 3), false, 8, 0)
 			}
-			if(final.won === 1)
+			if(final.won === 1) //won
 			{
 				reward = (multipliers[final.hands[0]] * bet) + (bet * 2)
 
@@ -186,7 +186,7 @@ async function main(interaction, bet, userStats, UID)
 				await xh.leveling(userStats, xp_rew)
 				await xh.achievements(userStats, userStats.chips - reward, true, 8, reward, bet, final.hands[0])
 			}
-			if(final.won === 2)
+			if(final.won === 2) //tied
 			{
 				embed 	
 				.setColor('#f58916')
@@ -197,22 +197,19 @@ async function main(interaction, bet, userStats, UID)
 				userStats.chips += (bet * 3)
 				await xh.achievements(userStats, userStats.chips, false, 8, 0)
 			}
-			if(final.won === 3)
+			if(final.won === 3) //lost, didnt qualify
 			{
-				reward = multipliers[final.hands[0]] * bet
-
 				embed 	
-				.setColor('#1aa32a')
-				.setTitle(`Dealer didn't qualify!`)
-				.setDescription(`Dealer: ${dealer_hand_str} *(${final.hands[1]})*, You: ${hand_str} *(${final.hands[0]})* \n Community cards: ${community_hand_str} \n\n-# *You won ${reward} Chips*`)
-				.setFooter({ text: `Lucky...` });
+				.setColor('#e80400')
+				.setTitle(`You didn't qualify!`)
+				.setDescription(`Dealer: ${dealer_hand_str} *(${final.hands[1]})*, You: ${hand_str} *(${final.hands[0]})* \n Community cards: ${community_hand_str} \n\n-# *You've lost ${bet * 3} Chips*`)
+				.setFooter({ text: `Unlucky...` });
 
-				userStats.chips += reward + (bet * 3)
-				await xh.achievements(userStats, userStats.chips - reward, true, 8, reward, bet, final.hands[0])
+				await xh.achievements(userStats, userStats.chips + (bet * 3), false, 8, 0)
 			}
 		}
 
-		userStats.active_game 	= false
+		userStats.active_game = false
 
 		await dh.userSave(UID, userStats)
 		await ch.remove(UID)
@@ -378,7 +375,7 @@ async function wincon(interaction, player_cards, dealer_cards)
 	const playerFinal = await calculate(interaction, player_cards)
 	const dealerFinal = await calculate(interaction, dealer_cards)
 
-	const qualified = qualifier(dealerFinal)
+	const qualified = qualifier(playerFinal)
 
 	if(!qualified)
 	{
@@ -404,16 +401,10 @@ async function wincon(interaction, player_cards, dealer_cards)
 	return { won: 2, hands: [playerFinal.hand, dealerFinal.hand] }
 }
 
-function qualifier(dealerFinal) 
+function qualifier(final)
 {
-	if (dealerFinal.rank > 2) return true;
-
-	if (dealerFinal.hand === "Pair")
-	{
-		const pairVal = dealerFinal.kickers[0]
-		if(pairVal >= 4)	return true;
-		else  				return false;
-	}
+	if (final.rank === 1) 	return false;
+	else					return true;
 }
 
 module.exports =
