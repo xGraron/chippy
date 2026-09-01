@@ -37,16 +37,6 @@ const multipliers =
 
 async function main(interaction, bet, userStats, UID)
 {
-	if(userStats.chips < bet * 2)
-	{
-		userStats.chips 		+= bet
-		userStats.active_game 	= false
-
-		dh.userSave(UID, userStats)
-		return eh.error(interaction, "You need at least 3x your bet to play this game! \n-# Example: You bet 50, you need 150, since calling requires you to put in double your bet");
-	}
-
-
 	const deck 		= await ch.create(UID)
 	const xp_rew	= Math.floor(bet / 7)
 
@@ -138,15 +128,17 @@ async function main(interaction, bet, userStats, UID)
 			.setDescription(`You didn't react in time \n\n-# *You've lost ${bet} Chips*`)
 			.setFooter({ text: `The house gives you thirty seconds` });
 
-			await xh.achievements(userStats, userStats.chips + 50, false, 8, 0)
+			await xh.achievements(userStats, userStats.chips + bet, false, 8, 0)
 		}
 		else if(folded)
 		{
 			embed 	
 			.setColor('#e80400')
-			.setTitle(`You lost!`)
-			.setDescription(`You folded, probably for the better.. \n\n-# *You've lost ${bet} Chips*`)
+			.setTitle(`You folded!`)
+			.setDescription(`Probably for the better.. \n\n-# *You've lost ${bet / 2} Chips*`)
 			.setFooter({ text: `Calling isn't always the best move!` });
+
+			userStats.chips += bet / 2
 
 			await xh.achievements(userStats, userStats.chips + bet, false, 8, 0)
 		}
@@ -154,8 +146,6 @@ async function main(interaction, bet, userStats, UID)
 		{
 			try 	{ initial = await interaction.editReply({ embeds: [embed], components: [row] }) }
 			catch 	{ dev.log("Failed to respond \n GameID: 8, Error: 2", 2) }
-
-			userStats.chips -= bet * 2
 
 			const player_cards = [...hand, ...community_hand]
 			const dealer_cards = [...dealer_hand, ...community_hand]
