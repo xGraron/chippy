@@ -22,3 +22,6 @@ Command ID's
 9. Russian Roulette
 10. Feedback
 11. Vote
+
+handler usage:
+xh.achievements(userStats, pre, won, gameID, reward, bet, additional)
