@@ -102,8 +102,7 @@ function achievements(userStats, pre, won, gameID, reward, bet, additional)
 	//503
 	if(gameID === 503 && additional === true && !userStats.achievements.includes("503"))			userStats.achievements.push("503")
 
-	//801-810
-	if(gameID === 8 && additional === "High Card" 		&& !userStats.achievements.includes("801"))		userStats.achievements.push("801")
+	//802-810
 	if(gameID === 8 && additional === "Pair" 			&& !userStats.achievements.includes("802"))		userStats.achievements.push("802")
 	if(gameID === 8 && additional === "Two Pair" 		&& !userStats.achievements.includes("803"))		userStats.achievements.push("803")
 	if(gameID === 8 && additional === "Three Of A Kind" && !userStats.achievements.includes("804"))		userStats.achievements.push("804")
