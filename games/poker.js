@@ -135,10 +135,10 @@ async function main(interaction, bet, userStats, UID)
 			embed 	
 			.setColor('#e80400')
 			.setTitle(`You folded!`)
-			.setDescription(`Probably for the better.. \n\n-# *You've lost ${bet / 2} Chips*`)
+			.setDescription(`Probably for the better.. \n\n-# *You've lost ${Math.floor(bet / 2)} Chips*`)
 			.setFooter({ text: `Calling isn't always the best move!` });
 
-			userStats.chips += bet / 2
+			userStats.chips += Math.floor(bet / 2)
 
 			await xh.achievements(userStats, userStats.chips + bet, false, 8, 0)
 		}
