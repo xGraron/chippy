@@ -70,7 +70,7 @@ const titles =
     501: { name: "Steroids",                       description: "Win when betting on horse" },
     502: { name: "Glue Factory",                   description: "Bet over 1.000 Chips on a horse & lose" },
     503: { name: "My Brain Is Dead I Fear",        description: "Win when betting on horse 'Giggle' (yellow)" },
-    701: { name: "Leave My Gold Alone",            description: "Play 10 games of 'Slots'" },
+    701: { name: "TO BE RENAMED",            description: "Play 10 games of 'Slots'" },
     801: { name: "Amateur",                        description: "In 'Poker', win with 'High Card'"},
     802: { name: "Pair",                           description: "In 'Poker', win with 'Pair'"},
     803: { name: "Two Pair",                       description: "In 'Poker', win with 'Two Pair'"},
