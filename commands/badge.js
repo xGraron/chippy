@@ -21,9 +21,6 @@ const emojis =
     202: "<:202:1391414199997169805>",
     203: "<:203:1391414219764924547>",
     204: "<:204:1391793652178882692>",
-    301: "<:301:1391483399373324288>",
-    302: "<:302:1391483409267818588>",
-    303: "<:303:1391483417115361415>",
     401: "<:401:1395373191811174441>",
     402: "<:402:1395373202091282443>",
     403: "<:403:1395373209641291796>",
@@ -31,7 +28,6 @@ const emojis =
     501: "<:501:1391483450153767162>",
     502: "<:502:1391793662287155302>",
     503: "<:503:1391793672982499378>",
-    601: "<:601:1391483456680235139>",
     701: "<:701:1391487659465248849>",
     801: "<:801:1397206591375147182>",
     802: "<:802:1397206600631980064>",
@@ -67,9 +63,6 @@ const titles =
     202: { name: "My Head Is Spinning 🥈",      description: "Play 25 games of 'Roulette'" },
     203: { name: "My Head Is Spinning 🥇",      description: "Play 100 games of 'Roulette'" },
     204: { name: "Go Big Or Go Home",               description: "Put in the maximum bet & lose in 'Roulette'" },
-    301: { name: "My Friends Love Me 🥉",       description: "Play 5 games of 'Seventeen + Four'" },
-    302: { name: "My Friends Love Me 🥈",       description: "Play 25 games of 'Seventeen + Four'" },
-    303: { name: "My Friends Love Me 🥇",       description: "Play 100 games of 'Seventeen + Four'" },
     401: { name: "Basic Strategy, Trust Me 🥉", description: "Play 5 games of 'Blackjack'" },
     402: { name: "Basic Strategy, Trust Me 🥈", description: "Play 25 games of 'Blackjack'" },
     403: { name: "Basic Strategy, Trust Me 🥇", description: "Play 100 games of 'Blackjack'" },
@@ -77,7 +70,6 @@ const titles =
     501: { name: "Steroids",                       description: "Win when betting on horse" },
     502: { name: "Glue Factory",                   description: "Bet over 1.000 Chips on a horse & lose" },
     503: { name: "My Brain Is Dead I Fear",        description: "Win when betting on horse 'Giggle' (yellow)" },
-    601: { name: "Max Vertrucken",                 description: "Play 10 games of 'Racer'" },
     701: { name: "Leave My Gold Alone",            description: "Play 10 games of 'Slots'" },
     801: { name: "Amateur",                        description: "In 'Poker', win with 'High Card'"},
     802: { name: "Pair",                           description: "In 'Poker', win with 'Pair'"},
@@ -94,7 +86,7 @@ const titles =
     903: { name: "In a hurry! 🥇",               description: "Play 100 games of 'Card Rush'" },
 }
 
-const publics = [ 11, 12, 13, 21, 22, 90, 101, 102, 103, 201, 202, 203, 301, 302, 303, 401, 402, 403, 501, 601, 701, 901, 902, 903 ]
+const publics = [ 11, 12, 13, 21, 22, 90, 101, 102, 103, 201, 202, 203, 401, 402, 403, 501, 701, 901, 902, 903 ]
 const secrets = [ 14, 15, 50, 69, 204, 404, 405, 502, 503, 801, 802, 803, 804, 805, 806, 807, 808, 809, 810 ]
 
 module.exports = 
