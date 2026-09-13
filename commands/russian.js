@@ -49,7 +49,7 @@ module.exports =
 			disable(interaction, embed, row, trigger)
 		}, 5000)
 
-		const pressed = await initial.createMessageComponentCollector({ time: 7_000 })
+		const pressed = await initial.createMessageComponentCollector({ time: 10_000 })
 
 		pressed.on('collect', async press =>
 		{
