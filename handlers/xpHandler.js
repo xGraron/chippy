@@ -79,9 +79,9 @@ function achievements(userStats, pre, won, gameID, reward, bet, additional)
 	}
 
 	//11-13, 69
-	if(userStats.chips >= 10000 && !userStats.achievements.includes("11"))							userStats.achievements.push("11")
-	if(userStats.chips >= 100000 && !userStats.achievements.includes("12"))							userStats.achievements.push("12")
-	if(userStats.chips >= 1000000 && !userStats.achievements.includes("13"))						userStats.achievements.push("13")
+	if(userStats.chips >= 1000 && !userStats.achievements.includes("11"))							userStats.achievements.push("11")
+	if(userStats.chips >= 10000 && !userStats.achievements.includes("12"))							userStats.achievements.push("12")
+	if(userStats.chips >= 100000 && !userStats.achievements.includes("13"))						userStats.achievements.push("13")
 	if(userStats.chips === 69420 && !userStats.achievements.includes("69"))							userStats.achievements.push("69")
 
 	//14

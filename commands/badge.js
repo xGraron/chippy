@@ -50,9 +50,9 @@ const emojis =
 
 const titles =
 {
-    11: { name: "Mr. Moneybags",                   description: "Have over 10.000 Chips" },
-    12: { name: "Scrooge McDuck",                  description: "Have over 100.000 Chips" },
-    13: { name: "One Chiptillion",                 description: "Have over 1.000.000 Chips" },
+    11: { name: "Mr. Moneybags",                    description: "Have over 1.000 Chips" },
+    12: { name: "Scrooge McDuck",                   description: "Have over 10.000 Chips" },
+    13: { name: "Big Bibi",                         description: "Have over 100.000 Chips" },
     14: { name: "Lose It All",                     description: "Lose all your money in a single bet" },
     21: { name: "Amateur Gambler",                 description: "Reach level 10"},
     22: { name: "Ranked Gambler",                  description: "Reach level 100"},
