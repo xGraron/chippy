@@ -37,7 +37,7 @@ module.exports =
         const embed = new EmbedBuilder()
         .setTitle(`Russian Roulette`)
         .setDescription("Six chambers, one bullet. Do you pull the trigger? \n *The cylinder is spinning..*")
-        .setThumbnail('https://cdn.discordapp.com/attachments/1242636042469642300/1402661726964416562/cylinder.gif?ex=6894ba07&is=68936887&hm=5fc48932e85b48811b78aec12388cea24e69ae99a8effcc071c1ee6a2ae22f23&')
+        .setThumbnail('https://cdn.discordapp.com/attachments/1242636042469642300/1548743758613586050/casino_chips.webp?ex=6aa82b86&is=6aa6da06&hm=8366a14342a2590869107754deda1775c118f4fb908678eeb4578219a9a2663f&')
 
         const row 	= new ActionRowBuilder().addComponents(trigger)
 
@@ -47,7 +47,7 @@ module.exports =
 	    setTimeout(() => 
 		{
 			disable(interaction, embed, row, trigger)
-		}, 5000)
+		}, 4250)
 
 		const pressed = await initial.createMessageComponentCollector({ time: 10_000 })
 
