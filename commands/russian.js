@@ -47,7 +47,7 @@ module.exports =
 	    setTimeout(() => 
 		{
 			disable(interaction, embed, row, trigger)
-		}, 2000)
+		}, 5000)
 
 		const pressed = await initial.createMessageComponentCollector({ time: 7_000 })
 
