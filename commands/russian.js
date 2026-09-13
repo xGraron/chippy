@@ -55,9 +55,9 @@ module.exports =
 		{
 			press.deferUpdate()
 
-			const n = await random.integer(1, 6)
+			const n = await random.integer(1, 5)
 
-			if(n === 6) dead = true;
+			if(n === 5) dead = true;
 
 			pulled = true
 
