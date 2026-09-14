@@ -19,17 +19,6 @@ const horses =
     { name: "🟫 Dutch", value: "brown"}
 ]
 
-const races =
-[
-    "https://cdn.discordapp.com/attachments/1242636042469642300/1387158274624720937/race_7.gif?ex=685c5350&is=685b01d0&hm=c14a41ca53870b76203d69c696b38a8995a870ef4d0894e3e3561604df4f7738&",
-    "https://cdn.discordapp.com/attachments/1242636042469642300/1387158275044413693/race_6.gif?ex=685c5350&is=685b01d0&hm=a40911d177ef93b5ee282a6435d50fe4f2eb8f1bd2989fdb6f172ae9cb9850b4&",
-    "https://cdn.discordapp.com/attachments/1242636042469642300/1387158275396473005/race_5.gif?ex=685c5351&is=685b01d1&hm=30cd545a94c2278da2a8d3cbc279fe39debdeb63673a8d0f630932eaec02682f&",
-    "https://cdn.discordapp.com/attachments/1242636042469642300/1387158275736473621/race_4.gif?ex=685c5351&is=685b01d1&hm=8b3d713476db3a5846fba33def69322ff0b20c7efdaa0c7eab9a64b225dbb9b5&",
-    "https://cdn.discordapp.com/attachments/1242636042469642300/1387158276059430923/race_3.gif?ex=685c5351&is=685b01d1&hm=6bdeca4636f538d19c9e3c3972e83e938d73df18df605692c0e3817592deb4c2&",
-    "https://cdn.discordapp.com/attachments/1242636042469642300/1387158276428402850/race_2.gif?ex=685c5351&is=685b01d1&hm=d80784fa019dec4dd30e67d39de2761b2b18165a3ea116af9b8c5741e524969c&",
-    "https://cdn.discordapp.com/attachments/1242636042469642300/1387158276780589198/race_1.gif?ex=685c5351&is=685b01d1&hm=b50978c20d85a6e9fe21bab420c8ddff6b2e633b15d1d7556ba40bc7d7fd9898&"
-]
-
 async function main(interaction, bet, userStats, UID, chosen)
 {
     const close     = Math.floor(Date.now() / 1000) + 13
@@ -106,7 +95,7 @@ async function main(interaction, bet, userStats, UID, chosen)
     selected.on('end', async collected =>
     {
         const r         = random.integer(0, 6)
-        embed.setDescription(`*The race is on!* \n**Players:** \n${p_names.join(", ")} \n\nBet: ${bet}`).setThumbnail(races[r])
+        embed.setDescription(`*The race is on!* \n**Players:** \n${p_names.join(", ")} \n\nBet: ${bet}`)
 
         try     { await interaction.editReply({ embeds: [embed] }) }
         catch   { dev.log("Failed to respond \n\n GameID: 5, Error: 4", 2) }
