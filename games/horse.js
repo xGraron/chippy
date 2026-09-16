@@ -45,13 +45,13 @@ async function main(interaction, bet, userStats, UID, chosen)
     const embed = new EmbedBuilder()
     .setColor("#259dd9")
     .setTitle("Horse race")
-    .setThumbnail("https://cdn.discordapp.com/attachments/1242636042469642300/1387158277120589964/horse_start.png?ex=685c5351&is=685b01d1&hm=a9f03f1900ae4945bc6c5efa25b763aacadc81fa60b50ac68b8992f6ae5c1dd9&")
+    .setThumbnail("https://cdn.discordapp.com/attachments/1381707752409399346/1549853866944634961/horses.webp?ex=6aac3564&is=6aaae3e4&hm=c9456cf7e651854f6fd9fe36a3004b01bab3827bc7047b3979a9da149dd684fd&")
     .setDescription(`*The horses are getting into starting position* \n**Players:** \n${p_names.join(", ")} \n\nBet: ${bet} *(close <t:${close}:R>)*`)
 
     try     { initial = await interaction.editReply({ embeds: [embed], components: [row] }) }
     catch   { dev.log("Failed to respond \n GameID: 5, Error: 1", 2) }
 
-    const selected  = await initial.createMessageComponentCollector({ time: 15_000 })
+    const selected  = await initial.createMessageComponentCollector({ time: 14_000 })
 
     setTimeout(() => 
     {
