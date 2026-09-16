@@ -96,6 +96,7 @@ async function main(interaction, bet, userStats, UID, chosen)
     {
         const r         = random.integer(0, 6)
         embed.setDescription(`*The race is on!* \n**Players:** \n${p_names.join(", ")} \n\nBet: ${bet}`)
+        embed.setThumbnail("https://cdn.discordapp.com/attachments/1381707752409399346/1549842026382622881/loading.webp?ex=6aac2a5d&is=6aaad8dd&hm=c62c4992e534f03e23f0abd9ee83dcc82cbe04dcced390bb0dcc207d59231d7a&")
 
         try     { await interaction.editReply({ embeds: [embed] }) }
         catch   { dev.log("Failed to respond \n\n GameID: 5, Error: 4", 2) }

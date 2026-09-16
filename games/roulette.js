@@ -58,6 +58,7 @@ async function main(interaction, bet, userStats, UID, chosen)
 	.setColor("#259dd9")
 	.setTitle("Roulette")
 	.setDescription(`*The wheel is spinning* \n**Players:** \n${p_names.join(", ")} \n\nBet: ${bet} *(close <t:${close}:R>)*`)
+	.setThumbnail("https://cdn.discordapp.com/attachments/1381707752409399346/1549842026382622881/loading.webp?ex=6aac2a5d&is=6aaad8dd&hm=c62c4992e534f03e23f0abd9ee83dcc82cbe04dcced390bb0dcc207d59231d7a&")
 
 	try 	{ initial = await interaction.editReply({ embeds: [embed], components: [row] }) }
 	catch 	{ dev.log("Failed to respond \n GameID: 2, Error: 1", 2) }
