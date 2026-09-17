@@ -37,7 +37,7 @@ module.exports =
         const embed = new EmbedBuilder()
         .setTitle(`Russian Roulette`)
         .setDescription("Six chambers, one bullet. Do you pull the trigger? \n *The cylinder is spinning..*")
-        .setThumbnail('https://cdn.discordapp.com/attachments/1242636042469642300/1548743758613586050/casino_chips.webp?ex=6aa82b86&is=6aa6da06&hm=8366a14342a2590869107754deda1775c118f4fb908678eeb4578219a9a2663f&')
+        .setThumbnail('https://xgraron.github.io/chippy_site/resources/chippy_assets/cylinder_spin.webp')
 
         const row 	= new ActionRowBuilder().addComponents(trigger)
 

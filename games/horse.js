@@ -45,7 +45,7 @@ async function main(interaction, bet, userStats, UID, chosen)
     const embed = new EmbedBuilder()
     .setColor("#259dd9")
     .setTitle("Horse race")
-    .setThumbnail("https://cdn.discordapp.com/attachments/1381707752409399346/1549853866944634961/horses.webp?ex=6aac3564&is=6aaae3e4&hm=c9456cf7e651854f6fd9fe36a3004b01bab3827bc7047b3979a9da149dd684fd&")
+    .setThumbnail("https://xgraron.github.io/chippy_site/resources/chippy_assets/horses.webp")
     .setDescription(`*The horses are getting into starting position* \n**Players:** \n${p_names.join(", ")} \n\nBet: ${bet} *(close <t:${close}:R>)*`)
 
     try     { initial = await interaction.editReply({ embeds: [embed], components: [row] }) }
@@ -96,7 +96,7 @@ async function main(interaction, bet, userStats, UID, chosen)
     {
         const r         = random.integer(0, 6)
         embed.setDescription(`*The race is on!* \n**Players:** \n${p_names.join(", ")} \n\nBet: ${bet}`)
-        embed.setThumbnail("https://cdn.discordapp.com/attachments/1381707752409399346/1549842026382622881/loading.webp?ex=6aac2a5d&is=6aaad8dd&hm=c62c4992e534f03e23f0abd9ee83dcc82cbe04dcced390bb0dcc207d59231d7a&")
+        embed.setThumbnail("https://xgraron.github.io/chippy_site/resources/chippy_assets/loading.webp")
 
         try     { await interaction.editReply({ embeds: [embed] }) }
         catch   { dev.log("Failed to respond \n\n GameID: 5, Error: 4", 2) }
