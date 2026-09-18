@@ -70,8 +70,7 @@ const titles =
     501: { name: "Steroids",                       description: "Win when betting on horse" },
     502: { name: "Glue Factory",                   description: "Bet over 1.000 Chips on a horse & lose" },
     503: { name: "My Brain Is Dead I Fear",        description: "Win when betting on horse 'Giggle' (yellow)" },
-    701: { name: "TO BE RENAMED",            description: "Play 10 games of 'Slots'" },
-    801: { name: "Amateur",                        description: "In 'Poker', win with 'High Card'"},
+    701: { name: "Retirement Defund",            description: "Play 10 games of 'Slots'" },
     802: { name: "Pair",                           description: "In 'Poker', win with 'Pair'"},
     803: { name: "Two Pair",                       description: "In 'Poker', win with 'Two Pair'"},
     804: { name: "Three Of A Kind",                description: "In 'Poker', win with 'Three Of A Kind'"},
@@ -87,7 +86,7 @@ const titles =
 }
 
 const publics = [ 11, 12, 13, 21, 22, 90, 101, 102, 103, 201, 202, 203, 401, 402, 403, 501, 701, 901, 902, 903 ]
-const secrets = [ 14, 15, 50, 69, 204, 404, 405, 502, 503, 801, 802, 803, 804, 805, 806, 807, 808, 809, 810 ]
+const secrets = [ 14, 15, 50, 69, 204, 404, 405, 502, 503, 802, 803, 804, 805, 806, 807, 808, 809, 810 ]
 
 module.exports = 
 {
