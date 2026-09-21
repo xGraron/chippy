@@ -45,7 +45,7 @@ module.exports =
                    lastbeg: 0,
                    inventory: {},
                    games: {},
-                   achievements: [],
+                   achievements: [16],
                    custom: {},
             }
 

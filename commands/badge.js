@@ -49,10 +49,11 @@ const titles =
     11: { name: "Mr. Moneybags",                    description: "Have over 1.000 Chips" },
     12: { name: "Scrooge McDuck",                   description: "Have over 10.000 Chips" },
     13: { name: "Big Bibi",                         description: "Have over 100.000 Chips" },
+    15: { name: "Menace To Society",               description: "Use /crime & succeed" },
     14: { name: "Lose It All",                     description: "Lose all your money in a single bet" },
+    16: { name: "I Dont Want To Be Here Anymore",   description: "Reset your progress using /reset"},
     21: { name: "Amateur Gambler",                 description: "Reach level 10"},
     22: { name: "Ranked Gambler",                  description: "Reach level 100"},
-    15: { name: "Menace To Society",               description: "Use /crime & succeed" },
     50: { name: "Five Hundred Cigarettes",         description: "Buy 500 Cigarettes at once" },
     69: { name: "Funny Number",                    description: "Have exactly 69.420 Chips" },
     90: { name: "Final Solution",                  description: "Try 'Russian Roulette' and lose"},
@@ -86,7 +87,7 @@ const titles =
 }
 
 const publics = [ 11, 12, 13, 21, 22, 90, 101, 102, 103, 201, 202, 203, 401, 402, 403, 501, 701, 901, 902, 903 ]
-const secrets = [ 14, 15, 50, 69, 204, 404, 405, 502, 503, 802, 803, 804, 805, 806, 807, 808, 809, 810 ]
+const secrets = [ 14, 15, 16, 50, 69, 204, 404, 405, 502, 503, 802, 803, 804, 805, 806, 807, 808, 809, 810 ]
 
 module.exports = 
 {
