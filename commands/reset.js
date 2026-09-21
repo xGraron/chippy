@@ -11,27 +11,62 @@ module.exports =
 
     async execute(interaction, userStats)
     {
-        await interaction.deferReply()
+        await interaction.deferReply({ ephemeral: true })
 
-        const trigger   = new ButtonBuilder()
+        const button   = new ButtonBuilder()
         .setCustomId("b_reset")
         .setLabel("RESET PROGRESS")
         .setStyle(ButtonStyle.Danger)
         const embed     = new EmbedBuilder()
         .setTitle(`ATTENTION`)
         .setColor("#1aa32a")
-        .setDescription(`THIS IS IRREVERSIBLE. \n Clicking the button below will delete your *entire* progress*.`)
-        const row       = new ActionRowBuilder().addComponents(trigger)
+        .setDescription(`THIS IS IRREVERSIBLE. \n Clicking the button below will delete your *entire* progress*!`)
+        const row       = new ActionRowBuilder().addComponents(button)
 
+        let initial;
 
-        try     { await interaction.editReply({ embeds: [embed], components: [row] }) }
+        try     { initial = await interaction.editReply({ embeds: [embed], components: [row] }) }
         catch   { dev.log("Failed to respond \n cmdID: TEMP, Error: 1", 2) }
 
-        setTimeout(() =>
-        {
-            dev.log("I love balkl")
-        }, 5000)
+        const pressed = await initial.createMessageComponentCollector({ time: 10_000 })
 
-        //const pressed = await initial.createMessageComponentCollector({ time: 10_000 })
+        pressed.on('collect', async press =>
+        {
+            press.deferUpdate()
+
+            userStats =
+            {
+                userID: userStats.userID,
+                registered: Date.now(),
+                   xp: 0,
+                   level: 1,
+                   chips: 2500,
+                   active_game: false,
+                   lastbeg: 0,
+                   inventory: {},
+                   games: {},
+                   achievements: [],
+                   custom: {},
+            }
+
+            dh.userSave(userStats.userID, userStats)
+
+            button.setStyle(ButtonStyle.Success)
+            embed
+            .setTitle(`SUCCESS`)
+            .setColor("#1aa32a")
+            .setDescription(`Your progress has been reset.`)
+
+            return pressed.stop()
+        })
+
+
+        pressed.on('end', async collected =>
+        {
+            button.setDisabled(true)
+
+            try 	{ interaction.editReply({ embeds: [embed], components: [row] })	}
+            catch 	{ dev.log("Failed to respond \n GameID: TEMP, Error: 2", 2) }
+        })
     }
 }
