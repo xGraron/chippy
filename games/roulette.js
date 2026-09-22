@@ -5,7 +5,9 @@ const dh 	= require("../handlers/dataHandler.js")
 const eh 	= require("../handlers/errorHandler.js")
 const xh	= require('../handlers/xpHandler.js')
 const dev   = require('../handlers/dev.js')
+const ah	= require('../handlers/assetHandler.js')
 
+const gif 			= ah.gif("loading")
 const redNumbers 	= [1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36];	
 const fields 		=  
 [
@@ -58,7 +60,7 @@ async function main(interaction, bet, userStats, UID, chosen)
 	.setColor("#259dd9")
 	.setTitle("Roulette")
 	.setDescription(`*The wheel is spinning* \n**Players:** \n${p_names.join(", ")} \n\nBet: ${bet} *(close <t:${close}:R>)*`)
-	.setThumbnail("https://xgraron.github.io/chippy_site/resources/chippy_assets/loading.webp")
+	.setThumbnail(gif)
 
 	try 	{ initial = await interaction.editReply({ embeds: [embed], components: [row] }) }
 	catch 	{ dev.log("Failed to respond \n GameID: 2, Error: 1", 2) }

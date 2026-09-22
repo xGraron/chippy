@@ -5,10 +5,12 @@ const dh 	= require("../handlers/dataHandler.js")
 const eh 	= require("../handlers/errorHandler.js")
 const xh	= require('../handlers/xpHandler.js')
 const dev   = require('../handlers/dev.js')
+const ah	= require('../handlers/assetHandler.js')
 
 const random    = new Random()
 
-const horses =
+const gifs      = [ah.gif("horses"), ah.gif("loading")]
+const horses    =
 [
     { name: "⬛ Spades", value: "black"},
     { name: "🟥 Jackie", value: "red"}, 
@@ -45,7 +47,7 @@ async function main(interaction, bet, userStats, UID, chosen)
     const embed = new EmbedBuilder()
     .setColor("#259dd9")
     .setTitle("Horse race")
-    .setThumbnail("https://xgraron.github.io/chippy_site/resources/chippy_assets/horses.webp")
+    .setThumbnail(gifs[0])
     .setDescription(`*The horses are getting into starting position* \n**Players:** \n${p_names.join(", ")} \n\nBet: ${bet} *(close <t:${close}:R>)*`)
 
     try     { initial = await interaction.editReply({ embeds: [embed], components: [row] }) }
@@ -96,7 +98,7 @@ async function main(interaction, bet, userStats, UID, chosen)
     {
         const r         = random.integer(0, 6)
         embed.setDescription(`*The race is on!* \n**Players:** \n${p_names.join(", ")} \n\nBet: ${bet}`)
-        embed.setThumbnail("https://xgraron.github.io/chippy_site/resources/chippy_assets/loading.webp")
+        embed.setThumbnail(gifs[1])
 
         try     { await interaction.editReply({ embeds: [embed] }) }
         catch   { dev.log("Failed to respond \n\n GameID: 5, Error: 4", 2) }
