@@ -13,8 +13,7 @@ const titles =
     16: { name: "I Dont Want To Be Here Anymore",   description: "Reset your progress using /reset"},
     21: { name: "Amateur Gambler",                 description: "Reach level 10"},
     22: { name: "Ranked Gambler",                  description: "Reach level 100"},
-    50: { name: "Five Hundred Cigarettes",         description: "Buy 500 Cigarettes at once" },
-    69: { name: "Six Seven",                    description: "Have exactly 67 Chips" },
+    67: { name: "Six Seven",                    description: "Have exactly 67 Chips" },
     69: { name: "Funny Number",                    description: "Have exactly 69.420 Chips" },
     90: { name: "Final Solution",                  description: "Try 'Russian Roulette' and lose"},
     101: { name: "I'm A Good Guesser 🥉",       description: "Play 5 games of 'High Or Low'" },
@@ -72,7 +71,7 @@ module.exports =
 
         let unlocked        = 0
         let public_str      = ""
-        let private_str     = ""
+        let private_str     = "**Secret Badges** \n"
         let description_str = "Badges with a ❓ are Badges you haven't earned yet. \n-# There are also a few *secret* badges that only show up in /badges secrets once earned\n\n"
 
         for(const badge of userStats.achievements)
@@ -107,7 +106,7 @@ module.exports =
         else                        description_str = private_str + totals
 
         const embed = new EmbedBuilder()
-        .setTitle(`${interaction.user.username}'s badges:`)
+        .setTitle(`Your badges`)
         .setDescription(description_str)
 
         try     { await interaction.editReply({ embeds: [embed] }) }
