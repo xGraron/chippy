@@ -28,7 +28,7 @@ module.exports =
 
         for(const badge of userStats.achievements)
         {
-            badge_str += `${emojis[badge]}`
+            badge_str += `${emojis[badge]} `
         }
 
         for(i = 0; i < progress; i++)
