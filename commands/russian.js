@@ -6,8 +6,10 @@ const eh    = require('../handlers/errorHandler.js')
 const xh    = require('../handlers/xpHandler.js') 
 const dh    = require('../handlers/dataHandler.js')
 const dev   = require('../handlers/dev.js')
+const ah	= require('../handlers/assetHandler.js')
 
-const random = new Random()
+const random	= new Random()
+const gif		= ah.gif("cylinder_spin")
 
 module.exports = 
 {
@@ -37,7 +39,7 @@ module.exports =
         const embed = new EmbedBuilder()
         .setTitle(`Russian Roulette`)
         .setDescription("Six chambers, one bullet. Do you pull the trigger? \n *The cylinder is spinning..*")
-        .setThumbnail('https://xgraron.github.io/chippy_site/resources/chippy_assets/cylinder_spin.webp')
+        .setThumbnail(gif)
 
         const row 	= new ActionRowBuilder().addComponents(trigger)
 
