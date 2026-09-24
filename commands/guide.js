@@ -11,10 +11,8 @@ var games =
 [
     { name: "High or Low", value: "1"}, 
     { name: "Roulette", value: "2"},
-    { name: "Seventeen + Four", value: "3"},
     { name: "Blackjack", value: "4"},
     { name: "Horse races", value: "5"},
-    { name: "Racer", value: "6"},
     { name: "Slots", value: "7"},
     { name: "Poker", value: "8"},
     { name: "Card Rush", value: "9"},
