@@ -4,13 +4,13 @@ const fs		= require("fs")
 var userdata 	= {}
 if(fs.existsSync("database/userdata.json")) userdata = jsonfile.readFileSync("database/userdata.json")
 
-function userGet(id)
+function userGet(ID)
 {
-	if(!(id in userdata))
+	if(!(ID in userdata))
 	{
-		userdata[id] = 
+		userdata[ID] =
 		{
-			userID: id,
+			userID: ID,
 			registered: Date.now(),
 			xp: 0,
 			level: 1,
@@ -24,11 +24,11 @@ function userGet(id)
 		}
 
 		jsonfile.writeFileSync("database/userdata.json", userdata)
-		return userdata[id]
+		return userdata[ID]
 	}
 	else
 	{
-		return userdata[id]
+		return userdata[ID]
 	}
 }
 
@@ -43,19 +43,19 @@ function sort(parameter)
 	return sorted;
 }
 
-function userSave(id, saveStats)
+function userSave(ID, saveStats)
 {
-	userdata[id] = saveStats
+	userdata[ID] = saveStats
 
 	jsonfile.writeFileSync("database/userdata.json", userdata)
 
 	return{ success: true }
 }
 
-function devGet(id)
+function devGet(ID)
 {
-	if(userdata[id] === undefined) 	return 0
-	else 							return userdata[id]
+	if(userdata[ID] === undefined) 	return 0
+	else 							return userdata[ID]
 }
 
 function devGlobal()
