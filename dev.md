@@ -16,10 +16,3 @@
 
     errors
     - Logs past errors to console, + amount
-
-#functions
- log(content, index)
- >content: error message
- >index: which color the message should be in the console
- - logs "content" to the console
- - if it's an error (index = 2), writes the error to errors.txt
