@@ -8,8 +8,8 @@ const dev   = require('../handlers/dev.js')
 
 const random 	= new Random()
 
-const gifs      = [ "<a:slots3f:1393967555135148073>", "<a:slots3:1393967550244720710>", "<a:slots2f:1393967541034024960>", "<a:slots2:1393967536302981171>", "<a:slots1f:1393967528967016458>", "<a:slots1:1393967520733462679>" ]
-const emojis	= [ "💣", "✅", "❌", "🔥", "💯" ]
+const gifs      = [ "placeholder" ]
+const emojis	= [ "💣", "✅", "❌", "🔥", "💯", "🍉" ]
 
 async function main(interaction, bet, userStats)
 {
