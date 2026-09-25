@@ -215,6 +215,7 @@ function cards()
 
     return cards[i]
 }
+
 function gif(name)
 {
     if(!name)
@@ -227,6 +228,17 @@ function gif(name)
     }
 }
 
+function static(name)
+{
+    if(!name)
+    {
+        return "https://xgraron.github.io/chippy_site/resources/chippy.png"
+    }
+    elses
+    {
+        return `https://xgraron.github.io/chippy_site/resources/chippy_assets/${name}.png`
+    }
+}
 module.exports =
 {
     badges, cards, gif
