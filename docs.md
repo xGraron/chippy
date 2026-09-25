@@ -7,8 +7,12 @@
 
     gif(name)
     >Name: name of gif
-    - Returns link to requested gif
-
+    - Returns link to gif hosted on asset-site
+    
+    static(name)
+    >Name: name of image
+    - Returns link to static PNG hosted on asset-site
+    
 #Card Handler (handling cards & their emojis)
     create(UID, size, template)
     >UID: Discord ID of user associated with the deck
