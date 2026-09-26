@@ -284,7 +284,24 @@ function slots(animated)
                 "<a:spin_6:1553460889242439740>",
             ]
         ]
+
+        return spins[i]
     }
+    else
+    {
+        const statics =
+        [
+            [   //live
+
+            ],
+            [   //dev
+
+            ]
+        ]
+
+        return statics[i]
+    }
+
 }
 module.exports =
 {
