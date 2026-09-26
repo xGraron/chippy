@@ -6,12 +6,16 @@
     - Returns object containing all cards and their IDs
 
     gif(name)
-    >Name: name of gif
+    >name: name of gif
     - Returns link to gif hosted on asset-site
     
     static(name)
-    >Name: name of image
+    >name: name of image
     - Returns link to static PNG hosted on asset-site
+    
+    slots(animated)
+    >animated: if  animated emojis are being requested
+    - Returns array of (animated-)emojis
     
 #Card Handler (handling cards & their emojis)
     create(UID, size, template)
