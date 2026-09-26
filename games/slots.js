@@ -9,7 +9,8 @@ const ah	= require('../handlers/assetHandler.js')
 
 const random 	= new Random()
 
-const emojis	= [ "💣", "✅", "❌", "🔥", "💯", "🍉" ]
+const statics	= ah.slots()
+const gifs 		= ah.slots(true)
 
 async function main(interaction, bet, userStats)
 {
@@ -18,13 +19,11 @@ async function main(interaction, bet, userStats)
 	var payline	= []
 
 	const used 	= []
-	const gif 	= await ah.gif(`slots/spin_${random.integer(0, 31)}`)
 
 	const embed = new EmbedBuilder()
-	//.setColor("#259dd9")
-	//.setTitle("Slots")
-	//.setDescription("Spin spin spin... \n-# Two equal ones: 75 Chips \n-# Three equal ones: 500 Chips")
-	.setImage(gif)
+	.setColor("#259dd9")
+	.setTitle("Slots")
+	.setDescription(`${gifs[random.integer(0, gifs.length-1)]}${gifs[random.integer(0, gifs.length-1)]}${gifs[random.integer(0, gifs.length-1)]}`)
 
 	try 	{ initial = await interaction.editReply({ embeds: [embed]}) }
 	catch 	{ dev.log("Failed to respond \n GameID: 7, Error: 1", 2) }
@@ -33,9 +32,9 @@ async function main(interaction, bet, userStats)
 
 	for(i = 0; i < 3; i++)
 	{
-		const n = random.integer(0, emojis.length - 1)
+		const n = random.integer(0, statics.length - 1)
 
-		final += emojis[n]
+		final += statics[n]
 
 		payline.push(n)
 	}
@@ -51,7 +50,7 @@ async function main(interaction, bet, userStats)
     	{
     		embed.setColor("#1aa32a")
 
-    		userStats.chips 		+= (reward + 50) 
+    		userStats.chips 		+= reward
     		userStats.active_game 	= false
 
     		xh.leveling(userStats, xp_rew)
