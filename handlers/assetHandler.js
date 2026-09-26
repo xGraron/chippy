@@ -288,5 +288,5 @@ function slots(animated)
 }
 module.exports =
 {
-    badges, cards, gif
+    badges, cards, gif, slots
 }
