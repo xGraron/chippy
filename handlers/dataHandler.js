@@ -14,7 +14,7 @@ function userGet(ID)
 			registered: Date.now(),
 			xp: 0,
 			level: 1,
-			chips: 2500,
+			chips: 500,
 			active_game: false,
 			lastbeg: 0,
 			inventory: {},
