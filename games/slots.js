@@ -44,8 +44,8 @@ async function main(interaction, bet, userStats)
 
     	if(reward > 0) 	
     	{
-			if(reward > 75)	foot = "Twins!"
-			else			foot = "Full row!"
+			if(reward === 75)	foot = "Twins!"
+			else				foot = "Full row!"
     		embed
     		.setColor("#1aa32a")
 			.setFooter({ text: foot + `You won ${reward} Chips` });
@@ -78,6 +78,8 @@ async function main(interaction, bet, userStats)
 async function wincon(payline)
 {
 	const [a, b, c] = payline
+
+	dev.log([a, b, c])
 
 	if(a === b && a === c)				return 500;
 	if( a === b || b === c || a === c) 	return 75;
