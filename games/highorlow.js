@@ -65,6 +65,7 @@ async function main(interaction, bet, userStats, UID)
 		if(game.user.id !== UID) return game.reply({ content: "This isn't your game!", ephemeral: true })
 
 		await game.deferUpdate()
+		played = true
 
 		const dealer_drawn 	= await ch.draw(UID)
 
@@ -80,17 +81,15 @@ async function main(interaction, bet, userStats, UID)
 		var chosen 	= 0
 		var final 	= 0 
 
-		if(game.customId === "b_low")	chosen = 1
-		if(game.customId === "b_equal")	chosen = 2
-		if(game.customId === "b_high")	chosen = 3
+		if		(game.customId === "b_low")		chosen = 1
+		else if	(game.customId === "b_equal")	chosen = 2
+		else									chosen = 3
 
-		if(dealer_points < points) 		final = 1
-		if(dealer_points === points)	final = 2
-		if(dealer_points > points)		final = 3 
+		if		(dealer_points < points) 		final = 1
+		else if	(dealer_points === points)		final = 2
+		else									final = 3
 
 		if(chosen === 2)	reward = (bet * 2) + Math.floor(bet / 2);
-
-		played = true
 
 		if(final === chosen) 	
 		{
@@ -108,8 +107,8 @@ async function main(interaction, bet, userStats, UID)
 			await xh.achievements(userStats, userStats.chips, false, 1, 0)
 		}
 
-		try 	{ await interaction.editReply({ embeds: [embed], components: [row] }) }
-		catch 	{ dev.log("Failed to respond \n GameID: 1, Error: 2", 2) }
+		//try 	{ await interaction.editReply({ embeds: [embed], components: [row] }) }
+		//catch 	{ dev.log("Failed to respond \n GameID: 1, Error: 2", 2) }
 
         pressed.stop()
 	})
@@ -130,7 +129,7 @@ async function main(interaction, bet, userStats, UID)
 		}
 
 		try 	{ await interaction.editReply({ embeds: [embed], components: [] }) }
-		catch 	{ dev.log("Failed to respond \n GameID: 1, Error: 3", 2) }
+		catch 	{ dev.log("Failed to respond \n GameID: 1, Error: 2", 2) }
 		
 		userStats.active_game = false
 
