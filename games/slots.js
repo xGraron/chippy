@@ -14,21 +14,17 @@ const gifs 		= ah.slots(true)
 
 async function main(interaction, bet, userStats)
 {
-	var reels 	= ""
 	var final 	= ""
+	var foot	= ""
 	var payline	= []
 
 	const used 	= []
-
 	const embed = new EmbedBuilder()
-	.setColor("#259dd9")
-	.setTitle("Slots")
-	.setDescription(`${gifs[random.integer(0, gifs.length-1)]}${gifs[random.integer(0, gifs.length-1)]}${gifs[random.integer(0, gifs.length-1)]}`)
+	.setTitle(`${gifs[random.integer(0, gifs.length-1)]}${gifs[random.integer(0, gifs.length-1)]}${gifs[random.integer(0, gifs.length-1)]}`)
+	.setFooter({ text: `Let's go gambling!` });
 
-	try 	{ initial = await interaction.editReply({ embeds: [embed]}) }
+	try 	{ initial = await interaction.editReply({ embeds: [embed] }) }
 	catch 	{ dev.log("Failed to respond \n GameID: 7, Error: 1", 2) }
-
-	reels = ""
 
 	for(i = 0; i < 3; i++)
 	{
@@ -44,11 +40,15 @@ async function main(interaction, bet, userStats)
 
     setTimeout(() => 
     {
-    	embed.setDescription(final + "\n-# Two equal ones: 75 Chips \n-# Three equal ones: 500 Chips")
+    	embed.setTitle(final)
 
     	if(reward > 0) 	
     	{
-    		embed.setColor("#1aa32a")
+			if(reward > 75)	foot = "Twins!"
+			else			foot = "Full row!"
+    		embed
+    		.setColor("#1aa32a")
+			.setFooter({ text: foot + `You won ${reward} Chips` });
 
     		userStats.chips 		+= reward
     		userStats.active_game 	= false
@@ -58,7 +58,9 @@ async function main(interaction, bet, userStats)
     	}
     	else 
     	{
-    		embed.setColor("#e80400")
+    		embed
+    		.setColor("#e80400")
+			.setFooter({ text: "One more spin..."})
 
     		userStats.active_game 	= false
 
