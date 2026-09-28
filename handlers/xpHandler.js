@@ -97,6 +97,9 @@ function achievements(userStats, pre, won, gameID, reward, bet, additional)
 	//503
 	if(gameID === 503 && additional === true && !userStats.achievements.includes("503"))			userStats.achievements.push("503")
 
+	//702
+	if(gameID === 7 && reward > 500 && !userStats.achievements.includes("702"))						userStats.achievements.push("702")
+
 	//802-810
 	if(gameID === 8 && additional === "Pair" 			&& !userStats.achievements.includes("802"))		userStats.achievements.push("802")
 	if(gameID === 8 && additional === "Two Pair" 		&& !userStats.achievements.includes("803"))		userStats.achievements.push("803")

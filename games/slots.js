@@ -42,10 +42,23 @@ async function main(interaction, bet, userStats)
     {
     	embed.setTitle(final)
 
-    	if(reward > 0) 	
+		if(reward > 500) //rare badge
+		{
+			embed
+			.setColor("#1aa32a")
+			.setTitle(`${statics[6]}${statics[6]}${statics[6]}`)
+			.setFooter({ text: `Found secret fih! You won ${reward} Chips` });
+
+			userStats.chips 		+= reward
+			userStats.active_game 	= false
+
+			xh.leveling(userStats, xp_rew)
+			xh.achievements(userStats, userStats - reward, true, 7, reward)
+		}
+    	else if(reward > 0)
     	{
-			if(reward === 75)	foot = "Twins!"
-			else				foot = "Full row!"
+			if(reward === 75)	foot = "Twins! "
+			else				foot = "Full row! "
     		embed
     		.setColor("#1aa32a")
 			.setFooter({ text: foot + `You won ${reward} Chips` });
@@ -79,11 +92,10 @@ async function wincon(payline)
 {
 	const [a, b, c] = payline
 
-	dev.log([a, b, c])
-
-	if(a === b && a === c)				return 500;
-	if( a === b || b === c || a === c) 	return 75;
-	else  								return 0;
+	if(random.bool(0.001))						return 1000
+	else if(a === b && a === c)					return 500
+	else if( a === b || b === c || a === c) 	return 75
+	else  										return 0
 }
 
 
