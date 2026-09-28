@@ -20,7 +20,7 @@ module.exports =
         const embed     = new EmbedBuilder()
         .setTitle(`ATTENTION`)
         .setColor("#1aa32a")
-        .setDescription(`THIS IS IRREVERSIBLE. \n Clicking the button below will delete your *entire* progress*!`)
+        .setDescription(`THIS IS IRREVERSIBLE. \n Clicking the button below will delete your *entire* progress!`)
         const row       = new ActionRowBuilder().addComponents(button)
 
         let initial;
