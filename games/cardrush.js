@@ -65,14 +65,21 @@ async function game(interaction, bet, userStats, UID, round, reward, last_rew, x
 	.setTitle("High or Low")
 	.setDescription(`You drew a **${emoji}**`)
 
-	try 	{ initial = await interaction.editReply({ embeds: [embed], components: [row] }) }
+	try
+	{
+		initial = await interaction.editReply({ embeds: [embed], components: [row] })
+		dev.log("Initial reply")
+	}
 	catch 	{ dev.log("Failed to respond \n GameID: 9, Error: 1", 2) }
 	
-	const pressed	= await initial.createMessageComponentCollector({ time: 5_000 })
+	const pressed = await initial.createMessageComponentCollector({ time: 5_000 })
 
 	pressed.on('collect', async game =>
 	{
 		if(game.user.id !== UID) return game.reply({ content: "This isn't your game!", ephemeral: true })
+
+		await game.deferUpdate()
+		played = true
 
 		const dealer_drawn 	= await ch.draw(UID)
 
@@ -92,11 +99,9 @@ async function game(interaction, bet, userStats, UID, round, reward, last_rew, x
 
 		if(dealer_points < points) 		final = 1
 		if(dealer_points === points)	final = 2
-		if(dealer_points > points)		final = 3 
+		if(dealer_points > points)		final = 3
 
 		if(chosen === 2)	reward = ((bet * 2) + Math.floor(bet / 2)) + (bet * round);
-
-		played = true
 
 		low		.setDisabled(true)
 		equal	.setDisabled(true)
@@ -115,13 +120,7 @@ async function game(interaction, bet, userStats, UID, round, reward, last_rew, x
 			embed.setColor('#e80400').setTitle(`You lost!`).setDescription(`You drew a **${emoji}** \nThe dealer drew a **${dealer_emoji}** \n\n-# *You lost ${bet} Chips on Round ${round}*`).setFooter({ text: `The house always wins...` });
 		}
 
-		try 	{ await interaction.editReply({ embeds: [embed], components: [row] }).then(game.deferUpdate())	 }
-		catch 	{ dev.log("Failed to respond \n GameID: 9, Error: 2", 2) }
-
-	    setTimeout(() => 
-	    {
-			pressed.stop()
-	    }, 2000)
+		pressed.stop()
 	})
 
 	pressed.on('end', async collected =>
@@ -144,7 +143,11 @@ async function game(interaction, bet, userStats, UID, round, reward, last_rew, x
 
 			await end(userStats)
 
-			try 	{ await interaction.editReply({ embeds: [embed], components: [row] }) }
+			try
+			{
+				await interaction.editReply({ embeds: [embed], components: [row] })
+				dev.log("Timed out reply")
+			}
 			catch 	{ dev.log("Failed to respond \n GameID: 9, Error: 3", 2) }
 
 			return;
@@ -185,7 +188,11 @@ async function game(interaction, bet, userStats, UID, round, reward, last_rew, x
 
 		const row2 	= new ActionRowBuilder().addComponents(stop, next)
 
-		try 	{ initial = await interaction.editReply({ embeds: [embed], components: [row2] }) }
+		try
+		{
+			initial = await interaction.editReply({ embeds: [embed], components: [row2] })
+			dev.log("Cashout reply")
+		}
 		catch 	{ dev.log("Failed to respond \n GameID: 9, Error: 4", 2) }
 
 		const last	= await initial.createMessageComponentCollector({ time: 5_000 })
@@ -200,7 +207,10 @@ async function game(interaction, bet, userStats, UID, round, reward, last_rew, x
 			stop.setDisabled(true)
 			next.setDisabled(true)
 
-			try 	{ await interaction.editReply({ embeds: [embed], components: [row] }).then(press.deferUpdate())	 }
+			try 	{
+				await interaction.editReply({ embeds: [embed], components: [row] }).then(press.deferUpdate())
+				dev.log("Continue reply")
+			}
 			catch 	{ dev.log("Failed to respond \n GameID: 9, Error: 5", 2) }
 
 			last.stop()
@@ -221,7 +231,11 @@ async function game(interaction, bet, userStats, UID, round, reward, last_rew, x
 				
 				await end(userStats)
 
-				try 	{ await interaction.editReply({ embeds: [embed], components: [row] }) }
+				try
+				{
+					await interaction.editReply({ embeds: [embed], components: [row] })
+					dev.log("Final reply")
+				}
 				catch 	{ dev.log("Failed to respond \n GameID: 9, Error: 6", 2) }
 
 				userStats.chips += reward
