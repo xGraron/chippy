@@ -64,6 +64,8 @@ async function main(interaction, bet, userStats, UID)
 	{
 		if(game.user.id !== UID) return game.reply({ content: "This isn't your game!", ephemeral: true })
 
+		await game.deferUpdate()
+
 		const dealer_drawn 	= await ch.draw(UID)
 
 		if(!dealer_drawn.success) return eh.error(interaction, dealer_drawn.reason)
@@ -106,7 +108,7 @@ async function main(interaction, bet, userStats, UID)
 			await xh.achievements(userStats, userStats.chips, false, 1, 0)
 		}
 
-		try 	{ await interaction.editReply({ embeds: [embed], components: [row] }).then(game.deferUpdate())	 }
+		try 	{ await interaction.editReply({ embeds: [embed], components: [row] }) }
 		catch 	{ dev.log("Failed to respond \n GameID: 1, Error: 2", 2) }
 
         pressed.stop()
@@ -114,9 +116,9 @@ async function main(interaction, bet, userStats, UID)
 
 	pressed.on('end', async collected =>
 	{
-		low		.setDisabled(true)
-		equal	.setDisabled(true)
-		high 	.setDisabled(true)
+		low.setDisabled(true)
+		equal.setDisabled(true)
+		high.setDisabled(true)
 
 		if(!played)
 		{
@@ -127,7 +129,7 @@ async function main(interaction, bet, userStats, UID)
 			.setFooter({ text: `The house gives you five seconds` });	
 		}
 
-		try 	{ await interaction.editReply({ embeds: [embed], components: [row] }) }
+		try 	{ await interaction.editReply({ embeds: [embed], components: [] }) }
 		catch 	{ dev.log("Failed to respond \n GameID: 1, Error: 3", 2) }
 		
 		userStats.active_game = false
