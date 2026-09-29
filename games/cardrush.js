@@ -64,9 +64,9 @@ async function game(interaction, bet, userStats, UID, round, reward, last_rew, x
 	.setColor("#259dd9")
 	.setTitle("High or Low")
 	.setDescription(`You drew a **${emoji}**`)
-//
-	initial = await interaction.editReply({ embeds: [embed], components:[row] })
-	dev.log("Initial reply" + round)
+
+	try { initial = await interaction.editReply({ embeds: [embed], components:[row] }) }
+	catch(error) { dev.log("Failed to respond \n GameID: 9, Error: 1", 2) } }
 
 	const press = await new Promise(resolve =>
 	{
@@ -116,12 +116,8 @@ async function game(interaction, bet, userStats, UID, round, reward, last_rew, x
 
 		await end(userStats)
 
-		try
-		{
-			await interaction.editReply({ embeds: [embed], components: [row] })
-			dev.log("Timed out reply")
-		}
-		catch 	{ dev.log("Failed to respond \n GameID: 9, Error: 3", 2) }
+		try 			{ await interaction.editReply({ embeds: [embed], components: [row] }) }
+		catch(error) 	{ dev.log("Failed to respond \n GameID: 9, Error: 2", 2) } }
 
 		return;
 	}
@@ -160,16 +156,11 @@ async function game(interaction, bet, userStats, UID, round, reward, last_rew, x
 		ch.remove(UID)
 		xh.achievements(userStats, userStats.chips, false, 9, 0)
 
-		try
-		{
-			await interaction.editReply({ embeds: [embed], components: [row] })
-			dev.log("Lost reply")
-		}
-		catch 	{ dev.log("Failed to respond \n GameID: 9, Error: 3", 2) }
+		try				{ await interaction.editReply({ embeds: [embed], components: [row] }) }
+		catch(error) 	{ dev.log("Failed to respond \n GameID: 9, Error: 3", 2) } }
 
 		return;
 	}
-
 
 	round++
 	reward 	+= last_rew
@@ -252,12 +243,8 @@ async function game(interaction, bet, userStats, UID, round, reward, last_rew, x
 
 		await end(userStats)
 
-		try
-		{
-			await interaction.editReply({ embeds: [embed], components: [row] })
-			dev.log("Final reply")
-		}
-		catch 	{ dev.log("Failed to respond \n GameID: 9, Error: 6", 2) }
+		try				{ await interaction.editReply({ embeds: [embed], components: [row] }) }
+		catch(error) 	{ dev.log("Failed to respond \n GameID: 9, Error: 4", 2) } }
 
 		userStats.chips += reward
 
