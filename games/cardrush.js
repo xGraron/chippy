@@ -8,9 +8,9 @@ const dev   = require('../handlers/dev.js')
 const values = 
 {
 	"Ace": 	2,
-	"Jack": 10,
-	"Queen": 10,
-	"King": 10
+	"Jack": 11,
+	"Queen": 12,
+	"King": 13
 }
 
 async function main(interaction, bet, userStats, UID)
@@ -32,7 +32,6 @@ async function game(interaction, bet, userStats, UID, round, reward, last_rew, x
 {
 	var	drawn 	= await ch.draw(UID)
 	var played 	= false
-	var won 	= false
 	var force 	= false
 	var cashout = true
 
@@ -143,9 +142,9 @@ async function game(interaction, bet, userStats, UID, round, reward, last_rew, x
 	var chosen 	= 0
 	var final 	= 0
 
-	if(game.customId === "b_low")	chosen = 1
-	if(game.customId === "b_equal")	chosen = 2
-	if(game.customId === "b_high")	chosen = 3
+	if(press.customId === "b_low")	chosen = 1
+	if(press.customId === "b_equal")	chosen = 2
+	if(press.customId === "b_high")	chosen = 3
 
 	if(dealer_points < points) 		final = 1
 	if(dealer_points === points)	final = 2
@@ -155,9 +154,10 @@ async function game(interaction, bet, userStats, UID, round, reward, last_rew, x
 
 	dev.log("Decided" + round)
 
-	won = final === chosen
+	dev.log(chosen)
+	dev.log(final)
 
-	if(won)
+	if(final === chosen)
 	{
 		embed.setColor('#1aa32a').setTitle(`You won!`).setDescription(`You drew a **${emoji}** \nThe dealer drew a **${dealer_emoji}**`)
 
@@ -216,7 +216,7 @@ async function game(interaction, bet, userStats, UID, round, reward, last_rew, x
 
 	const last = await new Promise(resolve =>
 	{
-		const collector = last.createMessageComponentCollector({ time: 5_000 })
+		const collector = prompt.createMessageComponentCollector({ time: 5_000 })
 
 		let resolved = false
 
@@ -233,8 +233,9 @@ async function game(interaction, bet, userStats, UID, round, reward, last_rew, x
 			stop.setDisabled(true)
 			next.setDisabled(true)
 
-			try 	{
-				await interaction.editReply({ embeds: [embed], components: [row] }).then(press.deferUpdate())
+			try
+			{
+				await prompt.editReply({ embeds: [embed], components: [row] }).then(press.deferUpdate())
 				dev.log("Continue reply")
 			}
 			catch 	{ dev.log("Failed to respond \n GameID: 9, Error: 5", 2) }
