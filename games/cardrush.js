@@ -65,8 +65,7 @@ async function game(interaction, bet, userStats, UID, round, reward, last_rew, x
 	.setTitle("High or Low")
 	.setDescription(`You drew a **${emoji}**`)
 
-	try { initial = await interaction.editReply({ embeds: [embed], components:[row] }) }
-	catch(error) { dev.log("Failed to respond \n GameID: 9, Error: 1", 2) } }
+	initial = await interaction.editReply({ embeds: [embed], components:[row] })
 
 	const press = await new Promise(resolve =>
 	{
@@ -76,7 +75,6 @@ async function game(interaction, bet, userStats, UID, round, reward, last_rew, x
 
 		collector.on("collect", async button =>
 		{
-			dev.log("Button press" + round)
 			if(button.user.id !== UID) return button.reply({ content: "This isn't your game!", ephemeral: true })
 
 			if(resolved) return
@@ -89,8 +87,6 @@ async function game(interaction, bet, userStats, UID, round, reward, last_rew, x
 
 		collector.on("end", (collected, reason) =>
 		{
-			dev.log("Ended" + round + " " + reason)
-
 			if(resolved) return
 
 			resolved = true
@@ -115,9 +111,7 @@ async function game(interaction, bet, userStats, UID, round, reward, last_rew, x
 		.setFooter({ text: `The house gives you five seconds` });
 
 		await end(userStats)
-
-		try 			{ await interaction.editReply({ embeds: [embed], components: [row] }) }
-		catch(error) 	{ dev.log("Failed to respond \n GameID: 9, Error: 2", 2) } }
+		await interaction.editReply({ embeds: [embed], components: [row] })
 
 		return;
 	}
@@ -156,8 +150,7 @@ async function game(interaction, bet, userStats, UID, round, reward, last_rew, x
 		ch.remove(UID)
 		xh.achievements(userStats, userStats.chips, false, 9, 0)
 
-		try				{ await interaction.editReply({ embeds: [embed], components: [row] }) }
-		catch(error) 	{ dev.log("Failed to respond \n GameID: 9, Error: 3", 2) } }
+		await interaction.editReply({ embeds: [embed], components: [row] })
 
 		return;
 	}
@@ -189,7 +182,7 @@ async function game(interaction, bet, userStats, UID, round, reward, last_rew, x
 
 	const row2 	= new ActionRowBuilder().addComponents(stop, next)
 
-	let prompt = await interaction.editReply({ embeds: [embed], components: [row2]})
+	let prompt = await interaction.editReply({ embeds: [embed], components: [row2] })
 
 	const last = await new Promise(resolve =>
 	{
@@ -243,8 +236,7 @@ async function game(interaction, bet, userStats, UID, round, reward, last_rew, x
 
 		await end(userStats)
 
-		try				{ await interaction.editReply({ embeds: [embed], components: [row] }) }
-		catch(error) 	{ dev.log("Failed to respond \n GameID: 9, Error: 4", 2) } }
+		await interaction.editReply({ embeds: [embed], components: [row] })
 
 		userStats.chips += reward
 
