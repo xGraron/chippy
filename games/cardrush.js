@@ -37,6 +37,7 @@ async function game(interaction, bet, userStats, UID, round, reward, last_rew, x
 	var cashout = true
 
 	let initial;
+	let pressed;
 	let repeat;
  		
 	const card		= drawn.card
@@ -64,15 +65,11 @@ async function game(interaction, bet, userStats, UID, round, reward, last_rew, x
 	.setColor("#259dd9")
 	.setTitle("High or Low")
 	.setDescription(`You drew a **${emoji}**`)
+//
+	initial = await interaction.editReply({ embeds: [embed], components:[row] })
+	pressed = await initial.createMessageComponentCollector({ time: 5_000 })
+	dev.log("Initial reply")
 
-	try
-	{
-		initial = await interaction.editReply({ embeds: [embed], components: [row] })
-		dev.log("Initial reply")
-	}
-	catch 	{ dev.log("Failed to respond \n GameID: 9, Error: 1", 2) }
-	
-	const pressed = await initial.createMessageComponentCollector({ time: 5_000 })
 
 	pressed.on('collect', async game =>
 	{

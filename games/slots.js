@@ -23,7 +23,7 @@ async function main(interaction, bet, userStats)
 	.setTitle(`${gifs[random.integer(0, gifs.length-1)]}${gifs[random.integer(0, gifs.length-1)]}${gifs[random.integer(0, gifs.length-1)]}`)
 	.setFooter({ text: `Let's go gambling!` });
 
-	try 	{ initial = await interaction.editReply({ embeds: [embed] }) }
+	try 	{ initial = await interaction.editReply({ embeds: [embed], components: [] }) }
 	catch 	{ dev.log("Failed to respond \n GameID: 7, Error: 1", 2) }
 
 	for(i = 0; i < 3; i++)
@@ -98,6 +98,7 @@ async function wincon(payline)
 	else  										return 0
 }
 
+async function replay(interaction, bet, userStats)
 
 module.exports =
 {
