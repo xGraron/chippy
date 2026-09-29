@@ -126,9 +126,7 @@ async function game(interaction, bet, userStats, UID, round, reward, last_rew, x
 		return;
 	}
 
-
 	await press.deferUpdate()
-	dev.log("Deferred" + round)
 
 	const dealer_drawn 	= await ch.draw(UID)
 
@@ -142,27 +140,16 @@ async function game(interaction, bet, userStats, UID, round, reward, last_rew, x
 	var chosen 	= 0
 	var final 	= 0
 
-	if(press.customId === "b_low")	chosen = 1
+	if(press.customId === "b_low")		chosen = 1
 	if(press.customId === "b_equal")	chosen = 2
-	if(press.customId === "b_high")	chosen = 3
-
-	if(dealer_points < points) 		final = 1
-	if(dealer_points === points)	final = 2
-	if(dealer_points > points)		final = 3
+	if(press.customId === "b_high")		chosen = 3
+	if(dealer_points < points) 			final = 1
+	if(dealer_points === points)		final = 2
+	if(dealer_points > points)			final = 3
 
 	if(chosen === 2)	reward = ((bet * 2) + Math.floor(bet / 2)) + (bet * round);
 
-	dev.log("Decided" + round)
-
-	dev.log(chosen)
-	dev.log(final)
-
-	if(final === chosen)
-	{
-		embed.setColor('#1aa32a').setTitle(`You won!`).setDescription(`You drew a **${emoji}** \nThe dealer drew a **${dealer_emoji}**`)
-
-		dev.log("Correct") + round
-	}
+	if(final === chosen) { embed.setColor('#1aa32a').setTitle(`You won!`).setDescription(`You drew a **${emoji}** \nThe dealer drew a **${dealer_emoji}**`) }
 	else
 	{
 		await end(userStats)
@@ -212,7 +199,6 @@ async function game(interaction, bet, userStats, UID, round, reward, last_rew, x
 	const row2 	= new ActionRowBuilder().addComponents(stop, next)
 
 	let prompt = await interaction.editReply({ embeds: [embed], components: [row2]})
-	dev.log("Cashout reply")
 
 	const last = await new Promise(resolve =>
 	{
@@ -227,34 +213,28 @@ async function game(interaction, bet, userStats, UID, round, reward, last_rew, x
 			if(resolved) return
 			resolved = true
 
-			if(press.customId === "b_next")	cashout = false
 			if(press.customId === "b_stop")	cashout = true
 
 			stop.setDisabled(true)
 			next.setDisabled(true)
 
-			try
-			{
-				await prompt.editReply({ embeds: [embed], components: [row] }).then(press.deferUpdate())
-				dev.log("Continue reply")
-			}
-			catch 	{ dev.log("Failed to respond \n GameID: 9, Error: 5", 2) }
-
 			collector.stop("player")
+			resolve(button)
 
 			resolve(true)
 		})
 
 		collector.on("end", (collected, reason) =>
 		{
-			dev.log("Cashout" + round + " " + reason)
-
 			if(resolved) return
 
 			resolved = true
 			resolve(false)
 		})
 	})
+
+	if(!last) 	cashout = true
+	else		last.deferUpdate()
 
 	if(cashout || force)
 	{
@@ -285,10 +265,10 @@ async function game(interaction, bet, userStats, UID, round, reward, last_rew, x
 		xh.achievements(userStats, userStats.chips - reward, true, 9, reward)
 		xh.leveling(userStats, xp_rew)
 	}
-
-	return game(interaction, bet, userStats, UID, round, reward, last_rew, xp_rew)
-
-
+	else
+	{
+		return game(interaction, bet, userStats, UID, round, reward, last_rew, xp_rew)
+	}
 }
 
 async function end(userStats)
