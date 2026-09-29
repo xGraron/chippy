@@ -213,7 +213,8 @@ async function game(interaction, bet, userStats, UID, round, reward, last_rew, x
 			if(resolved) return
 			resolved = true
 
-			if(press.customId === "b_stop")	cashout = true
+			if(button.customId === "b_stop")	cashout = true
+			else								cashout = false
 
 			stop.setDisabled(true)
 			next.setDisabled(true)
