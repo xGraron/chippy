@@ -79,6 +79,8 @@ async function game(interaction, bet, userStats, UID, round, reward, last_rew, x
 		await game.deferUpdate()
 		played = true
 
+		dev.log("Deferred")
+
 		const dealer_drawn 	= await ch.draw(UID)
 
 		if(!dealer_drawn.success) return eh.error(interaction, dealer_drawn.reason)
@@ -101,23 +103,25 @@ async function game(interaction, bet, userStats, UID, round, reward, last_rew, x
 
 		if(chosen === 2)	reward = ((bet * 2) + Math.floor(bet / 2)) + (bet * round);
 
-		low		.setDisabled(true)
-		equal	.setDisabled(true)
-		high 	.setDisabled(true)
+		dev.log("Decided")
 
 		if(final === chosen) 	
 		{
 			embed.setColor('#1aa32a').setTitle(`You won!`).setDescription(`You drew a **${emoji}** \nThe dealer drew a **${dealer_emoji}**`)
 
 			won = true
+			dev.log("Correct")
 		}
 		else 
 		{
 			await end(userStats)
 			
 			embed.setColor('#e80400').setTitle(`You lost!`).setDescription(`You drew a **${emoji}** \nThe dealer drew a **${dealer_emoji}** \n\n-# *You lost ${bet} Chips on Round ${round}*`).setFooter({ text: `The house always wins...` });
+
+			dev.log("Incorrect")
 		}
 
+		dev.log("Stopping pressed")
 		pressed.stop()
 	})
 
@@ -155,6 +159,13 @@ async function game(interaction, bet, userStats, UID, round, reward, last_rew, x
 			dh.userSave(userStats)
 			ch.remove(UID)
 			xh.achievements(userStats, userStats.chips, false, 9, 0)
+
+			try
+			{
+				await interaction.editReply({ embeds: [embed], components: [row] })
+				dev.log("Lost reply")
+			}
+			catch 	{ dev.log("Failed to respond \n GameID: 9, Error: 3", 2) }
 
 			return;
 		}
