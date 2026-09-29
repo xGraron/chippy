@@ -73,6 +73,7 @@ async function game(interaction, bet, userStats, UID, round, reward, last_rew, x
 
 	pressed.on('collect', async game =>
 	{
+		dev.log("Button press")
 		if(game.user.id !== UID) return game.reply({ content: "This isn't your game!", ephemeral: true })
 
 		await game.deferUpdate()
