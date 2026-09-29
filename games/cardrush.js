@@ -37,13 +37,13 @@ async function game(interaction, bet, userStats, UID, round, reward, last_rew, x
 	var cashout = true
 
 	let initial;
-	let pressed;
 	let repeat;
+	let remaining;
  		
 	const card		= drawn.card
 	const emoji     = drawn.emoji
 	const points 	= values[card] || card
-	const remaining = drawn.remaining
+	remaining 		= drawn.remaining
 
 	const low = new ButtonBuilder()
 	.setCustomId("b_low")
@@ -67,148 +67,165 @@ async function game(interaction, bet, userStats, UID, round, reward, last_rew, x
 	.setDescription(`You drew a **${emoji}**`)
 //
 	initial = await interaction.editReply({ embeds: [embed], components:[row] })
-	pressed = await initial.createMessageComponentCollector({ time: 5_000 })
-	dev.log("Initial reply")
+	dev.log("Initial reply" + round)
 
-
-	pressed.on('collect', async game =>
+	const press = await new Promise(resolve =>
 	{
-		dev.log("Button press")
-		if(game.user.id !== UID) return game.reply({ content: "This isn't your game!", ephemeral: true })
+		const collector = initial.createMessageComponentCollector({ time: 5_000 })
 
-		await game.deferUpdate()
-		played = true
+		let resolved = false
 
-		dev.log("Deferred")
-
-		const dealer_drawn 	= await ch.draw(UID)
-
-		if(!dealer_drawn.success) return eh.error(interaction, dealer_drawn.reason)
-
-		const dealer_card	= dealer_drawn.card
-		const dealer_emoji  = dealer_drawn.emoji
-		const dealer_points	= values[dealer_card] || dealer_card
-		const remaining		= dealer_drawn.remaining
-
-		var chosen 	= 0
-		var final 	= 0 
-
-		if(game.customId === "b_low")	chosen = 1
-		if(game.customId === "b_equal")	chosen = 2
-		if(game.customId === "b_high")	chosen = 3
-
-		if(dealer_points < points) 		final = 1
-		if(dealer_points === points)	final = 2
-		if(dealer_points > points)		final = 3
-
-		if(chosen === 2)	reward = ((bet * 2) + Math.floor(bet / 2)) + (bet * round);
-
-		dev.log("Decided")
-
-		if(final === chosen) 	
+		collector.on("collect", async button =>
 		{
-			embed.setColor('#1aa32a').setTitle(`You won!`).setDescription(`You drew a **${emoji}** \nThe dealer drew a **${dealer_emoji}**`)
+			dev.log("Button press" + round)
+			if(button.user.id !== UID) return button.reply({ content: "This isn't your game!", ephemeral: true })
 
-			won = true
-			dev.log("Correct")
-		}
-		else 
+			if(resolved) return
+			resolved = true
+
+			collector.stop("player")
+
+			resolve(button)
+		})
+
+		collector.on("end", (collected, reason) =>
 		{
-			await end(userStats)
-			
-			embed.setColor('#e80400').setTitle(`You lost!`).setDescription(`You drew a **${emoji}** \nThe dealer drew a **${dealer_emoji}** \n\n-# *You lost ${bet} Chips on Round ${round}*`).setFooter({ text: `The house always wins...` });
+			dev.log("Ended" + round + " " + reason)
 
-			dev.log("Incorrect")
-		}
+			if(resolved) return
 
-		dev.log("Stopping pressed")
-		pressed.stop()
+			resolved = true
+			resolve(null)
+		})
 	})
 
-	pressed.on('end', async collected =>
+	low		.setDisabled(true)
+	equal	.setDisabled(true)
+	high 	.setDisabled(true)
+
+	if(!press)
 	{
-		low		.setDisabled(true)
-		equal	.setDisabled(true)
-		high 	.setDisabled(true)
+		dh.userSave(userStats)
+		ch.remove(UID)
+		xh.achievements(userStats, userStats.chips, false, 9, 0)
 
-		if(!played)
-		{
-			dh.userSave(userStats)
-			ch.remove(UID)
-			xh.achievements(userStats, userStats.chips, false, 9, 0)
+		embed
+		.setColor('#e80400')
+		.setTitle(`You lost!`)
+		.setDescription(`You didn't react in time \n\n-# *You lost ${bet} Chips on Round ${round}*`)
+		.setFooter({ text: `The house gives you five seconds` });
 
-			embed 	
-			.setColor('#e80400')
-			.setTitle(`You lost!`)
-			.setDescription(`You didn't react in time \n\n-# *You lost ${bet} Chips on Round ${round}*`)
-			.setFooter({ text: `The house gives you five seconds` });	
-
-			await end(userStats)
-
-			try
-			{
-				await interaction.editReply({ embeds: [embed], components: [row] })
-				dev.log("Timed out reply")
-			}
-			catch 	{ dev.log("Failed to respond \n GameID: 9, Error: 3", 2) }
-
-			return;
-		}
-		if(!won)
-		{
-			dh.userSave(userStats)
-			ch.remove(UID)
-			xh.achievements(userStats, userStats.chips, false, 9, 0)
-
-			try
-			{
-				await interaction.editReply({ embeds: [embed], components: [row] })
-				dev.log("Lost reply")
-			}
-			catch 	{ dev.log("Failed to respond \n GameID: 9, Error: 3", 2) }
-
-			return;
-		}
-
-		round++
-		reward 	+= last_rew
-		last_rew = reward
-
-		if(round - 1 < 3) 
-		{
-			return game(interaction, bet, userStats, UID, round, reward, last_rew, xp_rew)
-		}
-		if(remaining <= 10)
-		{
-			force = true
-		}
-
-		const stop = new ButtonBuilder()
-		.setCustomId("b_stop")
-		.setEmoji("💳")
-		.setLabel("Cash out")
-		.setStyle(ButtonStyle.Primary)
-
-		const next = new ButtonBuilder()
-		.setCustomId('b_next')
-		.setEmoji("⚠️")
-		.setLabel("Next round")
-		.setStyle(ButtonStyle.Primary)
-
-		const row2 	= new ActionRowBuilder().addComponents(stop, next)
+		await end(userStats)
 
 		try
 		{
-			initial = await interaction.editReply({ embeds: [embed], components: [row2] })
-			dev.log("Cashout reply")
+			await interaction.editReply({ embeds: [embed], components: [row] })
+			dev.log("Timed out reply")
 		}
-		catch 	{ dev.log("Failed to respond \n GameID: 9, Error: 4", 2) }
+		catch 	{ dev.log("Failed to respond \n GameID: 9, Error: 3", 2) }
 
-		const last	= await initial.createMessageComponentCollector({ time: 5_000 })
+		return;
+	}
 
-		last.on('collect', async press =>
+
+	await press.deferUpdate()
+	dev.log("Deferred" + round)
+
+	const dealer_drawn 	= await ch.draw(UID)
+
+	if(!dealer_drawn.success) return eh.error(interaction, dealer_drawn.reason)
+
+	const dealer_card	= dealer_drawn.card
+	const dealer_emoji  = dealer_drawn.emoji
+	const dealer_points	= values[dealer_card] || dealer_card
+	remaining			= dealer_drawn.remaining
+
+	var chosen 	= 0
+	var final 	= 0
+
+	if(game.customId === "b_low")	chosen = 1
+	if(game.customId === "b_equal")	chosen = 2
+	if(game.customId === "b_high")	chosen = 3
+
+	if(dealer_points < points) 		final = 1
+	if(dealer_points === points)	final = 2
+	if(dealer_points > points)		final = 3
+
+	if(chosen === 2)	reward = ((bet * 2) + Math.floor(bet / 2)) + (bet * round);
+
+	dev.log("Decided" + round)
+
+	won = final === chosen
+
+	if(won)
+	{
+		embed.setColor('#1aa32a').setTitle(`You won!`).setDescription(`You drew a **${emoji}** \nThe dealer drew a **${dealer_emoji}**`)
+
+		dev.log("Correct") + round
+	}
+	else
+	{
+		await end(userStats)
+
+		embed.setColor('#e80400').setTitle(`You lost!`).setDescription(`You drew a **${emoji}** \nThe dealer drew a **${dealer_emoji}** \n\n-# *You lost ${bet} Chips on Round ${round}*`).setFooter({ text: `The house always wins...` });
+
+		dh.userSave(userStats)
+		ch.remove(UID)
+		xh.achievements(userStats, userStats.chips, false, 9, 0)
+
+		try
 		{
-			if(press.user.id !== UID) return press.reply({ content: "This isn't your game!", ephemeral: true })
+			await interaction.editReply({ embeds: [embed], components: [row] })
+			dev.log("Lost reply")
+		}
+		catch 	{ dev.log("Failed to respond \n GameID: 9, Error: 3", 2) }
+
+		return;
+	}
+
+
+	round++
+	reward 	+= last_rew
+	last_rew = reward
+
+	if(round - 1 < 3)
+	{
+		return game(interaction, bet, userStats, UID, round, reward, last_rew, xp_rew)
+	}
+	if(remaining <= 10)
+	{
+		force = true
+	}
+
+	const stop = new ButtonBuilder()
+	.setCustomId("b_stop")
+	.setEmoji("💳")
+	.setLabel("Cash out")
+	.setStyle(ButtonStyle.Primary)
+
+	const next = new ButtonBuilder()
+	.setCustomId('b_next')
+	.setEmoji("⚠️")
+	.setLabel("Next round")
+	.setStyle(ButtonStyle.Primary)
+
+	const row2 	= new ActionRowBuilder().addComponents(stop, next)
+
+	let prompt = await interaction.editReply({ embeds: [embed], components: [row2]})
+	dev.log("Cashout reply")
+
+	const last = await new Promise(resolve =>
+	{
+		const collector = last.createMessageComponentCollector({ time: 5_000 })
+
+		let resolved = false
+
+		collector.on("collect", async button =>
+		{
+			if(button.user.id !== UID) return button.reply({ content: "This isn't your game!", ephemeral: true })
+
+			if(resolved) return
+			resolved = true
 
 			if(press.customId === "b_next")	cashout = false
 			if(press.customId === "b_stop")	cashout = true
@@ -222,44 +239,55 @@ async function game(interaction, bet, userStats, UID, round, reward, last_rew, x
 			}
 			catch 	{ dev.log("Failed to respond \n GameID: 9, Error: 5", 2) }
 
-			last.stop()
+			collector.stop("player")
+
+			resolve(true)
 		})
 
-		last.on('end', async collected =>
+		collector.on("end", (collected, reason) =>
 		{
-			if(cashout || force)
-			{
-				if(force) reward += bet * 100;
+			dev.log("Cashout" + round + " " + reason)
 
-				embed
-				.setColor('#1aa32a')
-				.setTitle(`Game's over`)
-				.setDescription(`You cashed out & won ${reward}`)
+			if(resolved) return
 
-				if(force) embed.setFooter({ text: `You did it, the stack was done.` });
-				
-				await end(userStats)
-
-				try
-				{
-					await interaction.editReply({ embeds: [embed], components: [row] })
-					dev.log("Final reply")
-				}
-				catch 	{ dev.log("Failed to respond \n GameID: 9, Error: 6", 2) }
-
-				userStats.chips += reward
-
-				ch.remove(UID)
-				dh.userSave(userStats)
-				xh.achievements(userStats, userStats.chips - reward, true, 9, reward)
-				xh.leveling(userStats, xp_rew)
-			}
-			else
-			{
-				game(interaction, bet, userStats, UID, round, reward, last_rew, xp_rew)
-			}
+			resolved = true
+			resolve(false)
 		})
 	})
+
+	if(cashout || force)
+	{
+		if(force)
+		{
+			reward += bet * 100
+			embed.setFooter({ text: `You did it, the stack was done.` })
+		}
+
+		embed
+		.setColor('#1aa32a')
+		.setTitle(`Game's over`)
+		.setDescription(`You cashed out & won ${reward}`)
+
+		await end(userStats)
+
+		try
+		{
+			await interaction.editReply({ embeds: [embed], components: [row] })
+			dev.log("Final reply")
+		}
+		catch 	{ dev.log("Failed to respond \n GameID: 9, Error: 6", 2) }
+
+		userStats.chips += reward
+
+		ch.remove(UID)
+		dh.userSave(userStats)
+		xh.achievements(userStats, userStats.chips - reward, true, 9, reward)
+		xh.leveling(userStats, xp_rew)
+	}
+
+	return game(interaction, bet, userStats, UID, round, reward, last_rew, xp_rew)
+
+
 }
 
 async function end(userStats)
