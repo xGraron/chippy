@@ -110,10 +110,7 @@ async function game(interaction, bet, userStats, UID, round, reward, last_rew, x
 		.setDescription(`You didn't react in time \n\n-# *You lost ${bet} Chips on Round ${round}*`)
 		.setFooter({ text: `The house gives you five seconds` });
 
-		await end(userStats)
-		await interaction.editReply({ embeds: [embed], components: [row] })
-
-		return;
+		return end(userStats, interaction, embed)
 	}
 
 	await press.deferUpdate()
@@ -142,17 +139,13 @@ async function game(interaction, bet, userStats, UID, round, reward, last_rew, x
 	if(final === chosen) { embed.setColor('#1aa32a').setTitle(`You won!`).setDescription(`You drew a **${emoji}** \nThe dealer drew a **${dealer_emoji}**`) }
 	else
 	{
-		await end(userStats)
-
 		embed.setColor('#e80400').setTitle(`You lost!`).setDescription(`You drew a **${emoji}** \nThe dealer drew a **${dealer_emoji}** \n\n-# *You lost ${bet} Chips on Round ${round}*`).setFooter({ text: `The house always wins...` });
 
 		dh.userSave(userStats)
 		ch.remove(UID)
 		xh.achievements(userStats, userStats.chips, false, 9, 0)
 
-		await interaction.editReply({ embeds: [embed], components: [row] })
-
-		return;
+		return end(userStats, interaction, embed)
 	}
 
 	round++
@@ -234,16 +227,14 @@ async function game(interaction, bet, userStats, UID, round, reward, last_rew, x
 		.setTitle(`Game's over`)
 		.setDescription(`You cashed out & won ${reward}`)
 
-		await end(userStats)
-
-		await interaction.editReply({ embeds: [embed], components: [row] })
-
 		userStats.chips += reward
 
 		ch.remove(UID)
 		dh.userSave(userStats)
 		xh.achievements(userStats, userStats.chips - reward, true, 9, reward)
 		xh.leveling(userStats, xp_rew)
+
+		end(userStats, interaction, embed)
 	}
 	else
 	{
@@ -251,11 +242,41 @@ async function game(interaction, bet, userStats, UID, round, reward, last_rew, x
 	}
 }
 
-async function end(userStats)
+async function end(userStats, interaction, embed)
 {
 	userStats.active_game = false;
-
 	dh.userSave(userStats)
+
+	initial = await interaction.editReply({ embeds: [embed], components:[] })
+
+	/*
+	const press = await new Promise(resolve =>
+	{
+		const collector = initial.createMessageComponentCollector({ time: 5_000 })
+
+		let resolved = false
+
+		collector.on("collect", async button =>
+		{
+			if(button.user.id !== UID) return button.reply({ content: "This isn't your game!", ephemeral: true })
+
+				if(resolved) return
+					resolved = true
+
+					collector.stop("player")
+
+					resolve(button)
+		})
+
+		collector.on("end", (collected, reason) =>
+		{
+			if(resolved) return
+
+				resolved = true
+				resolve(null)
+		})
+	})
+	*/
 
 	return;
 }
