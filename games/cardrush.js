@@ -100,8 +100,6 @@ async function game(interaction, bet, userStats, UID, round, reward, last_rew, x
 
 	if(!press)
 	{
-		dh.userSave(userStats)
-		ch.remove(UID)
 		xh.achievements(userStats, userStats.chips, false, 9, 0)
 
 		embed
@@ -141,8 +139,6 @@ async function game(interaction, bet, userStats, UID, round, reward, last_rew, x
 	{
 		embed.setColor('#e80400').setTitle(`You lost!`).setDescription(`You drew a **${emoji}** \nThe dealer drew a **${dealer_emoji}** \n\n-# *You lost ${bet} Chips on Round ${round}*`).setFooter({ text: `The house always wins...` });
 
-		dh.userSave(userStats)
-		ch.remove(UID)
 		xh.achievements(userStats, userStats.chips, false, 9, 0)
 
 		return end(userStats, interaction, embed, bet, UID)
@@ -229,8 +225,6 @@ async function game(interaction, bet, userStats, UID, round, reward, last_rew, x
 
 		userStats.chips += reward
 
-		ch.remove(UID)
-		dh.userSave(userStats)
 		xh.achievements(userStats, userStats.chips - reward, true, 9, reward)
 		xh.leveling(userStats, xp_rew)
 
@@ -246,6 +240,9 @@ async function end(userStats, interaction, embed, bet, UID)
 {
 	userStats.active_game = false;
 	dh.userSave(userStats)
+	ch.remove(UID)
+
+	newStats = await dh.userGet(UID)
 
 	const again = new ButtonBuilder()
 	.setCustomId('b_again')
@@ -253,7 +250,7 @@ async function end(userStats, interaction, embed, bet, UID)
 	.setLabel('Play again?')
 	.setStyle(ButtonStyle.Primary)
 
-	const row 	= new ActionRowBuilder().addComponents(b_again)
+	const row 	= new ActionRowBuilder().addComponents(again)
 
 	initial = await interaction.editReply({ embeds: [embed], components:[row] })
 
@@ -265,8 +262,9 @@ async function end(userStats, interaction, embed, bet, UID)
 
 		collector.on("collect", async button =>
 		{
-			if(button.user.id !== UID) return button.reply({ content: "This isn't your game!", ephemeral: true })
-			if(userStats.chips < bet) return button.reply({ content: "You can't afford to play again with this bet!", ephemeral: true })
+			if(button.user.id !== UID) 	return button.reply({ content: "This isn't your game!", ephemeral: true })
+			if(newStats.chips < bet)	return button.reply({ content: "You can't afford to play again with this bet!", ephemeral: true })
+			if(newStats.active_game) 	return button.reply({ content: "You are already playing a game!", ephemeral: true })
 
 			if(resolved) return
 			resolved = true
@@ -286,22 +284,20 @@ async function end(userStats, interaction, embed, bet, UID)
 		})
 	})
 
-	if(!press)
-	{
-		again.setDisabled(true)
+	again.setDisabled(true)
+	interaction.editReply({ components: [row] })
 
-		interaction.editReply({ components: [row] })
-	}
+	if(!press)						return;
 	else
 	{
 		await press.deferUpdate()
 
-		userStats.chips -= bet
-		userStats.active_game = true
+		newStats.chips -= bet
+		newStats.active_game = true
 
-		dh.userSave(userStats)
+		dh.userSave(newStats)
 
-		main(interaction, bet, userStats, UID)
+		main(interaction, bet, newStats, UID)
 	}
 }
 
