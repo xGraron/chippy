@@ -84,122 +84,126 @@ async function main(interaction, bet, userStats, UID)
 	.setTitle("Casino Hold'em")
 	.setDescription(`Dealer: **?? ??**, You: ${hand_str} \n Community cards: ${community_hand_str}`)
 	
-	try 	{ initial = await interaction.editReply({ embeds: [embed], components: [row] }) }
-	catch 	{ dev.log("Failed to respond \n GameID: 8, Error: 1", 2) }
+	initial = await interaction.editReply({ embeds: [embed], components: [row] })
 
-	const pressed	= await initial.createMessageComponentCollector({ time: 30_000 })
-
-	pressed.on('collect', async game =>
+	const press = await new Promise(resolve =>
 	{
-		if(game.user.id !== UID) return game.reply({ content: "This isn't your game!", ephemeral: true })
+		const collector = initial.createMessageComponentCollector({ time: 7_000 })
 
-		game.deferUpdate()
-		played = true
+		let resolved = false
 
-		if(game.customId === "b_fold")	
+		collector.on("collect", async button =>
 		{
-			folded = true
+			if(button.user.id !== UID) 	return button.reply({ content: "This isn't your game!", ephemeral: true})
+			if(resolved) 				return
 
-			return pressed.stop()	
-		}
+			if(button.customId === "b_fold") folded = true
 
-		await ch.burn(UID)
+			resolved = true
 
-		for(let i = 0; i < 2; i++)
+			collector.stop("player")
+
+			resolve(button)
+		})
+
+		collector.on("end", (collected, reason) =>
 		{
-			community_hand_str = await community_draw(UID, community_hand, community_hand_str)
-		}
+			if(resolved) return
 
-		embed.setDescription(`Dealer: ${dealer_hand_str}, You: ${hand_str} \n Community cards: ${community_hand_str} \n\n-# *Evaluating...*`)
+			resolved = true
 
-		pressed.stop()
+			resolve(null)
+		})
 	})
 
-	pressed.on('end', async collected =>
+	call.setDisabled(true)
+	fold.setDisabled(true)
+
+	if(!press)
 	{
-		call.setDisabled(true)
-		fold.setDisabled(true)
+		embed
+		.setColor('#e80400')
+		.setTitle(`You lost!`)
+		.setDescription(`You didn't react in time \n\n-# *You've lost ${bet} Chips*`)
+		.setFooter({ text: `The house gives you seven seconds` });
 
-		if(!played)
-		{
-			embed 	
-			.setColor('#e80400')
-			.setTitle(`You lost!`)
-			.setDescription(`You didn't react in time \n\n-# *You've lost ${bet} Chips*`)
-			.setFooter({ text: `The house gives you thirty seconds` });
+		await xh.achievements(userStats, userStats.chips + bet, false, 8, 0)
+		return end(userStats, interaction, embed, bet, UID)
+	}
 
-			await xh.achievements(userStats, userStats.chips + bet, false, 8, 0)
-		}
-		else if(folded)
-		{
-			embed 	
-			.setColor('#e80400')
-			.setTitle(`You folded!`)
-			.setDescription(`Probably for the better.. \n\n-# *You've lost ${Math.floor(bet / 2)} Chips*`)
-			.setFooter({ text: `Calling isn't always the best move!` });
+	await press.deferUpdate()
 
-			userStats.chips += Math.floor(bet / 2)
+	if(folded)
+	{
+		embed
+		.setColor('#e80400')
+		.setTitle(`You folded!`)
+		.setDescription(`Probably for the better.. \n\n-# *You've lost ${Math.floor(bet / 2)} Chips*`)
+		.setFooter({ text: `Calling isn't always the best move!` });
 
-			await xh.achievements(userStats, userStats.chips + bet, false, 8, 0)
-		}
-		else
-		{
-			try 	{ initial = await interaction.editReply({ embeds: [embed], components: [row] }) }
-			catch 	{ dev.log("Failed to respond \n GameID: 8, Error: 2", 2) }
+		userStats.chips += Math.floor(bet / 2)
 
-			const player_cards = [...hand, ...community_hand]
-			const dealer_cards = [...dealer_hand, ...community_hand]
+		await xh.achievements(userStats, userStats.chips + bet, false, 8, 0)
+		return end(userStats, interaction, embed, bet, UID)
+	}
 
-			const final = await wincon(interaction, player_cards, dealer_cards)
+	await ch.burn(UID)
 
-			if(final.won === 0) //lost, dealer had better hand
-			{
-				embed 	
-				.setColor('#e80400')
-				.setTitle(`You lost!`)
-				.setDescription(`Dealer: ${dealer_hand_str} *(${final.hands[1]})*, You: ${hand_str} *(${final.hands[0]})* \n Community cards: ${community_hand_str} \n\n-# *You've lost ${bet * 3} Chips*`)
-				.setFooter({ text: `Calling isn't always a good move!` });
+	for(let i = 0; i < 2; i++)
+	{
+		community_hand_str = await community_draw(UID, community_hand, community_hand_str)
+	}
 
-				await xh.achievements(userStats, userStats.chips + (bet * 3), false, 8, 0)
-			}
-			if(final.won === 1) //won
-			{
-				reward = (multipliers[final.hands[0]] * bet) + (bet * 2)
+	const player_cards 	= [...hand, ...community_hand]
+	const dealer_cards 	= [...dealer_hand, ...community_hand]
+	const final 		= await wincon(interaction, player_cards, dealer_cards)
 
-				embed 	
-				.setColor('#1aa32a')
-				.setTitle(`You won!`)
-				.setDescription(`Dealer: ${dealer_hand_str} *(${final.hands[1]})*, You: ${hand_str} *(${final.hands[0]})* \n Community cards: ${community_hand_str} \n\n-# *You won ${reward} Chips*`)
+	if(final.won === 0) //lost, dealer had better hand
+	{
+		embed
+		.setColor('#e80400')
+		.setTitle(`You lost!`)
+		.setDescription(`Dealer: ${dealer_hand_str} *(${final.hands[1]})*, You: ${hand_str} *(${final.hands[0]})* \n Community cards: ${community_hand_str} \n\n-# *You've lost ${bet} Chips*`)
+		.setFooter({ text: `Calling isn't always a good move!` });
 
-				userStats.chips += reward + (bet * 3)
-				await xh.leveling(userStats, xp_rew)
-				await xh.achievements(userStats, userStats.chips - reward, true, 8, reward, bet, final.hands[0])
-			}
-			if(final.won === 2) //tied
-			{
-				embed 	
-				.setColor('#f58916')
-				.setTitle(`Tied!`)
-				.setDescription(`Dealer: ${dealer_hand_str} *(${final.hands[1]})*, You: ${hand_str} *(${final.hands[0]})* \n Community cards: ${community_hand_str} \n\n-# *You didn't lose any Chips*`)
-				.setFooter({ text: `Lucky...` });
+		await xh.achievements(userStats, userStats.chips + (bet * 3), false, 8, 0)
+	}
+	else if(final.won === 1) //won
+	{
+		reward = (multipliers[final.hands[0]] * bet) + (bet * 2)
 
-				userStats.chips += (bet * 3)
-				await xh.achievements(userStats, userStats.chips, false, 8, 0)
-			}
-			if(final.won === 3) //lost, didnt qualify
-			{
-				embed 	
-				.setColor('#e80400')
-				.setTitle(`You didn't qualify!`)
-				.setDescription(`Dealer: ${dealer_hand_str} *(${final.hands[1]})*, You: ${hand_str} *(${final.hands[0]})* \n Community cards: ${community_hand_str} \n\n-# *You've lost ${bet * 3} Chips*`)
-				.setFooter({ text: `Unlucky...` });
+		embed
+		.setColor('#1aa32a')
+		.setTitle(`You won!`)
+		.setDescription(`Dealer: ${dealer_hand_str} *(${final.hands[1]})*, You: ${hand_str} *(${final.hands[0]})* \n Community cards: ${community_hand_str} \n\n-# *You won ${reward} Chips*`)
 
-				await xh.achievements(userStats, userStats.chips + (bet * 3), false, 8, 0)
-			}
-		}
+		userStats.chips += reward + (bet * 3)
+		await xh.leveling(userStats, xp_rew)
+		await xh.achievements(userStats, userStats.chips - reward, true, 8, reward, bet, final.hands[0])
+	}
+	else if(final.won === 2) //tied
+	{
+		embed
+		.setColor('#f58916')
+		.setTitle(`Tied!`)
+		.setDescription(`Dealer: ${dealer_hand_str} *(${final.hands[1]})*, You: ${hand_str} *(${final.hands[0]})* \n Community cards: ${community_hand_str} \n\n-# *You didn't lose any Chips*`)
+		.setFooter({ text: `Lucky...` });
 
-		end(userStats, interaction, embed, bet, UID)
-	})
+		userStats.chips += (bet * 3)
+		await xh.achievements(userStats, userStats.chips, false, 8, 0)
+	}
+	else //lost, didnt qualify
+	{
+		embed
+		.setColor('#e80400')
+		.setTitle(`You didn't qualify!`)
+		.setDescription(`Dealer: ${dealer_hand_str} *(${final.hands[1]})*, You: ${hand_str} *(${final.hands[0]})* \n Community cards: ${community_hand_str} \n\n-# *You've lost ${bet * 3} Chips*`)
+		.setFooter({ text: `Unlucky...` });
+
+		await xh.achievements(userStats, userStats.chips + (bet * 3), false, 8, 0)
+	}
+
+	end(userStats, interaction, embed, bet, UID)
 }
 
 async function player_draw(UID, hand, hand_str)
