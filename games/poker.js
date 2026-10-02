@@ -203,7 +203,7 @@ async function main(interaction, bet, userStats, UID)
 		await xh.achievements(userStats, userStats.chips + (bet * 3), false, 8, 0)
 	}
 
-	end(userStats, interaction, embed, bet, UID)
+	return end(userStats, interaction, embed, bet, UID)
 }
 
 async function player_draw(UID, hand, hand_str)
@@ -443,10 +443,11 @@ async function end(userStats, interaction, embed, bet, UID)
 		})
 	})
 
-	again.setDisabled(true)
-	interaction.editReply({ components: [row] })
-
-	if(!press)	return;
+	if(!press)
+	{
+		again.setDisabled(true)
+		return interaction.editReply({ components: [row] })
+	}
 	else
 	{
 		await press.deferUpdate()
