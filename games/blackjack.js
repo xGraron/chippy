@@ -309,10 +309,11 @@ async function end(userStats, interaction, embed, bet, UID)
 		})
 	})
 
-	again.setDisabled(true)
-	interaction.editReply({ components: [row] })
-
-	if(!press)	return;
+	if(!press)
+	{
+		again.setDisabled(true)
+		return interaction.editReply({ components: [row] })
+	}
 	else
 	{
 		await press.deferUpdate()
