@@ -8,9 +8,9 @@ const dev   = require('../handlers/dev.js')
 const values = 
 {
 	"Ace": 	2,
-	"Jack": 11,
-	"Queen": 12,
-	"King": 13
+	"Jack": 10,
+	"Queen": 10,
+	"King": 10
 }
 
 async function main(interaction, bet, userStats, UID)
