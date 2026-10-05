@@ -2,16 +2,9 @@ const { SlashCommandBuilder, EmbedBuilder, StringSelectMenuBuilder, StringSelect
 const xh    = require('../handlers/xpHandler.js')
 const dev   = require('../handlers/dev.js')
 const ah    = require('../handlers/assetHandler.js')
+const ih    = require('../handlers/itemHandler.js')
 
-//TEMPORARY
-const assets = ["PLACEHOLDER"]
-const items =
-[
-    {"name":"testitem1", "price":10, "id": "i1"},
-    {"name":"testitem2", "price": 5, "id": "i2"},
-    {"name":"testitem3", "price": 15, "id": "i3"},
-]
-//TEMPORARY
+const items = ih.list("shop")
 
 module.exports =
 {
