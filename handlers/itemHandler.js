@@ -9,8 +9,6 @@ const items =
     {"name":"testitem5", "price": 30,   "id": "i5"},
     {"name":"testitem6", "price": 15,   "id": "i6"},
     {"name":"testitem7", "price": 40,   "id": "i7"},
-    {"name":"testitem8", "price": 50,   "id": "i8"},
-    {"name":"testitem9", "price": 215,  "id": "i9"},
 ]
 
 

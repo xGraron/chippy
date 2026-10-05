@@ -351,7 +351,35 @@ function slots(animated)
     }
 
 }
+
+function items()
+{
+    const items =
+    [
+        {   //live
+            "i1":"",
+            "i2":"",
+            "i3":"",
+            "i4":"",
+            "i5":"",
+            "i6":"",
+            "i7":""
+        },
+        {   //dev
+            "i1":"1553465813107875920",
+            "i2":"1553465806036148396",
+            "i3":"1553465746418442373",
+            "i4":"1553465756430106715",
+            "i5":"1553465764244357221",
+            "i6":"1553465773446533120",
+            "i7":"1553465791595421766"
+        }
+    ]
+
+    return items[i]
+}
+
 module.exports =
 {
-    badges, cards, gif, slots
+    badges, cards, gif, slots, items
 }
