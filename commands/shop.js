@@ -4,7 +4,10 @@ const dev   = require('../handlers/dev.js')
 const ah    = require('../handlers/assetHandler.js')
 const ih    = require('../handlers/itemHandler.js')
 
-const items = ih.list("shop")
+const items     = ih.list("shop")
+const emojis    = ah.items()
+
+dev.log(emojis)
 
 module.exports =
 {
@@ -31,6 +34,7 @@ module.exports =
                 .setLabel(item.name)
                 .setDescription(`Costs ${item.price} Chips`)
                 .setValue(item.id)
+                .setEmoji(emojis[item.id])
             )
         })
 
