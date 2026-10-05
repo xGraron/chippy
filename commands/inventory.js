@@ -37,7 +37,7 @@ module.exports =
 
         const embed = new EmbedBuilder()
         .setTitle(`Your inventory`)
-        .setDescription(invstr + "\n -# Buy using /shop")
+        .setDescription(invstr + "\n-# Buy using /shop")
 
         interaction.editReply({ embeds: [embed] })
     }
