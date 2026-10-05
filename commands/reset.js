@@ -43,7 +43,7 @@ module.exports =
                    chips: 500,
                    active_game: false,
                    lastbeg: 0,
-                   inventory: {},
+                   inventory: [],
                    games: {},
                    achievements: ["16"],
                    custom: {},
