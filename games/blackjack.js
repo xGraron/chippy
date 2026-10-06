@@ -4,6 +4,7 @@ const eh 	= require("../handlers/errorHandler.js")
 const ch    = require('../handlers/cardHandler.js')
 const xh	= require('../handlers/xpHandler.js')
 const dev   = require('../handlers/dev.js')
+const ah	= require('../handlers/assetHandler.js')
 
 const values = 
 {
@@ -12,7 +13,8 @@ const values =
 	"Queen": 10,
 	"King": 10
 }
-const facecards	= [	"Jack", "Queen","King" ]
+const facecards		= [	"Jack", "Queen","King" ]
+const secretcard	= ah.cards(true)
 
 async function main(interaction, bet, userStats, UID)
 {
@@ -66,7 +68,7 @@ async function main(interaction, bet, userStats, UID)
 	const embed = new EmbedBuilder()
 	.setColor("#259dd9")
 	.setTitle("Blackjack")
-	.setDescription(`Your hand: **${hand_str}** *(${points}p)* \nDealer's hand: **${dealer_hand_str.split('>')[0]}>, ??**`)
+	.setDescription(`Your hand: ${hand_str} *(${points}p)* \nDealer's hand: ${dealer_hand_str.split('>')[0]}>${secretcard}`)
 	
 	try 	{ initial = await interaction.editReply({ embeds: [embed], components: [row] }) }
 	catch 	{ dev.log("Failed to respond \n GameID: 4, Error: 1", 2) }
@@ -100,7 +102,7 @@ async function main(interaction, bet, userStats, UID)
 		points 		= await player_draw(UID, hand, points, hand_em)
 		hand_str 	= hand_em.join("")
 
-		embed.setDescription(`Your hand: **${hand_str}** *(${points}p)* \nDealer's hand: **${dealer_hand_str.split('>')[0]}>, ??**`)
+		embed.setDescription(`Your hand: ${hand_str} *(${points}p)* \nDealer's hand: ${dealer_hand_str.split('>')[0]}>${secretcard}`)
 
 		try 	{ await interaction.editReply({ embeds: [embed] }) }
 		catch 	{ dev.log("Failed to respond \n GameID: 4, Error: 2", 2) }
@@ -150,7 +152,7 @@ async function main(interaction, bet, userStats, UID)
 			embed 	
 			.setColor('#e80400')
 			.setTitle(`You lost!`)
-			.setDescription(`Your hand: **${hand_str}** *(${points}p)* \nDealer's hand: **${dealer_hand_str}** *(${dealer_points}p)* \n\n-# *You've lost ${lost} Chips*`)
+			.setDescription(`Your hand: ${hand_str} *(${points}p)* \nDealer's hand: ${dealer_hand_str} *(${dealer_points}p)* \n\n-# *You've lost ${lost} Chips*`)
 			.setFooter({ text: `The house always wins...` });
 
 			await xh.achievements(userStats, userStats.chips, false, 4, 0)
@@ -162,7 +164,7 @@ async function main(interaction, bet, userStats, UID)
 			embed 	
 			.setColor('#1aa32a')
 			.setTitle(`You won!`)
-			.setDescription(`Your hand: **${hand_str}** *(${points}p)* \nDealer's hand: **${dealer_hand_str}** *(${dealer_points}p)* \n\n-# *You won ${reward} Chips*`)
+			.setDescription(`Your hand: ${hand_str} *(${points}p)* \nDealer's hand: ${dealer_hand_str} *(${dealer_points}p)* \n\n-# *You won ${reward} Chips*`)
 
 			userStats.chips = userStats.chips + reward
 			await xh.leveling(userStats, xp_rew)
@@ -175,7 +177,7 @@ async function main(interaction, bet, userStats, UID)
 			embed 	
 			.setColor('#1aa32a')
 			.setTitle(`You won!`)
-			.setDescription(`Your hand: **${hand_str}** *(${points}p)* \nDealer's hand: **${dealer_hand_str}** *(${dealer_points}p)* \n\n-# *You won ${reward} Chips*`)
+			.setDescription(`Your hand: ${hand_str} *(${points}p)* \nDealer's hand: ${dealer_hand_str} *(${dealer_points}p)* \n\n-# *You won ${reward} Chips*`)
 
 			userStats.chips = userStats.chips + reward
 			await xh.leveling(userStats, xp_rew)
@@ -186,7 +188,7 @@ async function main(interaction, bet, userStats, UID)
 			embed 	
 			.setColor('#f58916')
 			.setTitle(`Push!`)
-			.setDescription(`Your hand: **${hand_str}** *(${points}p)* \nDealer's hand: **${dealer_hand_str}** *(${dealer_points}p)* \n\n-# *You didn't lose any Chips*`)
+			.setDescription(`Your hand: ${hand_str} *(${points}p)* \nDealer's hand: ${dealer_hand_str} *(${dealer_points}p)* \n\n-# *You didn't lose any Chips*`)
 			.setFooter({ text: `Lucky...` });
 
 			userStats.chips = userStats.chips + bet
@@ -199,7 +201,7 @@ async function main(interaction, bet, userStats, UID)
 			embed 	
 			.setColor('#e80400')
 			.setTitle(`You lost!`)
-			.setDescription(`Your hand: **${hand_str}** *(${points}p)* \nDealer's hand: **${dealer_hand_str}** *(${dealer_points}p)* \n\n-# *You lost ${lost} Chips*`)
+			.setDescription(`Your hand: ${hand_str} *(${points}p)* \nDealer's hand: ${dealer_hand_str} *(${dealer_points}p)* \n\n-# *You lost ${lost} Chips*`)
 			.setFooter({ text: `The house always wins...` });
 
 			await xh.achievements(userStats, userStats.chips, false, 4, 0)
