@@ -99,7 +99,7 @@ function badges()
     return badges[i]
 }
 
-function cards()
+function cards(secret)
 {
     const cards =
     [
@@ -215,7 +215,9 @@ function cards()
         }
     ]
 
-    return cards[i]
+
+    if(secret)  return `<:secret:${cards[i]["Secret"]}>`
+    else        return cards[i]
 }
 
 function gif(name)
