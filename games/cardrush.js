@@ -4,6 +4,7 @@ const eh 	= require("../handlers/errorHandler.js")
 const ch    = require('../handlers/cardHandler.js')
 const xh	= require('../handlers/xpHandler.js')
 const dev   = require('../handlers/dev.js')
+const ah	= require('../handlers/assetHandler.js')
 
 const values = 
 {
@@ -12,6 +13,8 @@ const values =
 	"Queen": 10,
 	"King": 10
 }
+
+const secretcard	= ah.cards(true)
 
 async function main(interaction, bet, userStats, UID)
 {
@@ -63,7 +66,7 @@ async function game(interaction, bet, userStats, UID, round, reward, last_rew, x
 	const embed = new EmbedBuilder()
 	.setColor("#259dd9")
 	.setTitle("High or Low")
-	.setDescription(`You drew a **${emoji}**`)
+	.setDescription(`1. Card: ${emoji} \n2. Card: ${secretcard}`)
 
 	initial = await interaction.editReply({ embeds: [embed], components:[row] })
 
@@ -137,7 +140,11 @@ async function game(interaction, bet, userStats, UID, round, reward, last_rew, x
 	if(final === chosen) { embed.setColor('#1aa32a').setTitle(`You won!`).setDescription(`You drew a **${emoji}** \nThe dealer drew a **${dealer_emoji}**`) }
 	else
 	{
-		embed.setColor('#e80400').setTitle(`You lost!`).setDescription(`You drew a **${emoji}** \nThe dealer drew a **${dealer_emoji}** \n\n-# *You lost ${bet} Chips on Round ${round}*`).setFooter({ text: `The house always wins...` });
+		embed
+		.setColor('#e80400')
+		.setTitle(`You lost!`)
+		.setDescription(`1. Card ${emoji} \n2. Card ${dealer_emoji} \n\n-# *You lost ${bet} Chips on Round ${round}*`)
+		.setFooter({ text: `The house always wins...` });
 
 		xh.achievements(userStats, userStats.chips, false, 9, 0)
 

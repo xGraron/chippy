@@ -123,7 +123,7 @@ async function main(interaction, bet, userStats, UID)
 		embed
 		.setColor('#1aa32a')
 		.setTitle(`You won!`)
-		.setDescription(`1. Card: **${emoji}** \n2. Card: **${dealer_emoji}** \n\n-# *You won ${reward} Chips*`)
+		.setDescription(`1. Card: ${emoji} \n2. Card: ${dealer_emoji} \n\n-# *You won ${reward} Chips*`)
 
 		userStats.chips 		= userStats.chips + reward
 
@@ -132,7 +132,11 @@ async function main(interaction, bet, userStats, UID)
 	}
 	else
 	{
-		embed.setColor('#e80400').setTitle(`You lost!`).setDescription(`1. Card: **${emoji}** \n2. Card: **${dealer_emoji}** \n\n-# *You lost ${bet} Chips*`).setFooter({ text: `The house always wins...` });
+		embed
+		.setColor('#e80400')
+		.setTitle(`You lost!`)
+		.setDescription(`1. Card: ${emoji} \n2. Card: ${dealer_emoji} \n\n-# *You lost ${bet} Chips*`)
+		.setFooter({ text: `The house always wins...` });
 
 		await xh.achievements(userStats, userStats.chips, false, 1, 0)
 	}
@@ -167,24 +171,24 @@ async function end(userStats, interaction, embed, bet, UID)
 		collector.on("collect", async button =>
 		{
 			if(button.user.id !== UID) 	return button.reply({ content: "This isn't your game!", ephemeral: true })
-				if(newStats.chips < bet)	return button.reply({ content: "You can't afford to play again with this bet!", ephemeral: true })
-					if(newStats.active_game) 	return button.reply({ content: "You are already playing a game!", ephemeral: true })
+			if(newStats.chips < bet)	return button.reply({ content: "You can't afford to play again with this bet!", ephemeral: true })
+			if(newStats.active_game) 	return button.reply({ content: "You are already playing a game!", ephemeral: true })
 
-						if(resolved) return
-							resolved = true
+			if(resolved) return
+			resolved = true
 
-							collector.stop("player")
-							resolve(button)
+			collector.stop("player")
+			resolve(button)
 
-							resolve(true)
+			resolve(true)
 		})
 
 		collector.on("end", (collected, reason) =>
 		{
 			if(resolved) return
 
-				resolved = true
-				resolve(null)
+			resolved = true
+			resolve(null)
 		})
 	})
 
