@@ -1,4 +1,5 @@
-const { SlashCommandBuilder, EmbedBuilder, } = require("discord.js")
+const { SlashCommandBuilder, EmbedBuilder, ContainerBuilder, MessageFlags } = require("discord.js")
+const fs    = require
 const eh    = require('../handlers/errorHandler.js')
 const dev   = require('../handlers/dev.js')
 
@@ -12,7 +13,17 @@ module.exports =
     {
         await interaction.deferReply()
 
+        const container = new ContainerBuilder()
+        .setAccentColor(0x0099ff)
+        .addTextDisplayComponents((textDisplay) =>
+            textDisplay.setContent('God help me',),
+        )
+        .addSeparatorComponents((separator) => separator)
+        .addTextDisplayComponents((textDisplay) =>
+        textDisplay.setContent('Please have mercy',),
+        )
 
-        await interaction.editReply({ content: "poopoo" })
+
+        await interaction.editReply({ components: [container], flags: MessageFlags.IsComponentsV2 })
     }
 }
