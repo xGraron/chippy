@@ -4,6 +4,7 @@ const eh 	= require("../handlers/errorHandler.js")
 const ch    = require('../handlers/cardHandler.js')
 const xh	= require('../handlers/xpHandler.js')
 const dev   = require('../handlers/dev.js')
+const ah	= require('../handlers/assetHandler.js')
 
 const values = 
 {
@@ -12,6 +13,8 @@ const values =
 	"Queen": 10,
 	"King": 10
 }
+
+const secretcard	= ah.cards(true)
 
 async function main(interaction, bet, userStats, UID)
 {
@@ -47,86 +50,94 @@ async function main(interaction, bet, userStats, UID)
 	const embed = new EmbedBuilder()
 	.setColor("#259dd9")
 	.setTitle("High or Low")
-	.setDescription(`You drew a **${emoji}**`)
+	.setDescription(`1. Card: **${emoji}** \n2. Card: **${secretcard}**`)
 
-	try 	{ initial = await interaction.editReply({ embeds: [embed], components: [row] }) }
-	catch 	{ dev.log("Failed to respond \n GameID: 1, Error: 1", 2) }
+	initial = await interaction.editReply({ embeds: [embed], components: [row] })
 	
-	const pressed	= await initial.createMessageComponentCollector({ time: 5_000 })
-
-	pressed.on('collect', async game =>
+	const press = await new Promise(resolve =>
 	{
-		if(game.user.id !== UID) return game.reply({ content: "This isn't your game!", ephemeral: true })
+		const collector = initial.createMessageComponentCollector({ time: 5_000 })
 
-		await game.deferUpdate()
-		played = true
+		let resolved = false
 
-		const dealer_drawn 	= await ch.draw(UID)
-
-		if(!dealer_drawn.success) return eh.error(interaction, dealer_drawn.reason)
-
-		const dealer_card	= dealer_drawn.card
-		const dealer_emoji  = dealer_drawn.emoji
-		const dealer_points	= values[dealer_card] || dealer_card
-		const remaining		= dealer_drawn.remaining
-
-		var reward	= Math.floor(bet / 2) + bet
-		var xp_rew	= Math.floor(bet / 7)
-		var chosen 	= 0
-		var final 	= 0 
-
-		if		(game.customId === "b_low")		chosen = 1
-		else if	(game.customId === "b_equal")	chosen = 2
-		else									chosen = 3
-
-		if		(dealer_points < points) 		final = 1
-		else if	(dealer_points === points)		final = 2
-		else									final = 3
-
-		if(chosen === 2)	reward = (bet * 2) + Math.floor(bet / 2);
-
-		if(final === chosen) 	
+		collector.on("collect", async button =>
 		{
-			embed.setColor('#1aa32a').setTitle(`You won!`).setDescription(`You drew a **${emoji}** \nThe dealer drew a **${dealer_emoji}** \n\n-# *You won ${reward} Chips*`)
+			if(button.user.id !== UID) return button.reply({ content: "This isn't your game!", ephemeral: true })
 
-			userStats.chips 		= userStats.chips + reward
+			if(resolved) return
+			resolved = true
 
-			await xh.leveling(userStats, xp_rew)
-			await xh.achievements(userStats, userStats.chips - reward, true, 1, reward)
-		}
-		else 
+			collector.stop("player")
+
+			resolve(button)
+		})
+
+		collector.on("end", (collected, reason) =>
 		{
-			embed.setColor('#e80400').setTitle(`You lost!`).setDescription(`You drew a **${emoji}** \nThe dealer drew a **${dealer_emoji}** \n\n-# *You lost ${bet} Chips*`).setFooter({ text: `The house always wins...` });
+			if(resolved) return
 
-			await xh.achievements(userStats, userStats.chips, false, 1, 0)
-		}
-
-		//try 	{ await interaction.editReply({ embeds: [embed], components: [row] }) }
-		//catch 	{ dev.log("Failed to respond \n GameID: 1, Error: 2", 2) }
-
-        pressed.stop()
+			resolved = true
+			resolve(null)
+		})
 	})
 
-	pressed.on('end', async collected =>
+	if(!press)
 	{
-		low.setDisabled(true)
-		equal.setDisabled(true)
-		high.setDisabled(true)
+		embed
+		.setColor('#e80400')
+		.setTitle(`You lost!`)
+		.setDescription(`You didn't react in time \n\n-# *You've lost ${bet} Chips*`)
+		.setFooter({ text: `The house gives you five seconds` });
 
-		if(!played)
-		{
-			embed 	
-			.setColor('#e80400')
-			.setTitle(`You lost!`)
-			.setDescription(`You didn't react in time \n\n-# *You've lost ${bet} Chips*`)
-			.setFooter({ text: `The house gives you five seconds` });	
-		}
+		await xh.achievements(userStats, userStats.chips + 50, false, 1, 0)
+		return end(userStats, interaction, embed, bet, UID)
+	}
 
-		try 	{ await interaction.editReply({ embeds: [embed], components: [] }) }
-		catch 	{ dev.log("Failed to respond \n GameID: 1, Error: 2", 2) }
+	await press.deferUpdate()
 
-		end(userStats, interaction, embed, bet, UID)
-	})
+	const dealer_drawn 	= await ch.draw(UID)
+
+	if(!dealer_drawn.success) return eh.error(interaction, dealer_drawn.reason)
+
+	const dealer_card	= dealer_drawn.card
+	const dealer_emoji  = dealer_drawn.emoji
+	const dealer_points	= values[dealer_card] || dealer_card
+
+	var reward	= Math.floor(bet / 2) + bet
+	var xp_rew	= Math.floor(bet / 7)
+	var chosen 	= 0
+	var final 	= 0
+
+	if		(press.customId === "b_low")	chosen = 1
+	else if	(press.customId === "b_equal")	chosen = 2
+	else									chosen = 3
+
+	if		(dealer_points < points) 		final = 1
+	else if	(dealer_points === points)		final = 2
+	else									final = 3
+
+	if(chosen === 2)	reward = (bet * 2) + Math.floor(bet / 2);
+
+	if(final === chosen)
+	{
+		embed
+		.setColor('#1aa32a')
+		.setTitle(`You won!`)
+		.setDescription(`1. Card: **${emoji}** \n2. Card: **${dealer_emoji}** \n\n-# *You won ${reward} Chips*`)
+
+		userStats.chips 		= userStats.chips + reward
+
+		await xh.leveling(userStats, xp_rew)
+		await xh.achievements(userStats, userStats.chips - reward, true, 1, reward)
+	}
+	else
+	{
+		embed.setColor('#e80400').setTitle(`You lost!`).setDescription(`1. Card: **${emoji}** \n2. Card: **${dealer_emoji}** \n\n-# *You lost ${bet} Chips*`).setFooter({ text: `The house always wins...` });
+
+		await xh.achievements(userStats, userStats.chips, false, 1, 0)
+	}
+
+	end(userStats, interaction, embed, bet, UID)
 }
 
 async function end(userStats, interaction, embed, bet, UID)
