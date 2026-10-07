@@ -4,6 +4,7 @@ const eh 	= require("../handlers/errorHandler.js")
 const ch    = require('../handlers/cardHandler.js')
 const xh	= require('../handlers/xpHandler.js')
 const dev   = require('../handlers/dev.js')
+const ah	= require('../handlers/assetHandler.js')
 
 const values = 
 {
@@ -34,6 +35,8 @@ const multipliers =
 	"Two Pair": 		2,
 	"Pair":             1,
 }
+
+const secretcard	= ah.cards(true)
 
 async function main(interaction, bet, userStats, UID)
 {
@@ -82,7 +85,7 @@ async function main(interaction, bet, userStats, UID)
 	const embed = new EmbedBuilder()
 	.setColor("#259dd9")
 	.setTitle("Casino Hold'em")
-	.setDescription(`Dealer: **?? ??**, You: ${hand_str} \n Community cards: ${community_hand_str}`)
+	.setDescription(`Dealer: **${secretcard}${secretcard}**, You: ${hand_str} \n Community cards: ${community_hand_str}`)
 	
 	initial = await interaction.editReply({ embeds: [embed], components: [row] })
 
