@@ -4,11 +4,7 @@ const items =
 [   //array of all items
     {"name":"Blank Round", "price": 99,     "id": "i1"},
     {"name":"Platinum Chip", "price": 99,   "id": "i2"},
-    {"name":"testitem3", "price": 125,  "id": "i3"},
-    {"name":"testitem4", "price": 10,   "id": "i4"},
-    {"name":"testitem5", "price": 30,   "id": "i5"},
-    {"name":"testitem6", "price": 15,   "id": "i6"},
-    {"name":"testitem7", "price": 40,   "id": "i7"},
+    {"name":"Golden Carrot", "price": 99,  "id": "i3"},
 ]
 
 
