@@ -2,7 +2,7 @@ const dev = require('../handlers/dev.js')
 
 const items =
 [   //array of all items
-    {"name":"testitem1", "price": 10,   "id": "i1"},
+    {"name":"Blank Round", "price": 10,   "id": "i1"},
     {"name":"testitem2", "price": 5,    "id": "i2"},
     {"name":"testitem3", "price": 125,  "id": "i3"},
     {"name":"testitem4", "price": 10,   "id": "i4"},
