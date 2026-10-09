@@ -115,9 +115,6 @@ function achievements(userStats, pre, won, gameID, reward, bet, additional)
 	if(gameID === 0 && additional === 21 && !userStats.achievements.includes("21"))					userStats.achievements.push("21")
 	if(gameID === 0 && additional === 22 && !userStats.achievements.includes("22"))					userStats.achievements.push("22")
 
-	//90
-	if(gameID === 0 && additional === 90 && !userStats.achievements.includes("90"))					userStats.achievements.push("90")
-
 	dh.userSave(userStats)
 }
 
