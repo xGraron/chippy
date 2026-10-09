@@ -21,10 +21,11 @@ module.exports =
     {
         await interaction.deferReply()
 
+		var pulled = false
+
 		let initial;
 
-		if(userStats.dead) 									return eh.error(interaction, `Dead \n-# Final round: <t:${Math.floor(userStats.lastrussian / 1000)}:F>`);
-        if((Date.now() - userStats.lastrussian) < 300000) 	return eh.error(interaction, "Timeout");
+		if(userStats.dead) return eh.error(interaction, `Dead. \n-# Final round: <t:${Math.floor(userStats.lastrussian / 1000)}:F>`);
 
         const trigger = new ButtonBuilder()
 		.setCustomId("b_trigger")
@@ -44,14 +45,42 @@ module.exports =
 		.setButtonAccessory(trigger)
 		)
 
-		await interaction.editReply({ components: [container], flags: MessageFlags.IsComponentsV2 })
+		await interaction.editReply({ components: [container], flags: MessageFlags.IsComponentsV2, ephemeral: true })
 
-		setTimeout(() =>
+		setTimeout(async () =>
 		{
 			trigger.setDisabled(false)
+			initial = await interaction.editReply({ components: [container], flags: MessageFlags.IsComponentsV2 })
+
+			const pull = await new Promise(resolve =>
+			{
+				const collector = initial.createMessageComponentCollector({ time: 1_000 })
+
+				collector.on("collect", async selection =>
+				{
+					pulled = true
+
+					selection.deferUpdate()
+					resolve("player")
+				})
+
+				collector.on("end", (collected, reason) =>
+				{
+					resolve(null)
+				})
+			})
+
+			container.components.splice(0, 2)
+
+			if(!pulled)
+			{
+				container.addTextDisplayComponents((textDisplay) => textDisplay.setContent('**Coward.** \nProbably the right choice...'))
+
+				return interaction.editReply({ components: [container], flags: MessageFlags.IsComponentsV2 })
+			}
+
 			interaction.editReply({ components: [container], flags: MessageFlags.IsComponentsV2 })
 		}, 3_000)
     }
 }
-
 
