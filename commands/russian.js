@@ -36,7 +36,7 @@ module.exports =
 		const container = new ContainerBuilder()
 		.addSectionComponents((section) =>
 		section
-        .addTextDisplayComponents((textDisplay) => textDisplay.setContent('A round of Russian Roulette. \nWin big or lose it all... \n-# If you lose, you lose all your money, xp & level! \n-# If you win, you get 1.000 Chips'))
+        .addTextDisplayComponents((textDisplay) => textDisplay.setContent('A round of Russian Roulette. \nWin big or lose it all... \n-# If you lose, you lose all your money, xp & level! \n-# If you win, you get 500 Chips'))
 		.setThumbnailAccessory((thumbnail) => thumbnail.setURL(gif))
 		 )
 		.addSectionComponents((section) =>
@@ -54,7 +54,7 @@ module.exports =
 
 			const pull = await new Promise(resolve =>
 			{
-				const collector = initial.createMessageComponentCollector({ time: 1_000 })
+				const collector = initial.createMessageComponentCollector({ time: 3_000 })
 
 				collector.on("collect", async selection =>
 				{
@@ -78,8 +78,41 @@ module.exports =
 
 				return interaction.editReply({ components: [container], flags: MessageFlags.IsComponentsV2 })
 			}
+			else if(userStats.inventory.includes("i1"))
+			{
+				userStats.inventory.splice(userStats.inventory.indexOf("i1"), 1)
+
+				container.addTextDisplayComponents((textDisplay) => textDisplay.setContent('**Well well well...** \nYour blank saved you!'))
+			}
+			else if(random.bool(0.16))
+			{
+				userStats =
+				{
+					userID: userStats.userID,
+					registered: Date.now(),
+					xp: 0,
+					level: 1,
+					chips: 500,
+					active_game: false,
+					lastbeg: 0,
+					inventory: [],
+					games: {},
+					achievements: ["90"],
+					custom: {},
+				}
+
+				container.addTextDisplayComponents((textDisplay) => textDisplay.setContent('## Truth is, the game was rigged from the start. \n-#  *Your progress has been reset*'))
+			}
+			else
+			{
+				userStats.chips += 500
+
+				container.addTextDisplayComponents((textDisplay) => textDisplay.setContent('**Lucky bastard.** \nYou made it! Here, have your reward.'))
+			}
 
 			interaction.editReply({ components: [container], flags: MessageFlags.IsComponentsV2 })
+
+			dh.userSave(userStats.userID, userStats)
 		}, 3_000)
     }
 }
