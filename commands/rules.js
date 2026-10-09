@@ -32,13 +32,12 @@ module.exports =
         const container = new ContainerBuilder()
         .setAccentColor(0x0099ff)
         .addTextDisplayComponents((textDisplay) => textDisplay.setContent('## Rules \n Maximum bet for each game is 1.000 Chips! \n You will lose if you fail to react in time!'))
-        .addSeparatorComponents((separator) => separator)
 
         rules.forEach(rule =>
         {
             container
-            .addTextDisplayComponents((textDisplay) => textDisplay.setContent(rule))
             .addSeparatorComponents((separator) => separator)
+            .addTextDisplayComponents((textDisplay) => textDisplay.setContent(rule))
         })
 
         await interaction.editReply({ components: [container], flags: MessageFlags.IsComponentsV2 })
