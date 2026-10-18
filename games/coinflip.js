@@ -78,7 +78,7 @@ async function main(interaction, bet, userStats, UID)
     }
 
     const n = random.integer(0, 1)
-    if(n === chosen) reward = bet + 10
+    if(n === chosen) reward = bet + 50
 
     embed.setThumbnail(statics[n])
 
