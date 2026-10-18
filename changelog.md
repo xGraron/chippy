@@ -19,3 +19,5 @@
 - Removed play again (will return on a small number of games)
 - Fixed missing assets on /shop, causing shop to be unavailable
 - New game: Diceroll
+- /stats renamed to /me  (/stats will come back, with statistics)
+- Failing to press a button in Poker now automatically folds (instead of losing entirely)
