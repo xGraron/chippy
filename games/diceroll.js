@@ -87,7 +87,7 @@ async function main(interaction, bet, userStats, UID)
     buttons.forEach(button => { button.setDisabled(true) })
     even.setDisabled(true)
     odd.setDisabled(true)
-    
+
     const n = random.integer(0, 6)
 
     if(!press)                          
@@ -99,11 +99,12 @@ async function main(interaction, bet, userStats, UID)
     {
         press.deferUpdate()
 
-        buttons[chosen[press.customId]-1].setStyle(ButtonStyle.Primary)
+        try     { buttons[chosen[press.customId]-1].setStyle(ButtonStyle.Primary) }
+        catch   { /*button is even/odd */ }
         buttons[n-1].setStyle(ButtonStyle.Success)
 
-        if(n % 2 === 0) even.setStyle(ButtonStyle.Success)
-        else            odd.setStyle(ButtonStyle.success)
+        if(n % 2 === 0) even.setStyle(ButtonStyle.Success);
+        else            odd.setStyle(ButtonStyle.Success)
 
         if(n === chosen[press.customId])                    reward = bet * 5
         else if(n % 2 === 0 && press.customId === "b_even") reward = bet * 2
