@@ -54,7 +54,6 @@ async function main(interaction, bet, userStats, UID)
 	var community_hand_str 	= ""
 	var winning_hand        = { string: "", name: "" }
 	var reward 				= 0
-	var played 				= false
 	var folded 				= false
 
 	let inital;
@@ -122,20 +121,10 @@ async function main(interaction, bet, userStats, UID)
 	call.setDisabled(true)
 	fold.setDisabled(true)
 
-	if(!press)
-	{
-		embed
-		.setColor(colors.red)
-		.setTitle(`You lost!`)
-		.setDescription(`You didn't react in time \n\n-# *You've lost ${bet} Chips*`)
-		.setFooter({ text: `The house gives you seven seconds` });
+	if(!press) folded = true
 
-		await xh.achievements(userStats, userStats.chips + bet, false, 8, 0)
-		return end(userStats, interaction, embed, bet, UID)
-	}
-
-	await press.deferUpdate()
-
+	try 	{ await press.deferUpdate() }
+	catch	{ /* user didnt react in time */ }
 	if(folded)
 	{
 		embed
