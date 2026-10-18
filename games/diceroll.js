@@ -85,6 +85,9 @@ async function main(interaction, bet, userStats, UID)
     })
 
     buttons.forEach(button => { button.setDisabled(true) })
+    even.setDisabled(true)
+    odd.setDisabled(true)
+    
     const n = random.integer(0, 6)
 
     if(!press)                          
