@@ -9,43 +9,57 @@ const ah	= require('../handlers/assetHandler.js')
 
 const colors	= ah.colors()
 const random 	= new Random()
-const statics	= []
 const emojis    = ah.dice()
-const gif		= ah.gif("coins")
-
-for(let i = 1; i < 7; i++)
-{
-    statics.push(ah.static(`dice_${i}`))
-}
 
 async function main(interaction, bet, userStats, UID)
 {
-    var foot	= "Which side will it land on?"
     var chosen  = 0
     var reward  = 0
+    var buttons = []
+    var chosen  = {}
 
     const embed = new EmbedBuilder()
-    .setTitle("Diceroll")
-    .setThumbnail(gif)
-    .setFooter({ text: foot });
+    .setTitle("Roll the Dice")
+    .setDescription("Guess the number")
 
-    const row       = new ActionRowBuilder()
+    const even = new ButtonBuilder()
+    .setCustomId(`b_even`)
+    .setLabel("Even")
+    .setStyle(ButtonStyle.Secondary)
+
+    const odd = new ButtonBuilder()
+    .setCustomId(`b_odd`)
+    .setLabel("Odd")
+    .setStyle(ButtonStyle.Secondary)
+
+    const die = new ButtonBuilder()
+    .setCustomId(`b_die`)
+    .setEmoji("🎲")
+    .setStyle(ButtonStyle.Secondary)
+    .setDisabled(true)
 
     for(let i = 1; i < 7; i++)
     {
-        const button[i] = new ButtonBuilder()
+         const new_button = new ButtonBuilder()
         .setCustomId(`b_${i}`)
         .setEmoji(emojis[i-1])
         .setStyle(ButtonStyle.Secondary)
 
-        row.addComponents(button[i])
+        buttons.push(new_button)
+
+        chosen[`b_${i}`] = i
     }
 
-    const initial   = await interaction.editReply({ embeds: [embed], components: [row] })
+    const row1 = new ActionRowBuilder().addComponents(...buttons.slice(0, 3))
+    const row2 = new ActionRowBuilder().addComponents(...buttons.slice(3, 6))
+    const row3 = new ActionRowBuilder().addComponents(even, die, odd)
+
+
+    const initial = await interaction.editReply({ embeds: [embed], components: [row1, row2, row3] })
 
     const press = await new Promise(resolve => 
     {
-        const collector = initial.createMessageComponentCollector({ time: 5_000 })
+        const collector = initial.createMessageComponentCollector({ time: 10_000 })
 
         let resolved = false
 
@@ -70,58 +84,43 @@ async function main(interaction, bet, userStats, UID)
         })
     })
 
+    buttons.forEach(button => { button.setDisabled(true) })
+    const n = random.integer(0, 6)
+
     if(!press)                          
     {
-        chosen = random.integer(0, 5)
+        chosen = random.integer(0, 6)
         embed.setDescription("You didn't react, \nso Chippy chose for you")
-    }
-    else 
-    {
-        press.deferUpdate()
-        if(press.customId === "b_tails") chosen = 1
-    }
-
-    const n = random.integer(0, 5)
-    if(n === chosen) reward = bet + 10
-
-    embed.setThumbnail(statics[n])
-
-    if(reward > 0)
-    {
-        const xp_rew    = Math.floor(reward / 7)
-        foot            = `You won ${reward} Chips`
-
-        embed
-        .setColor(colors.green)
-        .setFooter({ text: foot });
-
-        userStats.chips 		+= reward
-        userStats.active_game 	= false
-
-        xh.leveling(userStats, xp_rew)
-        xh.achievements(userStats, userStats - reward, true, 6, reward, bet, n)
     }
     else
     {
-        embed
-        .setColor(colors.red)
-        .setFooter({ text: "One more flip..."})
+        press.deferUpdate()
 
-        userStats.active_game 	= false
+        buttons[chosen[press.customId]-1].setStyle(ButtonStyle.Primary)
+        buttons[n-1].setStyle(ButtonStyle.Success)
 
-        xh.achievements(userStats, userStats - reward, false, 6, reward)
+        if(n % 2 === 0) even.setStyle(ButtonStyle.Success)
+        else            odd.setStyle(ButtonStyle.success)
+
+        if(n === chosen[press.customId])                    reward = bet * 5
+        else if(n % 2 === 0 && press.customId === "b_even") reward = bet * 2
+        else if(n % 2 !== 0 && press.customId === "b_odd")  reward = bet * 2
+
     }
 
-    end(userStats, interaction, embed, bet, UID)
+    if(reward > 0)  embed.setDescription(`You won ${reward} Chips`)
+    else            embed.setDescription("You lost!")
+
+    end(userStats, interaction, embed, bet, UID, [row1, row2, row3])
 }
 
-async function end(userStats, interaction, embed, bet, UID)
+async function end(userStats, interaction, embed, bet, UID, rows)
 {
     userStats.active_game = false;
     dh.userSave(userStats)
     ch.remove(UID)
 
-    initial = await interaction.editReply({ embeds: [embed], components:[] })
+    initial = await interaction.editReply({ embeds: [embed], components:rows })
 
 /*
     newStats = await dh.userGet(UID)
