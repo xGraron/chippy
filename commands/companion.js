@@ -3,24 +3,28 @@ const dh    = require('../handlers/dataHandler.js')
 const dev   = require('../handlers/dev.js')
 const ah    = require('../handlers/assetHandler.js')
 
-const bodies    = []
 const b_total   = 1
-const dents     = []
 const d_total   = 1
-const eyes      = []
 const e_total   = 5
+
+choices = 
+{
+    "bodies": [],
+    "dents": [],
+    "eyes": []
+}
 
 for(let i = 0; i < b_total; i++)
 {
-    bodies.push(ah.static(`body_${i}`))
+    choices["bodies"].push(ah.static(`body_${i}`))
 }
 for(let i = 0; i < d_total; i++)
 {
-    dents.push(ah.static(`dents_${i}`))
+    choices["dents"].push(ah.static(`dents_${i}`))
 }
 for(let i = 0; i < e_total; i++)
 {
-    eyes.push(ah.static(`eyes_${i}`))
+    choices["eyes"].push(ah.static(`eyes_${i}`))
 }
 
 module.exports =
@@ -44,7 +48,8 @@ module.exports =
 
         if(interaction.options.getSubcommand() === "view") return view(interaction, userStats)
 
-        var current = "body"
+        var current = "eyes"
+        var tracker = 0
 
         const save = new ButtonBuilder()
         .setCustomId("b_save")
@@ -68,17 +73,55 @@ module.exports =
 
         const row 	= new ActionRowBuilder().addComponents(prev, change, next)
 
-        const container = new ContainerBuilder()
+        let container = new ContainerBuilder()
         .addSectionComponents((section) => section
             .addTextDisplayComponents((textDisplay) => textDisplay.setContent('Editing your companion \nName: *test*'))
-            .setThumbnailAccessory((thumbnail) => thumbnail.setURL(bodies[0]))
+            .setThumbnailAccessory((thumbnail) => thumbnail.setURL(choices[current][tracker]))
         )
         .addSectionComponents((section) => section
-            .addTextDisplayComponents((textDisplay) => textDisplay.setContent(`Currently editing: **${current}**`))
+            .addTextDisplayComponents((textDisplay) => textDisplay.setContent(`Currently selection: **${current}**`))
             .setButtonAccessory(save)
         )
 
-        await interaction.editReply({ components: [container, row], flags: MessageFlags.IsComponentsV2, ephemeral: true })
+        const initial = await interaction.editReply({ components: [container, row], flags: MessageFlags.IsComponentsV2, ephemeral: true })
+
+            const press = await new Promise(resolve =>
+    {
+        const collector = initial.createMessageComponentCollector({ time: 60_000 })
+
+        let resolved = false
+
+        collector.on("collect", async button =>
+        {
+            if(button.user.id !== interaction.user.id)  return button.reply({ content: "This isn't your companion!", ephemeral: true })
+
+            if(resolved) return
+
+            if(button.customId === "b_next") tracker++
+            if(button.customId === "b_prev") tracker--
+
+            container = new ContainerBuilder()
+            .addSectionComponents((section) => section
+                .addTextDisplayComponents((textDisplay) => textDisplay.setContent('Editing your companion \nName: *test*'))
+                .setThumbnailAccessory((thumbnail) => thumbnail.setURL(choices[current][tracker]))
+            )
+            .addSectionComponents((section) => section
+                .addTextDisplayComponents((textDisplay) => textDisplay.setContent(`Currently selection: **${current}**`))
+                .setButtonAccessory(save)
+            )
+
+            button.deferUpdate()
+            interaction.editReply({ components: [container, row], flags: MessageFlags.IsComponentsV2, ephemeral: true })
+        })
+
+        collector.on("end", (collected, reason) =>
+        {
+            if(resolved) return
+
+            resolved = true
+            resolve(null)
+        })
+    })
     }
 }
 
