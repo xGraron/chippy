@@ -146,71 +146,72 @@ async function main(interaction, bet, userStats, UID)
 
 async function end(userStats, interaction, embed, bet, UID)
 {
-	userStats.active_game = false;
-	dh.userSave(userStats)
-	ch.remove(UID)
+    userStats.active_game = false;
+    dh.userSave(userStats)
+    ch.remove(UID)
 
-	newStats = await dh.userGet(UID)
+    initial = await interaction.editReply({ embeds: [embed], components:[] })
 
-	const again = new ButtonBuilder()
-	.setCustomId('b_again')
-	.setEmoji('🔁')
-	.setLabel('Play again?')
-	.setStyle(ButtonStyle.Primary)
+/*
+    newStats = await dh.userGet(UID)
 
-	const row 	= new ActionRowBuilder().addComponents(again)
+    const again = new ButtonBuilder()
+    .setCustomId('b_again')
+    .setEmoji('🔁')
+    .setLabel('Play again?')
+    .setStyle(ButtonStyle.Primary)
 
-	initial = await interaction.editReply({ embeds: [embed], components:[row] })
+    const row 	= new ActionRowBuilder().addComponents(again)
 
-	const press = await new Promise(resolve =>
-	{
-		const collector = initial.createMessageComponentCollector({ time: 7_000 })
+    initial = await interaction.editReply({ embeds: [embed], components:[row] })
 
-		let resolved = false
+    const press = await new Promise(resolve =>
+    {
+        const collector = initial.createMessageComponentCollector({ time: 7_000 })
 
-		collector.on("collect", async button =>
-		{
-			if(button.user.id !== UID) 	return button.reply({ content: "This isn't your game!", ephemeral: true })
-			if(newStats.chips < bet)	return button.reply({ content: "You can't afford to play again with this bet!", ephemeral: true })
-			if(newStats.active_game) 	return button.reply({ content: "You are already playing a game!", ephemeral: true })
+        let resolved = false
 
-			if(resolved) return
-			resolved = true
+        collector.on("collect", async button =>
+        {
+            if(button.user.id !== UID) 	return button.reply({ content: "This isn't your game!", ephemeral: true })
+            if(newStats.chips < bet)	return button.reply({ content: "You can't afford to play again with this bet!", ephemeral: true })
+            if(newStats.active_game) 	return button.reply({ content: "You are already playing a game!", ephemeral: true })
 
-			collector.stop("player")
-			resolve(button)
+            if(resolved) return
+            resolved = true
 
-			resolve(true)
-		})
+            collector.stop("player")
+            resolve(button)
 
-		collector.on("end", (collected, reason) =>
-		{
-			if(resolved) return
+            resolve(true)
+        })
 
-			resolved = true
-			resolve(null)
-		})
-	})
+        collector.on("end", (collected, reason) =>
+        {
+            if(resolved) return
 
-	again.setDisabled(true)
-	interaction.editReply({ components: [row] })
+            resolved = true
+            resolve(null)
+        })
+    })
 
-	if(!press)
-	{
-		again.setDisabled(true)
-		return interaction.editReply({ components: [row] })
-	}
-	else
-	{
-		await press.deferUpdate()
+    if(!press)
+    {
+        again.setDisabled(true)
+        return interaction.editReply({ components: [row] })
+    }
+    else
+    {
+        await press.deferUpdate()
 
-		newStats.chips -= bet
-		newStats.active_game = true
+        newStats.chips -= bet
+        newStats.active_game = true
 
-		dh.userSave(newStats)
+        dh.userSave(newStats)
 
-		main(interaction, bet, newStats, UID)
-	}
+        main(interaction, bet, newStats, UID)
+    }
+*/
 }
 
 module.exports =

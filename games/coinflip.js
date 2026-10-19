@@ -78,7 +78,7 @@ async function main(interaction, bet, userStats, UID)
     }
 
     const n = random.integer(0, 1)
-    if(n === chosen) reward = bet + 10
+    if(n === chosen) reward = bet + 50
 
     embed.setThumbnail(statics[n])
 
@@ -117,6 +117,9 @@ async function end(userStats, interaction, embed, bet, UID)
     dh.userSave(userStats)
     ch.remove(UID)
 
+    initial = await interaction.editReply({ embeds: [embed], components:[] })
+
+/*
     newStats = await dh.userGet(UID)
 
     const again = new ButtonBuilder()
@@ -175,6 +178,7 @@ async function end(userStats, interaction, embed, bet, UID)
 
         main(interaction, bet, newStats, UID)
     }
+*/
 }
 
 module.exports =

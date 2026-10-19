@@ -50,6 +50,7 @@
 7: Slots
 8: Poker
 9: Card Rush
+10: Dice Roll
 
 #Commands
 Explanation: Commands relating to

@@ -19,7 +19,11 @@ const rules     =
 
     '**Poker** \nYour goal is to have a better Five-card Poker hand than the Dealer. \nInitially, you & the dealer get two cards and three community cards. \nYou can not see the dealers cards. \nYou may fold if you believe you dont have a good chance. \nIf you fold, you only lose half of your bet \n-# Played with a standard deck of 52 cards',
 
-    '**Card Rush** \nSame as High or Low, but you must play three rounds before being able to "Cash out" \nAfterwards, you have the option to cash out after each round, \nsecuring your winnings. \nIf you lose, you lose everything you earnt up until that point \n-# Go long enough to be cashed out automatically, granting you a huge reward'
+    '**Card Rush** \nSame as High or Low, but you must play three rounds before being able to "Cash out" \nAfterwards, you have the option to cash out after each round, \nsecuring your winnings. \nIf you lose, you lose everything you earnt up until that point \n-# Go long enough to be cashed out automatically, granting you a huge reward',
+
+    '**Coinflip** \nExtremely simple, pick which side the coin will show. \nGuess right, you win 50 Chips. \nGuess wrong, you lose 50.',
+
+    '**Diceroll** \n Guess which number the dice will show, \nor play it save and guess whether its even or odd. \nGuessing a number gives you 200 Chips , \nGuessing even or odd 50, \nGuessing wrong costs you 50 Chips'
 ]
 
 module.exports =

@@ -146,6 +146,9 @@ async function end(userStats, interaction, embed, bet, UID)
     dh.userSave(userStats)
     ch.remove(UID)
 
+    initial = await interaction.editReply({ embeds: [embed], components:[] })
+
+/*
     newStats = await dh.userGet(UID)
 
     const again = new ButtonBuilder()
@@ -204,6 +207,7 @@ async function end(userStats, interaction, embed, bet, UID)
 
         main(interaction, bet, newStats, UID)
     }
+*/
 }
 
 async function bac_draw(hand, string, UID)

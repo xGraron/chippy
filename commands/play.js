@@ -114,6 +114,15 @@ module.exports =
 			.setDescription("Your bet")
 			.setRequired(false)
 		)
+	)
+	.addSubcommand(subcommand => subcommand
+		.setName("diceroll")
+		.setDescription("Even, Odd, Anything?")
+		.addIntegerOption(option => option
+			.setName("bet")
+			.setDescription("Your bet")
+			.setRequired(false)
+		)
 	),
 
 	async execute(interaction, userStats)
