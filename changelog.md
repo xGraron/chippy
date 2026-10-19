@@ -21,3 +21,4 @@
 - New game: Diceroll
 - /stats renamed to /me  (/stats will come back, with statistics)
 - Failing to press a button in Poker now automatically folds (instead of losing entirely)
+- fixed incorrect footer on poker embed 
