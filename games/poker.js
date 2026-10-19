@@ -189,7 +189,7 @@ async function main(interaction, bet, userStats, UID)
 		embed
 		.setColor('#e80400')
 		.setTitle(`You didn't qualify!`)
-		.setDescription(`Dealer: ${dealer_hand_str} *(${final.hands[1]})*, You: ${hand_str} *(${final.hands[0]})* \n Community cards: ${community_hand_str} \n\n-# *You've lost ${bet * 3} Chips*`)
+		.setDescription(`Dealer: ${dealer_hand_str} *(${final.hands[1]})*, You: ${hand_str} *(${final.hands[0]})* \n Community cards: ${community_hand_str} \n\n-# *You've lost ${bet} Chips*`)
 		.setFooter({ text: `Unlucky...` });
 
 		await xh.achievements(userStats, userStats.chips + (bet * 3), false, 8, 0)
