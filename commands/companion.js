@@ -28,7 +28,7 @@ module.exports =
         const parts     = []
 
         if(!userStats.companion)    userStats.companion = [0, 0, 0]
-        if(!userStats.unlocked)     userStats.unlocked = [[0], [0], [0, 1, 2, 3, 4]]
+        if(!userStats.unlocked)     userStats.unlocked = [[0, 1], [0, 1], [0, 1, ]]
 
         if(interaction.options.getSubcommand() === "view") return view(interaction, userStats)
 
@@ -90,12 +90,15 @@ module.exports =
 
             if(resolved) return
 
+            dev.log(current)
+            dev.log(userStats.companion)
+            dev.log(parts[current].length)
+
             if(button.customId === "b_next")                                userStats.companion[current]++
             if(button.customId === "b_prev")                                userStats.companion[current]--
 
             if(userStats.companion[current] < 0)                            userStats.companion[current] = parts[current].length - 1
             if(userStats.companion[current] > parts[current].length - 1)    userStats.companion[current] = 0
-
 
             if(button.customId === "b_change") current++
             if(button.customId === "b_save") collector.stop("save")
@@ -136,7 +139,6 @@ async function composite(parts, userStats)
 
     for(let i = 0; i < userStats.companion.length; i++)
     {
-        dev.log(parts[i][userStats.companion[i]])
         const temp = await loadImage(parts[i][userStats.companion[i]])
 
         context.drawImage(temp, 0, 0)
