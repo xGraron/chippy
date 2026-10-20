@@ -93,15 +93,17 @@ Accents:
 4: silver
 
 Eyes:
-0: standard
-1: sad
+0: Blank
+1: Sad
 2: Angry
 3: evil
+4: Happy
 
 Hats:
-0: Gambler
+0: Blank
 1: Banker
 2: Banker Blue
+3: Gambler
 
 
 
