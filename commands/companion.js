@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder, ContainerBuilder, MessageFlags, AttachmentBuilder } = require("discord.js")
+const { SlashCommandBuilder, EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder, ContainerBuilder, MessageFlags, AttachmentBuilder } = require("discord.js")
 const { createCanvas, loadImage }                                                                           = require('@napi-rs/canvas')
 const dh    = require('../handlers/dataHandler.js')
 const dev   = require('../handlers/dev.js')
@@ -27,10 +27,12 @@ module.exports =
 
         const parts     = []
 
-        if(!userStats.companion)    userStats.companion = [0, 0, 0]
-        if(!userStats.unlocked)     userStats.unlocked = [[0, 1], [0, 1], [0, 1, ]]
-
-        if(interaction.options.getSubcommand() === "view") return view(interaction, userStats)
+        if(!userStats.companion)    
+        {
+            userStats.companion = [0, 0, 0, 0]
+            userStats.unlocked  = [[0], [0], [0], [0]]
+            userStats.comp_name = "Run /companion name"
+        }
 
         for(let i = 0; i < userStats.unlocked.length; i++)
         {
@@ -39,10 +41,11 @@ module.exports =
             userStats.unlocked[i].forEach(part => parts[i].push(ah.static(`comp/${available[i]}_${part}`)) )
         }
 
+        if(interaction.options.getSubcommand() === "view") return view(interaction, userStats, parts)
+
         var current = 0
         var tracker = 0
         var image   = await composite(parts, userStats)
-
 
         const save = new ButtonBuilder()
         .setCustomId("b_save")
@@ -78,72 +81,72 @@ module.exports =
 
         const initial = await interaction.editReply({ components: [container, row], files: [image], flags: MessageFlags.IsComponentsV2 })
 
-            const press = await new Promise(resolve =>
-    {
-        const collector = initial.createMessageComponentCollector({ time: 60_000 })
-
-        let resolved = false
-
-        collector.on("collect", async button =>
+        const press = await new Promise(resolve =>
         {
-            if(button.user.id !== interaction.user.id)  return button.reply({ content: "This isn't your companion!", ephemeral: true })
+            const collector = initial.createMessageComponentCollector({ time: 60_000 })
 
-            if(resolved) return
+            let resolved = false
 
-            button.deferUpdate()                    
+            collector.on("collect", async button =>
+            {
+                if(button.user.id !== interaction.user.id)  return button.reply({ content: "This isn't your companion!", ephemeral: true })
 
-            if(button.customId === "b_next")                                userStats.companion[current]++
-            if(button.customId === "b_prev")                                userStats.companion[current]--
+                if(resolved) return
 
-            if(userStats.companion[current] < 0)                            userStats.companion[current] = parts[current].length - 1
-            if(userStats.companion[current] > parts[current].length - 1)    userStats.companion[current] = 0
+                button.deferUpdate()                    
 
-            if(button.customId === "b_change")          current++
-            if(current === userStats.companion.length)  current = 0
-            if(button.customId === "b_save") return collector.stop("save")
+                if(button.customId === "b_next")                                userStats.companion[current]++
+                if(button.customId === "b_prev")                                userStats.companion[current]--
 
-            image = await composite(parts, userStats)
+                if(userStats.companion[current] < 0)                            userStats.companion[current] = parts[current].length - 1
+                if(userStats.companion[current] > parts[current].length - 1)    userStats.companion[current] = 0
 
-            container = new ContainerBuilder()
-            .addSectionComponents((section) => section
-                .addTextDisplayComponents((textDisplay) => textDisplay.setContent('Editing your companion \nName: *test*'))
-                .setThumbnailAccessory((thumbnail) => thumbnail.setURL("attachment://result.png"))
-            )
-            .addSectionComponents((section) => section
-                .addTextDisplayComponents((textDisplay) => textDisplay.setContent(`Current selection: **${available[current]}**`))
-                .setButtonAccessory(save)
-            )
+                if(button.customId === "b_change")          current++
+                if(current === userStats.companion.length)  current = 0
+                if(button.customId === "b_save") return collector.stop("save")
 
-            interaction.editReply({ components: [container, row], files: [image], flags: MessageFlags.IsComponentsV2 })
+                image = await composite(parts, userStats)
+
+                container = new ContainerBuilder()
+                .addSectionComponents((section) => section
+                    .addTextDisplayComponents((textDisplay) => textDisplay.setContent('Editing your companion \nName: *test*'))
+                    .setThumbnailAccessory((thumbnail) => thumbnail.setURL("attachment://result.png"))
+                )
+                .addSectionComponents((section) => section
+                    .addTextDisplayComponents((textDisplay) => textDisplay.setContent(`Current selection: **${available[current]}**`))
+                    .setButtonAccessory(save)
+                )
+
+                interaction.editReply({ components: [container, row], files: [image], flags: MessageFlags.IsComponentsV2 })
+            })
+
+            collector.on("end", (collected, reason) =>
+            {
+                if(resolved) return
+
+                if(reason === "save") dh.userSave(interaction.user.id, userStats)
+
+                save.setDisabled(true)
+                prev.setDisabled(true)
+                next.setDisabled(true)
+                change.setDisabled(true)
+
+                container = new ContainerBuilder()
+                .addSectionComponents((section) => section
+                    .addTextDisplayComponents((textDisplay) => textDisplay.setContent('Your companion \nName: *test*'))
+                    .setThumbnailAccessory((thumbnail) => thumbnail.setURL("attachment://result.png"))
+                )
+                .addSectionComponents((section) => section
+                    .addTextDisplayComponents((textDisplay) => textDisplay.setContent(`Saved successfully.`))
+                    .setButtonAccessory(save)
+                )
+
+                interaction.editReply({ components: [container, row], files: [image], flags: MessageFlags.IsComponentsV2 })
+
+                resolved = true
+                resolve(null)
+            })
         })
-
-        collector.on("end", (collected, reason) =>
-        {
-            if(resolved) return
-
-            if(reason === "save") dh.userSave(interaction.user.id, userStats)
-
-            save.setDisabled(true)
-            prev.setDisabled(true)
-            next.setDisabled(true)
-            change.setDisabled(true)
-
-            container = new ContainerBuilder()
-            .addSectionComponents((section) => section
-                .addTextDisplayComponents((textDisplay) => textDisplay.setContent('Your companion \nName: *test*'))
-                .setThumbnailAccessory((thumbnail) => thumbnail.setURL("attachment://result.png"))
-            )
-            .addSectionComponents((section) => section
-                .addTextDisplayComponents((textDisplay) => textDisplay.setContent(`Saved successfully.`))
-                .setButtonAccessory(save)
-            )
-
-            interaction.editReply({ components: [container, row], files: [image], flags: MessageFlags.IsComponentsV2 })
-
-            resolved = true
-            resolve(null)
-        })
-    })
     }
 }
 
@@ -167,7 +170,14 @@ async function composite(parts, userStats)
     return img
 }
 
-async function view(interaction, userStats)
+async function view(interaction, userStats, parts)
 {
-    interaction.editReply({ content: "Cheggem"})
+    image = await composite(parts, userStats)
+
+    const embed = new EmbedBuilder()
+    .setTitle("temporary")
+    .setDescription("Temp")
+    .setThumbnail("attachment://result.png")
+
+    interaction.editReply({ embeds:[embed], files: [image] })
 }
