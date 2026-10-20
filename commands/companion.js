@@ -19,6 +19,15 @@ module.exports =
         .setName("customize")
         .setDescription("Customize your companion")
 
+    )
+    .addSubcommand(subcommand => subcommand
+        .setName("name")
+        .setDescription("(Rename your companion")
+        .addStringOption((option) => option
+            .setName('name')
+            .setDescription('What do you want your companion to be called')
+            .setRequired(true)
+        )
     ),
 
     async execute(interaction, userStats)
@@ -42,6 +51,7 @@ module.exports =
         }
 
         if(interaction.options.getSubcommand() === "view") return view(interaction, userStats, parts)
+        if(interaction.options.getSubcommand() === "name") return name(interaction, userStats, parts)
 
         var current = 0
         var tracker = 0
@@ -109,7 +119,7 @@ module.exports =
 
                 container = new ContainerBuilder()
                 .addSectionComponents((section) => section
-                    .addTextDisplayComponents((textDisplay) => textDisplay.setContent('Editing your companion \nName: *test*'))
+                    .addTextDisplayComponents((textDisplay) => textDisplay.setContent(`Your companion \nName: *${userStats.comp_name}*`))
                     .setThumbnailAccessory((thumbnail) => thumbnail.setURL("attachment://result.png"))
                 )
                 .addSectionComponents((section) => section
@@ -133,7 +143,7 @@ module.exports =
 
                 container = new ContainerBuilder()
                 .addSectionComponents((section) => section
-                    .addTextDisplayComponents((textDisplay) => textDisplay.setContent('Your companion \nName: *test*'))
+                    .addTextDisplayComponents((textDisplay) => textDisplay.setContent(`Your companion \nName: *${userStats.comp_name}*`))
                     .setThumbnailAccessory((thumbnail) => thumbnail.setURL("attachment://result.png"))
                 )
                 .addSectionComponents((section) => section
@@ -175,9 +185,27 @@ async function view(interaction, userStats, parts)
     image = await composite(parts, userStats)
 
     const embed = new EmbedBuilder()
-    .setTitle("temporary")
+    .setTitle(userStats.comp_name)
     .setDescription("Temp")
     .setThumbnail("attachment://result.png")
+
+    interaction.editReply({ embeds:[embed], files: [image] })
+}
+
+async function name(interaction, userStats, parts)
+{
+    image = await composite(parts, userStats)
+
+    const name = interaction.options.getString('name')
+
+    const embed = new EmbedBuilder()
+    .setTitle(name)
+    .setDescription("Successfully renamed your companion")
+    .setThumbnail("attachment://result.png")
+
+    userStats.comp_name = name
+
+    dh.userSave(interaction.user.id, userStats)
 
     interaction.editReply({ embeds:[embed], files: [image] })
 }
