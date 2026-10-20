@@ -99,9 +99,11 @@ module.exports =
 					lastbeg: 0,
 					inventory: [],
 					games: {},
-					achievements: userStats.achievements.push("90"),
+					achievements: userStats.achievements,
 					custom: {},
 				}
+
+				userStats.achievements.push("90")
 
 				container.addSectionComponents((section) => section
 					.addTextDisplayComponents((textDisplay) => textDisplay.setContent('## Truth is, the game was rigged from the start. \n-#  *Your progress has been reset*'))
