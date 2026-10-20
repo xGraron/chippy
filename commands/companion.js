@@ -39,7 +39,7 @@ module.exports =
         if(!userStats.companion)    
         {
             userStats.companion = [0, 0, 0, 0]
-            userStats.unlocked  = [[0], [0], [0], [0]]
+            userStats.unlocked  = [[0, 1], [0, 1], [0, 1], [0]]
             userStats.comp_name = "Run /companion name"
         }
 
