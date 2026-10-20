@@ -61,7 +61,7 @@ module.exports =
 
         const change = new ButtonBuilder()
         .setCustomId("b_change")
-        .setLabel("Change type")
+        .setLabel("Change selection")
         .setStyle(ButtonStyle.Secondary)
 
         const row 	= new ActionRowBuilder().addComponents(prev, change, next)
@@ -72,11 +72,11 @@ module.exports =
             .setThumbnailAccessory((thumbnail) => thumbnail.setURL("attachment://result.png"))
         )
         .addSectionComponents((section) => section
-            .addTextDisplayComponents((textDisplay) => textDisplay.setContent(`Currently selection: **${current}**`))
+            .addTextDisplayComponents((textDisplay) => textDisplay.setContent(`Currently selection: **${available[current]}**`))
             .setButtonAccessory(save)
         )
 
-        const initial = await interaction.editReply({ components: [container, row], files: [image], flags: MessageFlags.IsComponentsV2, ephemeral: true })
+        const initial = await interaction.editReply({ components: [container, row], files: [image], flags: MessageFlags.IsComponentsV2 })
 
             const press = await new Promise(resolve =>
     {
@@ -90,9 +90,7 @@ module.exports =
 
             if(resolved) return
 
-            dev.log(current)
-            dev.log(userStats.companion)
-            dev.log(parts[current].length)
+            button.deferUpdate()                    
 
             if(button.customId === "b_next")                                userStats.companion[current]++
             if(button.customId === "b_prev")                                userStats.companion[current]--
@@ -100,8 +98,9 @@ module.exports =
             if(userStats.companion[current] < 0)                            userStats.companion[current] = parts[current].length - 1
             if(userStats.companion[current] > parts[current].length - 1)    userStats.companion[current] = 0
 
-            if(button.customId === "b_change") current++
-            if(button.customId === "b_save") collector.stop("save")
+            if(button.customId === "b_change")          current++
+            if(current === userStats.companion.length)  current = 0
+            if(button.customId === "b_save") return collector.stop("save")
 
             image = await composite(parts, userStats)
 
@@ -111,19 +110,35 @@ module.exports =
                 .setThumbnailAccessory((thumbnail) => thumbnail.setURL("attachment://result.png"))
             )
             .addSectionComponents((section) => section
-                .addTextDisplayComponents((textDisplay) => textDisplay.setContent(`Currently selection: **${current}**`))
+                .addTextDisplayComponents((textDisplay) => textDisplay.setContent(`Current selection: **${available[current]}**`))
                 .setButtonAccessory(save)
             )
 
-            button.deferUpdate()
-            interaction.editReply({ components: [container, row], files: [image], flags: MessageFlags.IsComponentsV2, ephemeral: true })
+            interaction.editReply({ components: [container, row], files: [image], flags: MessageFlags.IsComponentsV2 })
         })
 
         collector.on("end", (collected, reason) =>
         {
             if(resolved) return
 
-            dev.log(reason)
+            if(reason === "save") dh.userSave(interaction.user.id, userStats)
+
+            save.setDisabled(true)
+            prev.setDisabled(true)
+            next.setDisabled(true)
+            change.setDisabled(true)
+
+            container = new ContainerBuilder()
+            .addSectionComponents((section) => section
+                .addTextDisplayComponents((textDisplay) => textDisplay.setContent('Your companion \nName: *test*'))
+                .setThumbnailAccessory((thumbnail) => thumbnail.setURL("attachment://result.png"))
+            )
+            .addSectionComponents((section) => section
+                .addTextDisplayComponents((textDisplay) => textDisplay.setContent(`Saved successfully.`))
+                .setButtonAccessory(save)
+            )
+
+            interaction.editReply({ components: [container, row], files: [image], flags: MessageFlags.IsComponentsV2 })
 
             resolved = true
             resolve(null)
