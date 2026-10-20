@@ -4,7 +4,7 @@ const dh    = require('../handlers/dataHandler.js')
 const dev   = require('../handlers/dev.js')
 const ah    = require('../handlers/assetHandler.js')
 
-const available = [ "body", "accents", "eyes"]
+const available = [ "body", "accents", "eyes", "hats"]
 
 module.exports =
 {
@@ -25,25 +25,19 @@ module.exports =
     {
         await interaction.deferReply()
 
-        const parts     = [[], [], []]
-        const totals    = [ 0, 0, 0]
+        const parts     = []
 
-        if(!userStats.companion)    userStats.companion = [0, 0, 0,]
+        if(!userStats.companion)    userStats.companion = [0, 0, 0]
         if(!userStats.unlocked)     userStats.unlocked = [[0], [0], [0, 1, 2, 3, 4]]
 
         if(interaction.options.getSubcommand() === "view") return view(interaction, userStats)
 
         for(let i = 0; i < userStats.unlocked.length; i++)
         {
-            userStats.unlocked[i].forEach(part =>
-            {
-                parts[i].push(ah.static(`${available[i]}_${part}`))
-                totals[i]++
-            })
-        }
+            parts.push([])
 
-        dev.log(parts)
-        dev.log(totals)
+            userStats.unlocked[i].forEach(part => parts[i].push(ah.static(`comp/${available[i]}_${part}`)) )
+        }
 
         var current = 0
         var tracker = 0
@@ -96,11 +90,11 @@ module.exports =
 
             if(resolved) return
 
-            if(button.customId === "b_next")                            userStats.companion[current]++
-            if(button.customId === "b_prev")                            userStats.companion[current]--
+            if(button.customId === "b_next")                                userStats.companion[current]++
+            if(button.customId === "b_prev")                                userStats.companion[current]--
 
-            if(userStats.companion[current] < 0)                        userStats.companion[current] = totals[current] - 1
-            if(userStats.companion[current] > totals[current] - 1)      userStats.companion[current] = 0
+            if(userStats.companion[current] < 0)                            userStats.companion[current] = parts[current].length - 1
+            if(userStats.companion[current] > parts[current].length - 1)    userStats.companion[current] = 0
 
 
             if(button.customId === "b_change") current++
@@ -137,20 +131,16 @@ module.exports =
 
 async function composite(parts, userStats)
 {
-    dev.log(userStats.companion)
-
-    const [b, d, e] = await Promise.all([
-        loadImage(parts[0][userStats.companion[0]]),
-        loadImage(parts[1][userStats.companion[1]]),
-        loadImage(parts[2][userStats.companion[2]])
-    ])
-
-    const canvas    = createCanvas(b.width, b.height)
+    const canvas    = createCanvas(512, 512)
     const context   = canvas.getContext('2d')
 
-    context.drawImage(b, 0, 0);
-    context.drawImage(d, 0, 0);
-    context.drawImage(e, 0, 0);
+    for(let i = 0; i < userStats.companion.length; i++)
+    {
+        dev.log(parts[i][userStats.companion[i]])
+        const temp = await loadImage(parts[i][userStats.companion[i]])
+
+        context.drawImage(temp, 0, 0)
+    }
 
     const img = new AttachmentBuilder(
         canvas.toBuffer('image/png'),
