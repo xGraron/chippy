@@ -98,13 +98,16 @@ Eyes:
 2: Angry
 3: evil
 4: Happy
+5: Pirate black
 
 Hats:
 0: Blank
 1: Banker
-2: Banker Blue
+2: Banker blue
 3: Gambler
-
+4: Pirate brown
+5: Cowboy
+6: Tophat big rim
 
 
 
