@@ -50,8 +50,9 @@ module.exports =
             userStats.unlocked[i].forEach(part => parts[i].push(ah.static(`comp/${available[i]}_${part}`)) )
         }
 
-        if(interaction.options.getSubcommand() === "view") return view(interaction, userStats, parts)
-        if(interaction.options.getSubcommand() === "name") return name(interaction, userStats, parts)
+        if(interaction.options.getSubcommand() === "view")      return view(interaction, userStats, parts)
+        if(interaction.options.getSubcommand() === "name")      return name(interaction, userStats, parts)
+        if(interaction.options.getSubcommand() === "unlocked")  return open(interaction, userStats)
 
         var current = 0
         var tracker = 0
@@ -206,6 +207,19 @@ async function name(interaction, userStats, parts)
     userStats.comp_name = name
 
     dh.userSave(interaction.user.id, userStats)
+
+    interaction.editReply({ embeds:[embed], files: [image] })
+}
+
+async function name(interaction, userStats, parts)
+{
+    const n = random.integer(0, 9)
+
+    image = await ah(`egg_${n}`)
+
+    const embed = new EmbedBuilder()
+    .setTitle("Crackin' an egge")
+    .setThumbnail(image)
 
     interaction.editReply({ embeds:[embed], files: [image] })
 }
