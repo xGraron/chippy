@@ -101,7 +101,8 @@ async function main(interaction, bet, userStats, UID)
 
         try     { buttons[chosen[press.customId]-1].setStyle(ButtonStyle.Primary) }
         catch   { /*button is even/odd */ }
-        buttons[n-1].setStyle(ButtonStyle.Success)
+        try     { buttons[n-1].setStyle(ButtonStyle.Success) }
+        catch   { }
 
         if(n % 2 === 0) even.setStyle(ButtonStyle.Success);
         else            odd.setStyle(ButtonStyle.Success)
