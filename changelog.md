@@ -1,24 +1,2 @@
-- Cardrush embed no longer colored (until you lose/win)
-- High or Low embed no longer colored (until you lose/win)
-- Horse Betting embed no longer colored (until end)
-- Horse Betting embed now has color of winning horse at the end
-- Horse Betting thumnbail now has a new asset
-- Poker embed no longer colored (until you lose/win)
-- Blackjack embed no longer colored (until you lose/win)
-- Roulette embed no longer colored (until end)
-- Roulette embed now has the winning color at the end
-- Dealer Blackjacks now top player Blackjack/21 (used to be push)
-- Time to react in Blackjack reduced to 10s (was 30s)
-- Fixed a bug causing /beg not to work
-- New game: Coinflip
-- New badges: "Beheadding" and "Shot through the- coin?!", do /badges to find out how to earn
-- New secret badge: "What the flip"
-- Russian Roulette no longer resets badges
-- Fixed bug causing buttons to go unresponsive on blackjack
-- Fixed entry in /rule for High or Low and Cardrush
-- Removed play again (will return on a small number of games)
-- Fixed missing assets on /shop, causing shop to be unavailable
-- New game: Diceroll
-- /stats renamed to /me  (/stats will come back, with statistics)
-- Failing to press a button in Poker now automatically folds (instead of losing entirely)
-- fixed incorrect footer on poker embed 
+- fixed a bug causing russian roulette to softlock the player
+- fixed a bug causing russian roulette badge to be applied multiple times 
