@@ -2,8 +2,8 @@ const { SlashCommandBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder, Conta
 const { Random }                             = require("random-js")
 const fs    = require('fs')
 const path  = require('path')
-const eh    = require('../handlers/errorHandler.js')   
-const xh    = require('../handlers/xpHandler.js') 
+const eh    = require('../handlers/errorHandler.js')
+const xh    = require('../handlers/xpHandler.js')
 const dh    = require('../handlers/dataHandler.js')
 const dev   = require('../handlers/dev.js')
 const ah	= require('../handlers/assetHandler.js')
@@ -13,12 +13,12 @@ const gif		= ah.gif("cylinder_spin")
 const dead 		= ah.static("dead")
 const blank		= ah.static("blank")
 
-module.exports = 
+module.exports =
 {
     data: new SlashCommandBuilder()
         .setName("russian")
         .setDescription("Russian Roulette, are you really this broke?"),
-                    
+
     async execute(interaction, userStats)
     {
         await interaction.deferReply()
@@ -103,7 +103,8 @@ module.exports =
 					custom: {},
 				}
 
-				userStats.achievements.push("90")
+				if(!userStats.achievements.includes("69"))) userStats.achievements.push("90")
+
 
 				container.addSectionComponents((section) => section
 					.addTextDisplayComponents((textDisplay) => textDisplay.setContent('## Truth is, the game was rigged from the start. \n-#  *Your progress has been reset*'))
