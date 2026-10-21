@@ -99,6 +99,8 @@ Eyes:
 3: evil
 4: Happy
 5: Pirate black
+6: Pirate Brown
+7: Cat
 
 Hats:
 0: Blank
@@ -108,6 +110,10 @@ Hats:
 4: Pirate brown
 5: Cowboy
 6: Tophat big rim
+7: Pirate black
+8: Cylinder
+9: Cat
+
 
 
 
