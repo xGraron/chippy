@@ -15,7 +15,7 @@ const games_con = [
 	//Blackjack
 	{ gameID: 4, plays: 5, wins: 0, earnings: 0, achievementID: "401" },
 	{ gameID: 4, plays: 25, wins: 0, earnings: 0, achievementID: "402" },
-	{ gameID: 4, plays: 100, wins: 0, earnings: 0, achievementID: "403 "},
+	{ gameID: 4, plays: 100, wins: 0, earnings: 0, achievementID: "403"},
 	//horse
 	{ gameID: 5, plays: 1, wins: 1, earnings: 0, achievementID: "501" },
 	//coinflip-secret
