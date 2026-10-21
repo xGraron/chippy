@@ -1,10 +1,12 @@
 const { SlashCommandBuilder, EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder, ContainerBuilder, MessageFlags, AttachmentBuilder } = require("discord.js")
-const { createCanvas, loadImage }                                                                           = require('@napi-rs/canvas')
+const { createCanvas, loadImage }   = require('@napi-rs/canvas')
+const { Random }                    = require('random-js')                                                                            
 const dh    = require('../handlers/dataHandler.js')
 const dev   = require('../handlers/dev.js')
 const ah    = require('../handlers/assetHandler.js')
 
 const available = [ "body", "accents", "eyes", "hats"]
+const random    = new Random()          
 
 module.exports =
 {
@@ -28,6 +30,10 @@ module.exports =
             .setDescription('What do you want your companion to be called')
             .setRequired(true)
         )
+    )
+    .addSubcommand(subcommand => subcommand
+        .setName("egge")
+        .setDescription("Get new accessoires")
     ),
 
     async execute(interaction, userStats)
@@ -50,9 +56,9 @@ module.exports =
             userStats.unlocked[i].forEach(part => parts[i].push(ah.static(`comp/${available[i]}_${part}`)) )
         }
 
-        if(interaction.options.getSubcommand() === "view")      return view(interaction, userStats, parts)
-        if(interaction.options.getSubcommand() === "name")      return name(interaction, userStats, parts)
-        if(interaction.options.getSubcommand() === "unlocked")  return open(interaction, userStats)
+        if(interaction.options.getSubcommand() === "view")  return view(interaction, userStats, parts)
+        if(interaction.options.getSubcommand() === "name")  return name(interaction, userStats, parts)
+        if(interaction.options.getSubcommand() === "egge")  return egg(interaction, userStats)
 
         var current = 0
         var tracker = 0
@@ -211,7 +217,7 @@ async function name(interaction, userStats, parts)
     interaction.editReply({ embeds:[embed], files: [image] })
 }
 
-async function name(interaction, userStats, parts)
+async function egg(interaction, userStats, parts)
 {
     const n = random.integer(0, 9)
 
