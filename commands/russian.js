@@ -103,7 +103,7 @@ module.exports =
 					custom: {},
 				}
 
-				if(!userStats.achievements.includes("69"))) userStats.achievements.push("90")
+				if(!userStats.achievements.includes("90")) userStats.achievements.push("90")
 
 
 				container.addSectionComponents((section) => section
