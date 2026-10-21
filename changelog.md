@@ -1,2 +1,3 @@
 - fixed a bug causing russian roulette to softlock the player
 - fixed a bug causing russian roulette badge to be applied multiple times 
+- fixed a bug causing badge 403 to cause issues
