@@ -6,6 +6,7 @@ const dev   = require('../handlers/dev.js')
 const ah    = require('../handlers/assetHandler.js')
 
 const available = [ "body", "accents", "eyes", "hats"]
+const amounts   = [ 3, 5, 8, 10 ]
 const random    = new Random()          
 
 module.exports =
@@ -44,16 +45,19 @@ module.exports =
 
         if(!userStats.companion)    
         {
-            userStats.companion = [0, 0, 0, 0]
-            userStats.unlocked  = [[0, 1], [0, 1], [0, 1], [0]]
-            userStats.comp_name = "Run /companion name"
+            userStats["companion"] =
+            {
+                build:      [0, 0, 0, 0],
+                unlocked:   [[0], [0], [0], [0]],
+                name:       "Run /companion name"
+            }
         }
 
-        for(let i = 0; i < userStats.unlocked.length; i++)
+        for(let i = 0; i < userStats.companion.unlocked.length; i++)
         {
             parts.push([])
 
-            userStats.unlocked[i].forEach(part => parts[i].push(ah.static(`comp/${available[i]}_${part}`)) )
+            userStats.companion.unlocked[i].forEach(part => parts[i].push(ah.static(`comp/${available[i]}_${part}`)) )
         }
 
         if(interaction.options.getSubcommand() === "view")  return view(interaction, userStats, parts)
@@ -112,21 +116,21 @@ module.exports =
 
                 button.deferUpdate()                    
 
-                if(button.customId === "b_next")                                userStats.companion[current]++
-                if(button.customId === "b_prev")                                userStats.companion[current]--
+                if(button.customId === "b_next")                                userStats.companion.build[current]++
+                if(button.customId === "b_prev")                                userStats.companion.build[current]--
 
-                if(userStats.companion[current] < 0)                            userStats.companion[current] = parts[current].length - 1
-                if(userStats.companion[current] > parts[current].length - 1)    userStats.companion[current] = 0
+                if(userStats.companion.build[current] < 0)                            userStats.companion.build[current] = parts[current].length - 1
+                if(userStats.companion.build[current] > parts[current].length - 1)    userStats.companion.build[current] = 0
 
-                if(button.customId === "b_change")          current++
-                if(current === userStats.companion.length)  current = 0
-                if(button.customId === "b_save") return collector.stop("save")
+                if(button.customId === "b_change")                  current++
+                if(current === userStats.companion.build.length)    current = 0
+                if(button.customId === "b_save")                    return collector.stop("save")
 
                 image = await composite(parts, userStats)
 
                 container = new ContainerBuilder()
                 .addSectionComponents((section) => section
-                    .addTextDisplayComponents((textDisplay) => textDisplay.setContent(`Your companion \nName: *${userStats.comp_name}*`))
+                    .addTextDisplayComponents((textDisplay) => textDisplay.setContent(`Your companion \nName: *${userStats.companion.name}*`))
                     .setThumbnailAccessory((thumbnail) => thumbnail.setURL("attachment://result.png"))
                 )
                 .addSectionComponents((section) => section
@@ -150,7 +154,7 @@ module.exports =
 
                 container = new ContainerBuilder()
                 .addSectionComponents((section) => section
-                    .addTextDisplayComponents((textDisplay) => textDisplay.setContent(`Your companion \nName: *${userStats.comp_name}*`))
+                    .addTextDisplayComponents((textDisplay) => textDisplay.setContent(`Your companion \nName: *${userStats.companion.name}*`))
                     .setThumbnailAccessory((thumbnail) => thumbnail.setURL("attachment://result.png"))
                 )
                 .addSectionComponents((section) => section
@@ -172,9 +176,9 @@ async function composite(parts, userStats)
     const canvas    = createCanvas(512, 512)
     const context   = canvas.getContext('2d')
 
-    for(let i = 0; i < userStats.companion.length; i++)
+    for(let i = 0; i < userStats.companion.build.length; i++)
     {
-        const temp = await loadImage(parts[i][userStats.companion[i]])
+        const temp = await loadImage(parts[i][userStats.companion.build[i]])
 
         context.drawImage(temp, 0, 0)
     }
@@ -192,7 +196,7 @@ async function view(interaction, userStats, parts)
     image = await composite(parts, userStats)
 
     const embed = new EmbedBuilder()
-    .setTitle(userStats.comp_name)
+    .setTitle(userStats.companion.name)
     .setDescription("Temp")
     .setThumbnail("attachment://result.png")
 
@@ -210,7 +214,7 @@ async function name(interaction, userStats, parts)
     .setDescription("Successfully renamed your companion")
     .setThumbnail("attachment://result.png")
 
-    userStats.comp_name = name
+    userStats.companion.name = name
 
     dh.userSave(interaction.user.id, userStats)
 
@@ -219,13 +223,36 @@ async function name(interaction, userStats, parts)
 
 async function egg(interaction, userStats, parts)
 {
-    const n = random.integer(0, 9)
+    var rew;
+    var has;
 
-    image = await ah(`egg_${n}`)
+    const n = random.integer(0, 9)
+    image = await ah.gif(`eggs_${n}`)
 
     const embed = new EmbedBuilder()
     .setTitle("Crackin' an egge")
-    .setThumbnail(image)
+    .setImage(image)
 
-    interaction.editReply({ embeds:[embed], files: [image] })
+    const type  = random.integer(0, available.length)
+
+    rew = unlock(0)
+
+    function unlock(rew)
+    {
+        return rew = random.integer(0, amounts[type] - 1)
+    }
+
+    has = userStats.companion.unlocked[type].includes(rew)
+
+    dev.log(type, rew)
+    dev.log(has)
+    while(has) 
+    {
+        rew = unlock(0)
+        has = userStats.companion.unlocked[type].includes(rew)
+    }
+
+    dev.log(has)
+
+    interaction.editReply({ embeds:[embed] })
 }
