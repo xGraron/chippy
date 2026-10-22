@@ -225,7 +225,7 @@ async function name(interaction, userStats, parts)
 
 async function egg(interaction, userStats, parts)
 {
-    //if(!userStats.companion.egg > 0) return interaction.editReply({ content: "You don't have an egge to open!", ephemeral: true})
+    if(!userStats.inventory.includes("i4")> 0) return interaction.editReply({ content: "You don't have an egge to open!", ephemeral: true})
 
     var rew;
     var has;
