@@ -4,6 +4,7 @@ const { Random }                    = require('random-js')
 const dh    = require('../handlers/dataHandler.js')
 const dev   = require('../handlers/dev.js')
 const ah    = require('../handlers/assetHandler.js')
+const eh 	= require("../handlers/errorHandler.js")
 
 const available = [ "body", "accents", "eyes", "hats"]
 const amounts   = [ 3, 5, 8, 10 ]
@@ -51,8 +52,6 @@ module.exports =
                 unlocked:   [[0], [0], [0], [0]],
                 name:       "Run /companion name"
             }
-
-            dev.log("no companion")
         }
 
         for(let i = 0; i < userStats.companion.unlocked.length; i++)
@@ -94,7 +93,7 @@ module.exports =
 
         let container = new ContainerBuilder()
         .addSectionComponents((section) => section
-            .addTextDisplayComponents((textDisplay) => textDisplay.setContent('Editing your companion \nName: *${userStats.companion.name}*'))
+            .addTextDisplayComponents((textDisplay) => textDisplay.setContent(`Editing your companion \nName: *${userStats.companion.name}*`))
             .setThumbnailAccessory((thumbnail) => thumbnail.setURL("attachment://result.png"))
         )
         .addSectionComponents((section) => section
@@ -132,7 +131,7 @@ module.exports =
 
                 container = new ContainerBuilder()
                 .addSectionComponents((section) => section
-                    .addTextDisplayComponents((textDisplay) => textDisplay.setContent(`Your companion \nName: *${userStats.companion.name}*`))
+                    .addTextDisplayComponents((textDisplay) => textDisplay.setContent(`Editing your companion \nName: *${userStats.companion.name}*`))
                     .setThumbnailAccessory((thumbnail) => thumbnail.setURL("attachment://result.png"))
                 )
                 .addSectionComponents((section) => section
@@ -227,37 +226,50 @@ async function egg(interaction, userStats, parts)
 {
     if(!userStats.inventory.includes("i4")> 0) return interaction.editReply({ content: "You don't have an egge to open!", ephemeral: true})
 
-    userStats.inventory.splice(userStats.inventory.indexOf("i4"), 1)
+    await userStats.inventory.splice(userStats.inventory.indexOf("i4"), 1)
 
     var rew;
-    var has;
+    var img;
 
     const n = random.integer(0, 9)
-    image = await ah.gif(`eggs_${n}`)
+    img = await ah.gif(`eggs_${n}`)
+
+    dev.log(img)
 
     const embed = new EmbedBuilder()
     .setTitle("Crackin' an egge")
-    .setImage(image)
+    .setImage(img)
 
-    interaction.editReply({ embeds:[embed] })
+    await interaction.editReply({ embeds:[embed] })
 
-    const type  = random.integer(0, available.length)
+    const type  = random.integer(0, available.length - 1)
 
-    rew = unlock(0)
+    rew = random.integer(1, amounts[type] - 1)
+    img = await ah.static(`comp/${available[type]}_${rew}`)
 
-    function unlock(rew)
+    setTimeout(async () =>
     {
-        return rew = random.integer(0, amounts[type] - 1)
-    }
+        embed.setImage(null)
 
-    has = userStats.companion.unlocked[type].includes(rew)
+        if(!userStats.companion.unlocked[type].includes(rew))
+        {
+            userStats.companion.unlocked[type].push(rew)
+
+            embed
+            .setTitle(`Unlocked something new!`)
+            .setDescription(`It has been added \nto your ${available[type]} collection. \n-# use /companion customize`)
+            .setThumbnail(img)
+        }
+        else
+        {
+            embed
+            .setTitle("You already have this..")
+            .setDescription("Really sucks man... \n-# Better luck next time <3")
+            .setThumbnail(img)
+        }
 
 
-    while(has) 
-    {
-        rew = unlock(0)
-        has = userStats.companion.unlocked[type].includes(rew)
-    }
-
-    userStats.companion.unlocked[type].push(rew)
+        dh.userSave(interaction.user.id, userStats)
+        interaction.editReply({ embeds: [embed] })
+    }, 5_000)
 }
