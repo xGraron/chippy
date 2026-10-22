@@ -51,6 +51,8 @@ module.exports =
                 unlocked:   [[0], [0], [0], [0]],
                 name:       "Run /companion name"
             }
+
+            dev.log("no companion")
         }
 
         for(let i = 0; i < userStats.companion.unlocked.length; i++)
@@ -92,7 +94,7 @@ module.exports =
 
         let container = new ContainerBuilder()
         .addSectionComponents((section) => section
-            .addTextDisplayComponents((textDisplay) => textDisplay.setContent('Editing your companion \nName: *test*'))
+            .addTextDisplayComponents((textDisplay) => textDisplay.setContent('Editing your companion \nName: *${userStats.companion.name}*'))
             .setThumbnailAccessory((thumbnail) => thumbnail.setURL("attachment://result.png"))
         )
         .addSectionComponents((section) => section
@@ -223,7 +225,8 @@ async function name(interaction, userStats, parts)
 
 async function egg(interaction, userStats, parts)
 {
-    if(!userStats.companion.egg > 0) return interaction.reply({ content: "You don't have an egge to open!", ephemeral: true})
+    //if(!userStats.companion.egg > 0) return interaction.editReply({ content: "You don't have an egge to open!", ephemeral: true})
+
     var rew;
     var has;
 
@@ -233,6 +236,8 @@ async function egg(interaction, userStats, parts)
     const embed = new EmbedBuilder()
     .setTitle("Crackin' an egge")
     .setImage(image)
+
+    interaction.editReply({ embeds:[embed] })
 
     const type  = random.integer(0, available.length)
 
@@ -245,15 +250,12 @@ async function egg(interaction, userStats, parts)
 
     has = userStats.companion.unlocked[type].includes(rew)
 
-    dev.log(type, rew)
-    dev.log(has)
+
     while(has) 
     {
         rew = unlock(0)
         has = userStats.companion.unlocked[type].includes(rew)
     }
 
-    dev.log(has)
-
-    interaction.editReply({ embeds:[embed] })
+    userStats.companion.unlocked[type].push(rew)
 }
