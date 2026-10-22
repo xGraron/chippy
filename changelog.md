@@ -1,8 +1,2 @@
-- fixed a bug causing russian roulette to softlock the player
-- fixed a bug causing russian roulette badge to be applied multiple times 
-- fixed a bug causing badge 403 to cause issues
-- fixed a bug causing diceroll to not pay out
-- fixed a bug causing poker to pay you on a tie
-- fixed a bug causing blackjack to pay you too little on a tie after doubling
-- fixed diceroll hard locking the player
-- /badges secret now shows the proper number of available secret badges
+- fixed missing asset for badge 69
+- fixed badge 67 not being applied
