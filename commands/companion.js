@@ -227,6 +227,8 @@ async function egg(interaction, userStats, parts)
 {
     if(!userStats.inventory.includes("i4")> 0) return interaction.editReply({ content: "You don't have an egge to open!", ephemeral: true})
 
+    userStats.inventory.splice(userStats.inventory.indexOf("i4"), 1)
+
     var rew;
     var has;
 
