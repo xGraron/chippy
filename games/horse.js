@@ -122,8 +122,6 @@ async function race(interaction, embed)
     const colors    = ["#000000", "#ff0000", "#ffea00", "c800ff", "#ff8800", "#00c903", "#6e4927"]
     const thumb     = await ah.static(`h_winner_${n+1}`)
 
-    dev.log(thumb)
-
     embed 
     .setColor(colors[n])
     .setThumbnail(thumb)
