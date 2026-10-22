@@ -73,6 +73,46 @@ Commands that arent easily catogorized are given 1XX IDs
 101: Guide
 102: Vote
 
+#Companions
+Main parts array:
+0 = body
+1 = accents
+2 = eyes
+3 = hates
+
+Bodies:
+0: standard
+1: gold
+2: silver
+
+Accents:
+0: standard
+1: white
+2: black
+3: gold
+4: silver
+
+Eyes:
+0: Blank
+1: Sad
+2: Angry
+3: evil
+4: Happy
+5: Pirate black
+6: Pirate Brown
+7: Cat
+
+Hats:
+0: Blank
+1: Banker
+2: Banker blue
+3: Gambler
+4: Pirate brown
+5: Cowboy
+6: Tophat big rim
+7: Pirate black
+8: Cylinder
+9: Cat
 
 
 
