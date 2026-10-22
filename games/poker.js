@@ -181,7 +181,7 @@ async function main(interaction, bet, userStats, UID)
 		.setDescription(`Dealer: ${dealer_hand_str} *(${final.hands[1]})*, You: ${hand_str} *(${final.hands[0]})* \n Community cards: ${community_hand_str} \n\n-# *You didn't lose any Chips*`)
 		.setFooter({ text: `Lucky...` });
 
-		userStats.chips += (bet * 3)
+		userStats.chips += (bet)
 		await xh.achievements(userStats, userStats.chips, false, 8, 0)
 	}
 	else //lost, didnt qualify
