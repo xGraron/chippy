@@ -84,6 +84,10 @@ Bodies:
 0: standard
 1: gold
 2: silver
+3: Orange
+4: Cat
+5: Lime
+6: Green
 
 Accents:
 0: standard
@@ -91,6 +95,9 @@ Accents:
 2: black
 3: gold
 4: silver
+5: Orange
+6: Green
+7: Lime
 
 Eyes:
 0: Blank
