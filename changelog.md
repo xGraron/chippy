@@ -3,3 +3,5 @@
 - fixed a bug causing badge 403 to cause issues
 - fixed a bug causing diceroll to not pay out
 - fixed a bug causing poker to pay you on a tie
+- fixed a bug causing blackjack to pay you too little on a tie after doubling
+- fixed diceroll hard locking the player
