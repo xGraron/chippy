@@ -209,7 +209,9 @@ async function main(interaction, bet, userStats, UID)
 		.setDescription(`Your hand: ${hand_str} *(${points}p)* \nDealer's hand: ${dealer_hand_str} *(${dealer_points}p)* \n\n-# *You didn't lose any Chips*`)
 		.setFooter({ text: `Lucky...` });
 
-		userStats.chips = userStats.chips + bet
+		if(doubled) userStats.chips += bet * 2
+		else		userStats.chips += bet
+
 		await xh.achievements(userStats, userStats.chips, false, 4, 0)
 	}
 	else
