@@ -111,6 +111,7 @@ async function main(interaction, bet, userStats, UID)
         else if(n % 2 === 0 && press.customId === "b_even") reward = bet * 2
         else if(n % 2 !== 0 && press.customId === "b_odd")  reward = bet * 2
 
+        userStats.chips += reward
     }
 
     if(reward > 0)  embed.setDescription(`You won ${reward} Chips`)
