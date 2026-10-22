@@ -7,7 +7,7 @@ const ah    = require('../handlers/assetHandler.js')
 const eh 	= require("../handlers/errorHandler.js")
 
 const available = [ "body", "accents", "eyes", "hats"]
-const amounts   = [ 7, 7, 8, 10 ]
+const amounts   = [ 6, 7, 8, 10 ]
 const random    = new Random()          
 
 module.exports =
