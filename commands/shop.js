@@ -53,7 +53,11 @@ module.exports =
             {
                 userStats = dh.userGet(selection.user.id)
 
-                if(cost[selection.values[0]] > userStats.chips) return selection.reply({ content: "You're too poor", ephemeral: true })
+                if(cost[selection.values[0]] > userStats.chips) 
+                {
+                    selection.reply({ content: "You're too poor", ephemeral: true })
+                    return interaction.editReply({ components:  [row] })
+                }
 
                 userStats.chips -= cost[selection.values[0]]
                 userStats.inventory.push(selection.values[0])
