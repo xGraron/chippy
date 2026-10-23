@@ -162,6 +162,8 @@ async function main(interaction, bet, userStats, UID)
 		.setFooter({ text: `The house always wins...` });
 
 		await xh.achievements(userStats, userStats.chips, false, 4, 0)
+
+		return end(userStats, interaction, embed, bet, UID)
 	}
 	else if(dealer_points > 21)
 	{
@@ -175,6 +177,8 @@ async function main(interaction, bet, userStats, UID)
 		userStats.chips = userStats.chips + reward
 		await xh.leveling(userStats, xp_rew)
 		await xh.achievements(userStats, userStats.chips - reward, true, 4, reward)
+
+		return end(userStats, interaction, embed, bet, UID)
 	}
 	else if(dealer_points === 21 && dealer_hand.length === 2)
 	{
@@ -187,6 +191,8 @@ async function main(interaction, bet, userStats, UID)
 		.setFooter({ text: `Dealer has a Blackjack!` });
 
 		await xh.achievements(userStats, userStats.chips, false, 4, 0)
+
+		return end(userStats, interaction, embed, bet, UID)
 	}
 	else if(points > dealer_points)
 	{
@@ -200,6 +206,8 @@ async function main(interaction, bet, userStats, UID)
 		userStats.chips = userStats.chips + reward
 		await xh.leveling(userStats, xp_rew)
 		await xh.achievements(userStats, userStats.chips - reward, true, 4, reward)
+
+		return end(userStats, interaction, embed, bet, UID)
 	}
 	else if(points === dealer_points)
 	{
@@ -213,6 +221,8 @@ async function main(interaction, bet, userStats, UID)
 		else		userStats.chips += bet
 
 		await xh.achievements(userStats, userStats.chips, false, 4, 0)
+
+		return end(userStats, interaction, embed, bet, UID)
 	}
 	else
 	{
@@ -225,9 +235,9 @@ async function main(interaction, bet, userStats, UID)
 		.setFooter({ text: `The house always wins...` });
 
 		await xh.achievements(userStats, userStats.chips, false, 4, 0)
-	}
 
-	end(userStats, interaction, embed, bet, UID)
+		return end(userStats, interaction, embed, bet, UID)
+	}
 }
 
 async function player_draw(UID, hand, points, hand_em)
