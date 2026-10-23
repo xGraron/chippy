@@ -1,2 +1,4 @@
 - fixed missing asset for badge 69
 - fixed badge 67 not being applied
+- added /stats
+- Diceroll now grants you 10xp
