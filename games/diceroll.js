@@ -114,8 +114,18 @@ async function main(interaction, bet, userStats, UID)
         userStats.chips += reward
     }
 
-    if(reward > 0)  embed.setDescription(`You won ${reward} Chips`)
-    else            embed.setDescription("You lost!")
+    if(reward > 0)  
+    {
+        embed.setDescription(`You won ${reward} Chips`)
+
+        xh.leveling(userStats, 5)
+        xh.achievements(userStats, userStats - reward, true, 10, reward, bet)
+    }
+    else            
+    {
+        embed.setDescription("You lost!")
+        xh.achievements(userStats, userStats, false, 10, 0, bet)
+    }
 
     end(userStats, interaction, embed, bet, UID, [row1, row2, row3])
 }

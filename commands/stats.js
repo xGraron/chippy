@@ -27,18 +27,17 @@ module.exports =
     {
         await interaction.deferReply()
 
+        const embed = new EmbedBuilder()
+        .setTitle("Your stats")
+
         Object.entries(userStats.games).forEach(game =>
         {
-            const name  = available[game[0]]
+            const named = available[game[0]]
             const stats = game[1]
 
-            dev.log(name)
-            dev.log(stats.won)
+            dev.log(stats)
+            embed.addFields({ name: named, value: `${stats.won}/${stats.played} games played were won \nWon a total of ${stats.earned} Chips`})
         })
-
-        const embed = new EmbedBuilder()
-        .setTitle(`${interaction.user.username}'s stats:`)
-        .setDescription(`Testles`)
 
         await interaction.editReply({ embeds: [embed] })
     }
