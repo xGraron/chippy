@@ -15,8 +15,15 @@ const gif		= ah.gif("coins")
 
 async function main(userStats, opponentStats, interaction, embed, bet)
 {
+    embed
+    .setTitle(`<@${opponentStats.userID}> turn`)
+    .setDescription(null)
+
     dev.log("Success")
     dev.log(userStats.userID + " " + opponentStats.userID)
+
+    interaction.editReply({ embeds: [embed], row: []})
+
     end(userStats, opponentStats, interaction, embed, bet)
 }
 
