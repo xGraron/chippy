@@ -7,7 +7,7 @@ const dev   = require('../handlers/dev.js')
 const ah	= require('../handlers/assetHandler.js')
 
 const colors = ah.colors()
-const values = 
+const values =
 {
 	"Ace": 	11,
 	"Jack": 10,
@@ -45,7 +45,7 @@ async function main(interaction, bet, userStats, UID)
 	{
 		points 			= await player_draw(UID, hand, points, hand_em)
 		dealer_points 	= await dealer_draw(UID, dealer_hand, dealer_points, dealer_hand_em)
-	} 
+	}
 
 	hand_str 		= hand_em.join("")
 	dealer_hand_str = dealer_hand_em.join("")
@@ -162,6 +162,8 @@ async function main(interaction, bet, userStats, UID)
 		.setFooter({ text: `The house always wins...` });
 
 		await xh.achievements(userStats, userStats.chips, false, 4, 0)
+
+		return end(userStats, interaction, embed, bet, UID)
 	}
 	else if(dealer_points > 21)
 	{
@@ -175,6 +177,8 @@ async function main(interaction, bet, userStats, UID)
 		userStats.chips = userStats.chips + reward
 		await xh.leveling(userStats, xp_rew)
 		await xh.achievements(userStats, userStats.chips - reward, true, 4, reward)
+
+		return end(userStats, interaction, embed, bet, UID)
 	}
 	else if(dealer_points === 21 && dealer_hand.length === 2)
 	{
@@ -187,6 +191,8 @@ async function main(interaction, bet, userStats, UID)
 		.setFooter({ text: `Dealer has a Blackjack!` });
 
 		await xh.achievements(userStats, userStats.chips, false, 4, 0)
+
+		return end(userStats, interaction, embed, bet, UID)
 	}
 	else if(points > dealer_points)
 	{
@@ -200,6 +206,8 @@ async function main(interaction, bet, userStats, UID)
 		userStats.chips = userStats.chips + reward
 		await xh.leveling(userStats, xp_rew)
 		await xh.achievements(userStats, userStats.chips - reward, true, 4, reward)
+
+		return end(userStats, interaction, embed, bet, UID)
 	}
 	else if(points === dealer_points)
 	{
@@ -213,6 +221,8 @@ async function main(interaction, bet, userStats, UID)
 		else		userStats.chips += bet
 
 		await xh.achievements(userStats, userStats.chips, false, 4, 0)
+
+		return end(userStats, interaction, embed, bet, UID)
 	}
 	else
 	{
@@ -225,9 +235,9 @@ async function main(interaction, bet, userStats, UID)
 		.setFooter({ text: `The house always wins...` });
 
 		await xh.achievements(userStats, userStats.chips, false, 4, 0)
-	}
 
-	end(userStats, interaction, embed, bet, UID)
+		return end(userStats, interaction, embed, bet, UID)
+	}
 }
 
 async function player_draw(UID, hand, points, hand_em)
