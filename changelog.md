@@ -2,3 +2,5 @@
 - fixed badge 67 not being applied
 - added /stats
 - Diceroll now grants you 10xp
+- Added /versus
+- Added /challange coinflio
