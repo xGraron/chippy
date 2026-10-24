@@ -80,15 +80,25 @@ async function main(userStats, opponentStats, interaction, embed, bet)
     }
 
     const n = random.integer(0, 1)
-    if(n === chosen)    winner = opponentStats.userID;
-    else                winner = userStats.userID;
+    if(n === chosen)
+    {
+        winner = opponentStats.userID;
+        opponentStats.chips += bet
+    }
+    else
+    {
+        winner = userStats.userID;
+        userStats.chips += bet
+    }
 
-    embed.setThumbnail(statics[n])
-    embed.setDescription(`<@${winner}> wins!`)
+    foot = `They win ${bet} Chips`
 
-    dev.log(winner)
+    embed
+    .setThumbnail(statics[n])
+    .setDescription(`<@${winner}> wins!`)
+    .setFooter({ text: foot });
 
-    interaction.editReply({ embeds: [embed], row: [] })
+    interaction.editReply({ embeds: [embed], components: [] })
 
     end(userStats, opponentStats, interaction, embed, bet)
 }
