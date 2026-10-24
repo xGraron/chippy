@@ -18,6 +18,7 @@ async function main(userStats, opponentStats, interaction, embed, bet)
     var foot	= "Which side will it land on?"
     var chosen  = 0
     var reward  = 0
+    var winne   = 0
 
     embed
     .setTitle("Coinflip")
@@ -48,7 +49,7 @@ async function main(userStats, opponentStats, interaction, embed, bet)
 
         collector.on("collect", async button =>
         {
-            if(button.user.id !== opponentStats.user.ID) return button.reply({content: "It's not your turn", ephemeral: true})
+            if(button.user.id !== opponentStats.userID) return button.reply({content: "It's not your turn", ephemeral: true})
 
             if(resolved) return
             resolved = true
@@ -79,14 +80,20 @@ async function main(userStats, opponentStats, interaction, embed, bet)
     }
 
     const n = random.integer(0, 1)
-    if(n === chosen) reward = bet + 50
+    if(n === chosen)    winner = opponentStats.userID;
+    else                winner = userStats.userID;
 
     embed.setThumbnail(statics[n])
+    embed.setDescription(`<@${winner}> wins!`)
+
+    dev.log(winner)
+
+    interaction.editReply({ embeds: [embed], row: [] })
 
     end(userStats, opponentStats, interaction, embed, bet)
 }
 
-async function end(userStats, opponentStats, interaction, embed)
+async function end(userStats, opponentStats, interaction)
 {
     userStats.active_game       = false;
     opponentStats.active_game   = false;
