@@ -119,7 +119,7 @@ async function main(userStats, opponentStats, interaction, embed, bet)
 
 //TURN ONE
 
-    initial = await interaction.editReply({ embeds: [embed], components: [row] })
+    initial = await interaction.editReply({ embeds: [embed], components: [row, row2] })
 
 	press = await new Promise(resolve =>
 	{
@@ -129,9 +129,9 @@ async function main(userStats, opponentStats, interaction, embed, bet)
 
 		collector.on("collect", async button =>
 		{
-			if(button.user.id !== oppID) 	return button.reply({ content: "Not your turn", ephemeral: true})
-			if(resolved) 				    return
-
+            if(button.customId === "b_view") return button.reply({ content: hands[button.user.id].str, ephemeral: true})
+			if(button.user.id !== oppID)     return button.reply({ content: "Not your turn", ephemeral: true})
+			if(resolved)                     return
 			if(button.customId === "b_fold") return collector.stop("folded")
 
             resolved = true
@@ -159,7 +159,7 @@ async function main(userStats, opponentStats, interaction, embed, bet)
 
 //TURN TWO
 
-    initial = await interaction.editReply({ embeds: [embed], components: [row] })
+    initial = await interaction.editReply({ embeds: [embed], components: [row, row2] })
 
 	press = await new Promise(resolve =>
 	{
@@ -169,9 +169,9 @@ async function main(userStats, opponentStats, interaction, embed, bet)
 
 		collector.on("collect", async button =>
 		{
-			if(button.user.id !== userID) 	return button.reply({ content: "Not your turn", ephemeral: true})
-			if(resolved) 				    return
-
+            if(button.customId === "b_view") return button.reply({ content: hands[button.user.id].str, ephemeral: true})
+			if(button.user.id !== userID)    return button.reply({ content: "Not your turn", ephemeral: true})
+			if(resolved)                     return
 			if(button.customId === "b_fold") return collector.stop("folded")
 
             resolved = true
