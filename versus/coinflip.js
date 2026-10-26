@@ -49,7 +49,7 @@ async function main(userStats, opponentStats, interaction, embed, bet)
 
         collector.on("collect", async button =>
         {
-            if(button.user.id !== opponentStats.userID) return button.reply({content: "It's not your turn", ephemeral: true})
+            if(button.user.id !== opponentStats.userID) return button.reply({content: "Not your turn", ephemeral: true})
 
             if(resolved) return
             resolved = true

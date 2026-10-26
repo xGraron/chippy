@@ -16,12 +16,12 @@ const blank     = ah.static("blank")
 async function main(userStats, opponentStats, interaction, embed, bet)
 {
     const players = [ userStats, opponentStats ]
-    let track = 2
+    let tracker = 2
 
     embed
     .setTitle("Russian Roulette")
     .setThumbnail(gif)
-    .setDescription(`<@${opponentStats.userID}> has to decide`)
+    .setDescription(`<@${opponentStats.userID}> has to decide \n -#You get 30s before both your wagers are gone`)
 
     const trigger = new ButtonBuilder()
     .setCustomId("b_trigger")
@@ -37,43 +37,53 @@ async function main(userStats, opponentStats, interaction, embed, bet)
     const initial   = await interaction.editReply({ embeds: [embed], components: [row] })
     const press     = await new Promise(resolve =>
     {
-        const collector = initial.createMessageComponentCollector({ time: 30_000 })
+        const collector = initial.createMessageComponentCollector({ time: 10_000 })
 
         let resolved = false
 
         collector.on("collect", async button =>
         {
-            if(button.user.id !== players[2 % tracker])  return button.reply({ content: "Not your turn!", ephemeral: true})
-            if(resolved)                return
-                
+            if(button.user.id !== players[tracker % 2].userID)  return button.reply({ content: "Not your turn!", ephemeral: true})
+            if(resolved)                                        return
+            if(button.customId === "fold")                      return collector.stop("quit")
 
+                
             button.deferUpdate()
+            tracker++
         })
 
         collector.on("end", (collected, reason) =>
         {
             if(resolved) return
 
+            if(reason === "quit")
+            {
+                embed.setDescription(`<@${players[tracker % 2].userID} chicken'd out! \n<@${players[(tracker + 1) % 2 ].userID}> wins ${bet}`)
+            }
+            else if(reason === "died")
+            {
+                embed.setDescription(`Seems like that's it for <@${players[tracker % 2].userID} \n<@${players[(tracker + 1) % 2 ].userID}> wins ${players[tracker % 2].chips}`)
+            }
+            else if(reason === "time") embed.setDescription("You both lost ran out of time, \nthe casino keeps your wagers.")
+
+            end(players)
+
             resolved = true
 
             resolve(null)
         })
     })
-
-    end(userStats, opponentStats, embed, interaction)
 }
 
-async function end(winStats, loseStats, embed, interaction)
+async function end([userStats, opponentStats], embed, interaction)
 {
-    winStats.active_game    = false;
-    loseStats.active_game   = false;
+    userStats.active_game       = false;
+    opponentStats.active_game   = false;
 
-    dh.userSave(winStats)
-    dh.userSave(loseStats)
+    dh.userSave(userStats)
+    dh.userSave(opponentStats)
 
-    embed.setDescription(`**<@${winStats.userID}> wins!**`)
-
-    interaction.editReply({ embeds: [embed], components: [] })
+    interaction.editReply({ embeds: [embed], row: [] })
 }
 
 async function folded(winStats, loseStats, hands, userID, embed, interaction, bet)
