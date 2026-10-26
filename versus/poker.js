@@ -114,7 +114,7 @@ async function main(userStats, opponentStats, interaction, embed, bet)
 
 	embed
 	.setTitle("Poker")
-	.setDescription(`Community cards: \n${hands["community"].str} \n\n-# <@${opponentStats.userID}>'s turn`)
+	.setDescription(`Community cards: \n${hands["community"].str} \n\n-# <@${opponentStats.userID}>'s turn \n-# You have 10s`)
 
 
 //TURN ONE
@@ -123,7 +123,7 @@ async function main(userStats, opponentStats, interaction, embed, bet)
 
 	press = await new Promise(resolve =>
 	{
-		const collector = initial.createMessageComponentCollector({ time: 7_000 })
+		const collector = initial.createMessageComponentCollector({ time: 15_000 })
 
 		let resolved = false
 
@@ -147,7 +147,7 @@ async function main(userStats, opponentStats, interaction, embed, bet)
 
 			resolved = true
 
-			if(reason === "folded") return folded(userStats, opponentStats, hands, userID, embed, interaction, bet)
+			if(reason === "time" || reason === "folded") return folded(userStats, opponentStats, hands, userID, embed, interaction, bet)
 
 			resolve(null)
 		})
@@ -155,7 +155,7 @@ async function main(userStats, opponentStats, interaction, embed, bet)
 
     if(!press) return
     press.deferUpdate()
-    embed.setDescription(`Community cards: \n${hands["community"].str} \n\n-# <@${userStats.userID}>'s turn`)
+    embed.setDescription(`Community cards: \n${hands["community"].str} \n\n-# <@${userStats.userID}>'s turn \n-# You have 10s`)
 
 //TURN TWO
 
@@ -163,7 +163,7 @@ async function main(userStats, opponentStats, interaction, embed, bet)
 
 	press = await new Promise(resolve =>
 	{
-		const collector = initial.createMessageComponentCollector({ time: 7_000 })
+		const collector = initial.createMessageComponentCollector({ time: 15_000 })
 
 		let resolved = false
 
@@ -187,7 +187,7 @@ async function main(userStats, opponentStats, interaction, embed, bet)
 
 			resolved = true
 
-			if(reason === "folded") return folded(opponentStats, userStats, hands, userID, embed, interaction, bet)
+			if(reason === "timr" || reason === "folded") return folded(opponentStats, userStats, hands, userID, embed, interaction, bet)
 
 			resolve(null)
 		})
