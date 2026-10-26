@@ -18,7 +18,7 @@ async function main(userStats, opponentStats, interaction, embed, bet)
     var foot	= "Which side will it land on?"
     var chosen  = 0
     var reward  = 0
-    var winne   = 0
+    var winner  = 0
 
     embed
     .setTitle("Coinflip")
