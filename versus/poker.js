@@ -7,6 +7,7 @@ const xh	= require('../handlers/xpHandler.js')
 const dev   = require('../handlers/dev.js')
 const ah	= require('../handlers/assetHandler.js')
 
+const random = new Random()
 const colors = ah.colors()
 const values =
 {
@@ -91,11 +92,6 @@ async function main(userStats, opponentStats, interaction, embed, bet)
 	.setLabel("Call")
 	.setStyle(ButtonStyle.Success)
 
-    const raise = new ButtonBuilder()
-    .setCustomId("b_raise")
-    .setLabel("Raise")
-    .setStyle(ButtonStyle.Danger)
-
 	const fold = new ButtonBuilder()
 	.setCustomId("b_fold")
 	.setLabel("Fold")
@@ -106,17 +102,40 @@ async function main(userStats, opponentStats, interaction, embed, bet)
     .setLabel("Click to see your cards")
     .setStyle(ButtonStyle.Secondary)
 
-	const row 	= new ActionRowBuilder().addComponents(call, fold, raise)
+	const row 	= new ActionRowBuilder().addComponents(call, fold)
     const row2  = new ActionRowBuilder().addComponents(view)
 
 	embed
 	.setTitle("Poker")
 	.setDescription(`Community cards: \n${hands["community"].str} \n\n-# <@${opponentStats.userID}>'s turn`)
 
-    const aFinal = await calculate(interaction, [...hands[oppID].hand, ...hands["community"].hand])
-    const bFinal = await calculate(interaction, [...hands[userID].hand, ...hands["community"].hand])
+    const aFinal = await calculate(interaction, [...hands[userID].hand, ...hands["community"].hand])
+    const bFinal = await calculate(interaction, [...hands[oppID].hand, ...hands["community"].hand])
 
-    end(userStats, opponentStats, hands, userID, embed, interaction, bet)
+    dev.log(aFinal)
+    dev.log(bFinal)
+
+    if(aFinal.rank > bFinal.rank)  return end(userStats, opponentStats, hands, userID, embed, interaction, bet)
+    if(aFinal.rank < bFinal.rank)  return end(opponentStats, userStats, hands, userID, embed, interaction, bet)
+
+    for(let i = 0; i < Math.min(aFinal.kickers.length, bFinal.kickers.length); i++)
+    {
+        if(aFinal.kickers[i] > bFinal.kickers[i])
+        {
+            return end(userStats, opponentStats, hands, userID, embed, interaction, bet)
+        }
+
+        if(aFinal.kickers[i] < bFinal.kickers[i])
+        {
+            return end(opponentStats, userStats, hands, userID, embed, interaction, bet)
+        }
+    }
+
+    const decider = random.integer(0, 1)
+
+    if(decider === 1) return end(userStats, opponentStats, hands, userID, embed, interaction, bet, true)
+    else              return end(opponentStats, userStats, hands, userID, embed, interaction, bet, true)
+
 }
 
 async function end(winStats, loseStats, hands, userID, embed, interaction, bet, tie)
