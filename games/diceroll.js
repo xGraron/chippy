@@ -88,11 +88,11 @@ async function main(interaction, bet, userStats, UID)
     even.setDisabled(true)
     odd.setDisabled(true)
 
-    const n = random.integer(0, 6)
+    const n = random.integer(1, 6)
 
     if(!press)                          
     {
-        chosen = random.integer(0, 6)
+        chosen = random.integer(1, 6)
         embed.setDescription("You didn't react, \nso Chippy chose for you")
     }
     else
