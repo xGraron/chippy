@@ -73,23 +73,35 @@ async function main(userStats, opponentStats, interaction, embed, bet)
             if(reason === "quit")
             {
                 embed.setDescription(`<@${players[tracker % 2].userID}> chicken'd out! \n<@${players[(tracker + 1) % 2 ].userID}> wins ${bet} Chips`)
+                embed.setThumbnail(null)
 
                 players[(tracker + 1) % 2 ].chips += bet * 2
             }
             else if(reason === "died")
             {
-                embed.setDescription(`Seems like that's it for <@${players[tracker % 2].userID}> \n<@${players[(tracker + 1) % 2 ].userID}> wins ${players[tracker % 2].chips}`)
-                embed.setThumbnail(dead)
+                if(players[tracker % 2].inventory.includes("i1"))
+                {
+                    players[tracker % 2].inventory.splice(players[tracker % 2].inventory.indexOf("i1"), 1)
+                    players[(tracker + 1) % 2 ].chips += bet * 2
 
-                players[(tracker + 1) % 2].chips += players[tracker % 2].chips
+                    embed.setDescription(`Seems like <@${players[tracker % 2].userID}> loaded a blank \n<@${players[(tracker + 1) % 2 ].userID}> takes the wager of ${bet} Chips`)
+                    embed.setThumbnail(blank)
+                }
+                else
+                {
+                    embed.setDescription(`Seems like that's it for <@${players[tracker % 2].userID}> \n<@${players[(tracker + 1) % 2 ].userID}> wins ${players[tracker % 2].chips}`)
+                    embed.setThumbnail(dead)
 
-                players[tracker % 2].xp = 0
-                players[tracker % 2].level = 1
-                players[tracker % 2].chips = 0
-                players[tracker % 2].inventory = []
-                players[tracker % 2].games = {}
+                    players[(tracker + 1) % 2].chips += players[tracker % 2].chips
 
-                if(!players[tracker % 2].achievements.includes("90")) players[tracker % 2].achievements.push("90")
+                    players[tracker % 2].xp = 0
+                    players[tracker % 2].level = 1
+                    players[tracker % 2].chips = 0
+                    players[tracker % 2].inventory = []
+                    players[tracker % 2].games = {}
+
+                    if(!players[tracker % 2].achievements.includes("90")) players[tracker % 2].achievements.push("90")
+                }
             }
             else if(reason === "time") embed.setDescription("You both ran out of time, \nthe casino keeps your wagers.")
 
