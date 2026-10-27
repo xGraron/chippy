@@ -83,12 +83,12 @@ async function main(userStats, opponentStats, interaction, embed, bet)
     if(n === chosen)
     {
         winner = opponentStats.userID;
-        opponentStats.chips += bet
+        opponentStats.chips += bet * 2
     }
     else
     {
         winner = userStats.userID;
-        userStats.chips += bet
+        userStats.chips += bet * 2
     }
 
     foot = `They win ${bet} Chips`
