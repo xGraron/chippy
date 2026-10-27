@@ -5,3 +5,4 @@
 - Added /challange coinflip
 - Added /challenge russian
 - fixed missing asset for badge 702
+- fixed dice being able to roll 0 
