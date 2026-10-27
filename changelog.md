@@ -2,5 +2,6 @@
 - fixed badge 67 not being applied
 - added /stats
 - Diceroll now grants you 10xp
-- Added /challange coinflio
+- Added /challange coinflip
+- Added /challenge russian
 - fixed missing asset for badge 702
