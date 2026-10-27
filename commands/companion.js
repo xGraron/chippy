@@ -155,7 +155,7 @@ module.exports =
 
                 container = new ContainerBuilder()
                 .addSectionComponents((section) => section
-                    .addTextDisplayComponents((textDisplay) => textDisplay.setContent(`Your companion \nName: *${userStats.companion.name}*`))
+                    .addTextDisplayComponents((textDisplay) => textDisplay.setContent(`Editing your companion \nName: *${userStats.companion.name}*`))
                     .setThumbnailAccessory((thumbnail) => thumbnail.setURL("attachment://result.png"))
                 )
                 .addSectionComponents((section) => section
