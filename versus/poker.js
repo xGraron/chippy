@@ -11,61 +11,91 @@ const random = new Random()
 const colors = ah.colors()
 const values =
 {
-    "ace": 		14,
-    "2": 		2,
-    "3": 		3,
-    "4": 		4,
-    "5": 		5,
-    "6": 		6,
-    "7": 		7,
-    "8": 		8,
-    "9": 		9,
-    "10": 		10,
-    "jack": 	11,
-    "queen": 	12,
-    "king": 	13
+	"ace": 		14,
+	"2": 		2,
+	"3": 		3,
+	"4": 		4,
+	"5": 		5,
+	"6": 		6,
+	"7": 		7,
+	"8": 		8,
+	"9": 		9,
+	"10": 		10,
+	"jack": 	11,
+	"queen": 	12,
+	"king": 	13
 }
 
 const secretcard	= ah.cards(true)
 
 async function main(userStats, opponentStats, interaction, embed, bet)
 {
-    const deck 		= await ch.create(userStats.userID)
+	const userID	= userStats.userID
+	const oppID		= opponentStats.userID
+	const deck 		= await ch.create(userID)
+	const players	= [ userStats, opponentStats ]
+	const hands 	=
+	{
+		userID:
+		{
+			string: "",
+			hand: []
+		},
+		oppID:
+		{
+			string: "",
+			hand: []
+		},
+		"community":
+		{
+			string: "",
+			hand: []
+		}
+	}
+
+	let tracker 	= 2
 
 	if(!deck.success)
-    {
-        end(userStats, opponentStats)
-        return eh.error(interaction, deck.reason)
-    }
+	{
+		end(userStats, opponentStats)
+		return eh.error(interaction, deck.reason)
+	}
+
+	for(let i = 0; i < 3; i++)
+	{
+		hands[userID] 		+= await draw(userID, hands[userID])
+		hands[oppID]		+= await draw(userID, hands[oppID])
+		hands["community"]	*= await draw(userID, hands["community"])
+	}
 
 	const call = new ButtonBuilder()
 	.setCustomId("b_call")
 	.setLabel("Call")
 	.setStyle(ButtonStyle.Success)
 
-    const raise = new ButtonBuilder()
-    .setCustomId("b_raise")
-    .setLabel("Fold")
-    .setStyle(ButtonStyle.Danger)
+	const raise = new ButtonBuilder()
+	.setCustomId("b_raise")
+	.setLabel("Fold")
+	.setStyle(ButtonStyle.Danger)
 
 	const fold = new ButtonBuilder()
 	.setCustomId("b_fold")
 	.setLabel("Fold")
 	.setStyle(ButtonStyle.Danger)
 
-    const view = new ButtonBuilder()
-    .setCustomId("b_view")
-    .setLabel("Click to see your cards")
-    .setStyle(ButtonStyle.Secondary)
+	const view = new ButtonBuilder()
+	.setCustomId("b_view")
+	.setLabel("Click to see your cards")
+	.setStyle(ButtonStyle.Secondary)
 
 	const row 	= new ActionRowBuilder().addComponents(call, fold)
-    const row2  = new ActionRowBuilder().addComponents(view)
+	const row2  = new ActionRowBuilder().addComponents(view)
 
 	embed
 	.setTitle("Poker")
-	.setDescription(`TESTING`)
+	.setDescription(`Community cards: \n${hands["community"].string}`)
 
-    const initial = await interaction.editReply({ embeds: [embed], components: [row, row2] })
+	const initial = await interaction.editReply({ embeds: [embed], components: [row, row2] })
 	const press 	= await new Promise(resolve =>
 	{
 		const collector = initial.createMessageComponentCollector({ time: 60_000 })
@@ -74,45 +104,45 @@ async function main(userStats, opponentStats, interaction, embed, bet)
 
 		collector.on("collect", async button =>
 		{
-            if(button.customId === "b_view") return button.reply({ content: hands[button.user.id].str, ephemeral: true})
-			if(resolved)                     return
+			if(button.customId === "b_view") return button.reply({ content: hands[button.user.id].str, ephemeral: true})
+				if(resolved)                     return
 
 
-            resolved = true
+					resolved = true
 
-			resolve(button)
+					resolve(button)
 		})
 
 		collector.on("end", (collected, reason) =>
 		{
 			if(resolved) return
 
-			resolved = true
+				resolved = true
 
-			resolve(null)
+				resolve(null)
 		})
 	})
 }
 
 async function end(players, userID, embed, interaction, bet, tie)
 {
-    players[0].active_game    = false;
-    players[1]..active_game   = false;
+	players[0].active_game    = false;
+	players[1]..active_game   = false;
 
-    ch.remove(userID)
-    dh.userSave(players[0])
-    dh.userSave(players[1])
+	ch.remove(userID)
+	dh.userSave(players[0])
+	dh.userSave(players[1])
 }
 
 
-async function draw(deck, ID, hands)
+async function draw(deck, current)
 {
-    const drawn = await ch.draw(deck)
+	const drawn = await ch.draw(deck)
 
-    hands[ID].hand.push(drawn.suited)
-    hands[ID].str += drawn.emoji
+	current.hand.push(drawn.suited)
+	current.str += drawn.emoji
 
-    return hands
+	return current
 }
 
 async function calculate(interaction, cards)
@@ -238,5 +268,5 @@ async function calculate(interaction, cards)
 
 module.exports =
 {
-    main,
+	main,
 }
