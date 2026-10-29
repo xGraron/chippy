@@ -110,9 +110,12 @@ async function main(userStats, opponentStats, interaction, embed, bet)
 		{
 			if(button.customId === "b_view") 					return button.reply({ content: hands[button.user.id].string, ephemeral: true})
 			if(button.user.id !== players[tracker % 2].userID)  return button.reply({ content: "Not your turn!", ephemeral: true})
-			if(resolved)                     					return
 
 			button.deferUpdate()
+
+			if(button.customId === "b_fold")	return collector.stop("fold")
+			if(resolved)                     	return
+
 			tracker++
 
 			if(tracker % 2 === 0) 	hands	= await draw(userID, hands, "community")
@@ -120,7 +123,7 @@ async function main(userStats, opponentStats, interaction, embed, bet)
 
 			embed
 			.setTitle("Poker")
-			.setDescription(`Community cards: \n${hands["community"].string} \n<@${players[tracker % 2].userID}>'s turn \nCurrent pot: ${bet*2} \n\n-# You have 90s to play before the house takes your wagers`)
+			.setDescription(`Community cards: \n${hands["community"].string} \n<@${players[tracker % 2].userID}>'s turn \nCurrent pot: ${players[tracker % 2].contributed + players[(tracker + 1) % 2].contributed} Chips \n\n-# You have 90s to play before the house takes your wagers`)
 
 			interaction.editReply({ embeds: [embed] })
 		})
@@ -129,7 +132,19 @@ async function main(userStats, opponentStats, interaction, embed, bet)
 		{
 			if(resolved) return
 
-			if(reason === "showdown") dev.log("showdown")
+			if(reason === "fold")
+			{
+				const reward = hands[players[tracker % 2].userID].contributed + hands[players[(tracker+ 1) % 2].userID].contributed
+
+				embed.setDescription(`<@${players[tracker % 2].userID}> folded! \n <@${players[(tracker + 1) % 2].userID}> wins the pot of ${reward} Chips`)
+
+				players[(tracker + 1) % 2].chips += reward
+
+				interaction.editReply({ embeds: [embed], components: [] })
+
+				return end(players, userID, embed, interaction,)
+			}
+			if(reason === "time") return dev.log("time")
 
 			resolved = true
 
@@ -138,7 +153,7 @@ async function main(userStats, opponentStats, interaction, embed, bet)
 	})
 }
 
-async function end(players, userID, embed, interaction, bet, tie)
+async function end(players, userID, embed, interaction,)
 {
 	players[0].active_game 	= false;
 	players[1].active_game	= false;
