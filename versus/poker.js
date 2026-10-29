@@ -123,12 +123,12 @@ async function main(userStats, opponentStats, interaction, embed, bet)
 
 			embed
 			.setTitle("Poker")
-			.setDescription(`Community cards: \n${hands["community"].string} \n<@${players[tracker % 2].userID}>'s turn \nCurrent pot: ${players[tracker % 2].contributed + players[(tracker + 1) % 2].contributed} Chips \n\n-# You have 90s to play before the house takes your wagers`)
+			.setDescription(`Community cards: \n${hands["community"].string} \n<@${players[tracker % 2].userID}>'s turn \nCurrent pot: ${hands[players[tracker % 2].userID].contributed + hands[players[(tracker+ 1) % 2].userID].contributed} Chips \n\n-# You have 90s to play before the house takes your wagers`)
 
 			interaction.editReply({ embeds: [embed] })
 		})
 
-		collector.on("end", (collected, reason) =>
+		collector.on("end", async (collected, reason) =>
 		{
 			if(resolved) return
 
@@ -136,7 +136,7 @@ async function main(userStats, opponentStats, interaction, embed, bet)
 			{
 				const reward = hands[players[tracker % 2].userID].contributed + hands[players[(tracker+ 1) % 2].userID].contributed
 
-				embed.setDescription(`<@${players[tracker % 2].userID}> folded! \n <@${players[(tracker + 1) % 2].userID}> wins the pot of ${reward} Chips`)
+				embed.setDescription(`<@${players[tracker % 2]}> folded! \n <@${players[(tracker + 1) % 2].userID}> wins the pot of ${reward} Chips`)
 
 				players[(tracker + 1) % 2].chips += reward
 
@@ -144,7 +144,60 @@ async function main(userStats, opponentStats, interaction, embed, bet)
 
 				return end(players, userID, embed, interaction,)
 			}
-			if(reason === "time") return dev.log("time")
+			else if(reason === "time")
+			{
+				embed.setDescription("You took too long. \n The house took your wagers!")
+
+				interaction.editReply({ embeds: [embed], components: [] })
+				end(players, userID, embed, interaction)
+			}
+			else if(reason === "showdown")
+			{
+				embed.addFields(
+					{ name: `Hands`, value: `<@${players[tracker % 2].userID}> ${hands[players[tracker % 2].userID].string}`, inline: true },
+					{ name: " ", value: `<@${players[(tracker + 1) % 2].userID}> ${hands[players[(tracker + 1) % 2].userID].string}`, inline: true },
+					{ name: "Community cards:", value: hands["community"].string }
+
+				)
+
+				const aFinal = await calculate(interaction, [...hands[players[tracker % 2].userID].hand, ...hands["community"].hand])
+				const bFinal = await calculate(interaction, [...hands[players[(tracker + 1) % 2].userID].hand, ...hands["community"].hand])
+				const reward = hands[players[tracker % 2].userID].contributed + hands[players[(tracker+ 1) % 2].userID].contributed
+
+				if(aFinal.rank > bFinal.rank) return win_a()
+				if(aFinal.rank < bFinal.rank) return win_b()
+
+				for(let i = 0; i < Math.min(aFinal.kickers.length, bFinal.kickers.length); i++)
+				{
+					if(aFinal.kickers[i] > bFinal.kickers[i]) return win_a()
+					if(aFinal.kickers[i] < bFinal.kickers[i]) return win_b()
+				}
+
+				const decider = random.integer(0, 1)
+
+				if(decider === 1) players[tracker % 2].chips += reward
+				else              players[(tracker % 2) % 2].chips += reward
+
+				function win_a()
+				{
+					players[tracker % 2].chips += reward
+
+					embed.setDescription(`<@${players[tracker % 2].userID}> wins!`)
+					interaction.editReply({ embeds: [embed], components: []})
+
+					end(players, userID, embed, interaction)
+				}
+				function win_b()
+				{
+					players[(tracker + 1) % 2].chips += reward
+
+					embed.setDescription(`<@${players[(tracker + 1) % 2].userID}> wins!`)
+					interaction.editReply({ embeds: [embed], components: []})
+
+					end(players, userID, embed, interaction)
+				}
+
+			}
 
 			resolved = true
 
@@ -153,7 +206,7 @@ async function main(userStats, opponentStats, interaction, embed, bet)
 	})
 }
 
-async function end(players, userID, embed, interaction,)
+async function end(players, userID, embed, interaction)
 {
 	players[0].active_game 	= false;
 	players[1].active_game	= false;
