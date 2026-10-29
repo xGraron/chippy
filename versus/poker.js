@@ -26,67 +26,16 @@ const values =
     "king": 	13
 }
 
-const multipliers =
-{
-    "Royal Flush": 		100,
-    "Straight Flush": 	20,
-    "Four Of A Kind": 	15,
-    "Full House": 		10,
-    "Flush":  			8,
-    "Straight":  		5,
-    "Three Of A Kind":  3,
-    "Two Pair": 		2,
-    "Pair":             1,
-}
-
 const secretcard	= ah.cards(true)
 
 async function main(userStats, opponentStats, interaction, embed, bet)
 {
     const deck 		= await ch.create(userStats.userID)
-    const userID    = userStats.userID
-    const oppID     = opponentStats.userID
-	const xp_rew	= Math.floor(bet / 7)
 
 	if(!deck.success)
     {
         end(userStats, opponentStats)
         return eh.error(interaction, deck.reason)
-    }
-
-	let hands = {}
-	let initial;
-    let press;
-
-	hands[userID] =
-    {
-        hand: [],
-        str: "",
-        contributed: bet
-    }
-    hands[oppID] =
-    {
-        hand: [],
-        str: "",
-        contributed: bet
-    }
-    hands["community"] =
-    {
-        hand: [],
-        str: ""
-    }
-
-	for(let i = 0; i < 2; i++)
-	{
-		hands = await draw(userID, userID, hands)
-		hands = await draw(userID, oppID, hands)
-    }
-
-	await ch.burn(userID)
-
-    for(let i = 0; i < 3; i++)
-    {
-        hands = await await draw(userID, "community", hands)
     }
 
 	const call = new ButtonBuilder()
@@ -114,29 +63,22 @@ async function main(userStats, opponentStats, interaction, embed, bet)
 
 	embed
 	.setTitle("Poker")
-	.setDescription(`Community cards: \n${hands["community"].str} \n\n-# <@${opponentStats.userID}>'s turn \n-# You have 10s`)
+	.setDescription(`TESTING`)
 
-
-//TURN ONE
-
-    initial = await interaction.editReply({ embeds: [embed], components: [row, row2] })
-
-	press = await new Promise(resolve =>
+    const initial = await interaction.editReply({ embeds: [embed], components: [row, row2] })
+	const press 	= await new Promise(resolve =>
 	{
-		const collector = initial.createMessageComponentCollector({ time: 15_000 })
+		const collector = initial.createMessageComponentCollector({ time: 60_000 })
 
 		let resolved = false
 
 		collector.on("collect", async button =>
 		{
             if(button.customId === "b_view") return button.reply({ content: hands[button.user.id].str, ephemeral: true})
-			if(button.user.id !== oppID)     return button.reply({ content: "Not your turn", ephemeral: true})
 			if(resolved)                     return
-			if(button.customId === "b_fold") return collector.stop("folded")
+
 
             resolved = true
-
-			collector.stop("player")
 
 			resolve(button)
 		})
@@ -147,122 +89,21 @@ async function main(userStats, opponentStats, interaction, embed, bet)
 
 			resolved = true
 
-			if(reason === "time" || reason === "folded") return folded(userStats, opponentStats, hands, userID, embed, interaction, bet)
-
 			resolve(null)
 		})
 	})
-
-    if(!press) return
-    press.deferUpdate()
-    embed.setDescription(`Community cards: \n${hands["community"].str} \n\n-# <@${userStats.userID}>'s turn \n-# You have 10s`)
-
-//TURN TWO
-
-    initial = await interaction.editReply({ embeds: [embed], components: [row, row2] })
-
-	press = await new Promise(resolve =>
-	{
-		const collector = initial.createMessageComponentCollector({ time: 15_000 })
-
-		let resolved = false
-
-		collector.on("collect", async button =>
-		{
-            if(button.customId === "b_view") return button.reply({ content: hands[button.user.id].str, ephemeral: true})
-			if(button.user.id !== userID)    return button.reply({ content: "Not your turn", ephemeral: true})
-			if(resolved)                     return
-			if(button.customId === "b_fold") return collector.stop("folded")
-
-            resolved = true
-
-			collector.stop("player")
-
-			resolve(button)
-		})
-
-		collector.on("end", (collected, reason) =>
-		{
-			if(resolved) return
-
-			resolved = true
-
-			if(reason === "timr" || reason === "folded") return folded(opponentStats, userStats, hands, userID, embed, interaction, bet)
-
-			resolve(null)
-		})
-	})
-
-    if(!press) return
-    press.deferUpdate()
-
-    for(let i = 0; i < 2; i++)
-    {
-        hands = await await draw(userID, "community", hands)
-    }
-
-    const aFinal = await calculate(interaction, [...hands[userID].hand, ...hands["community"].hand])
-    const bFinal = await calculate(interaction, [...hands[oppID].hand, ...hands["community"].hand])
-
-    if(aFinal.rank > bFinal.rank)  return end(userStats, opponentStats, hands, userID, embed, interaction, bet)
-    if(aFinal.rank < bFinal.rank)  return end(opponentStats, userStats, hands, userID, embed, interaction, bet)
-
-    for(let i = 0; i < Math.min(aFinal.kickers.length, bFinal.kickers.length); i++)
-    {
-        if(aFinal.kickers[i] > bFinal.kickers[i])
-        {
-            return end(userStats, opponentStats, hands, userID, embed, interaction, bet)
-        }
-
-        if(aFinal.kickers[i] < bFinal.kickers[i])
-        {
-            return end(opponentStats, userStats, hands, userID, embed, interaction, bet)
-        }
-    }
-
-    const decider = random.integer(0, 1)
-
-    if(decider === 1) return end(userStats, opponentStats, hands, userID, embed, interaction, bet, true)
-    else              return end(opponentStats, userStats, hands, userID, embed, interaction, bet, true)
-
 }
 
-async function end(winStats, loseStats, hands, userID, embed, interaction, bet, tie)
+async function end(players, userID, embed, interaction, bet, tie)
 {
-    winStats.active_game    = false;
-    winStats.chips          += bet * 2
-    loseStats.active_game   = false;
+    players[0].active_game    = false;
+    players[1]..active_game   = false;
 
     ch.remove(userID)
-    dh.userSave(winStats)
-    dh.userSave(loseStats)
-
-    embed.setDescription(`**<@${winStats.userID}> wins!**`)
-    embed.addFields(
-        { name: `Winner`, value: hands[winStats.userID].str, inline: true },
-        { name: `Loser`, value: hands[loseStats.userID].str, inline: true },
-        { name: `Community cards`, value: hands["community"].str }
-    )
-    if(tie) embed.setFooter({ text: 'It was a tie! Winner was decided by random' });
-
-    interaction.editReply({ embeds: [embed], components: [] })
+    dh.userSave(players[0])
+    dh.userSave(players[1])
 }
 
-async function folded(winStats, loseStats, hands, userID, embed, interaction, bet)
-{
-    winStats.active_game    = false;
-    winStats.chips          += bet + Math.floor(bet / 2)
-    loseStats.active_game   = false;
-    loseStats.chips         += Math.floor(bet / 2)
-
-    ch.remove(userID)
-    dh.userSave(winStats)
-    dh.userSave(loseStats)
-
-    embed.setDescription(`**<@${winStats.userID}> wins** \nbecause <@${loseStats.userID}> folded`)
-
-    interaction.editReply({ embeds: [embed], components: [] })
-}
 
 async function draw(deck, ID, hands)
 {
