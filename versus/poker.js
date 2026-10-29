@@ -34,26 +34,27 @@ async function main(userStats, opponentStats, interaction, embed, bet)
 	const oppID		= opponentStats.userID
 	const deck 		= await ch.create(userID)
 	const players	= [ userStats, opponentStats ]
-	const hands 	=
-	{
-		userID:
-		{
-			string: "",
-			hand: []
-		},
-		oppID:
-		{
-			string: "",
-			hand: []
-		},
-		"community":
-		{
-			string: "",
-			hand: []
-		}
-	}
 
-	let tracker 	= 2
+	let hands 	= {}
+	let tracker	= 2
+
+	hands[userID] =
+	{
+		string: "",
+		hand: [],
+		contributed: bet
+	}
+	hands[oppID] =
+	{
+		string: "",
+		hand: [],
+		contributed: bet
+	}
+	hands["community"] =
+	{
+		string: "",
+		hand: []
+	}
 
 	if(!deck.success)
 	{
@@ -61,11 +62,15 @@ async function main(userStats, opponentStats, interaction, embed, bet)
 		return eh.error(interaction, deck.reason)
 	}
 
+	for(let i = 0; i < 2; i++)
+	{
+		hands	= await draw(userID, hands, userID)
+		hands	= await draw(userID, hands, oppID)
+	}
+
 	for(let i = 0; i < 3; i++)
 	{
-		hands[userID] 		+= await draw(userID, hands[userID])
-		hands[oppID]		+= await draw(userID, hands[oppID])
-		hands["community"]	*= await draw(userID, hands["community"])
+		hands	= await draw(userID, hands, "community")
 	}
 
 	const call = new ButtonBuilder()
@@ -93,41 +98,50 @@ async function main(userStats, opponentStats, interaction, embed, bet)
 
 	embed
 	.setTitle("Poker")
-	.setDescription(`Community cards: \n${hands["community"].string}`)
+	.setDescription(`Community cards: \n${hands["community"].string} \n<@${players[tracker % 2].userID}>'s turn \nCurrent pot: ${bet*2} \n\n-# You have 90s to play before the house takes your wagers`)
 
-	const initial = await interaction.editReply({ embeds: [embed], components: [row, row2] })
-	const press 	= await new Promise(resolve =>
+	const initial	= await interaction.editReply({ embeds: [embed], components: [row, row2] })
+	const press		= await new Promise(resolve =>
 	{
-		const collector = initial.createMessageComponentCollector({ time: 60_000 })
-
+		const collector = initial.createMessageComponentCollector({ time: 90_000 })
 		let resolved = false
 
 		collector.on("collect", async button =>
 		{
-			if(button.customId === "b_view") return button.reply({ content: hands[button.user.id].str, ephemeral: true})
-				if(resolved)                     return
+			if(button.customId === "b_view") 					return button.reply({ content: hands[button.user.id].string, ephemeral: true})
+			if(button.user.id !== players[tracker % 2].userID)  return button.reply({ content: "Not your turn!", ephemeral: true})
+			if(resolved)                     					return
 
+			button.deferUpdate()
+			tracker++
 
-					resolved = true
+			if(tracker % 2 === 0) 	hands	= await draw(userID, hands, "community")
+			if(tracker === 6)		return collector.stop("showdown")
 
-					resolve(button)
+			embed
+			.setTitle("Poker")
+			.setDescription(`Community cards: \n${hands["community"].string} \n<@${players[tracker % 2].userID}>'s turn \nCurrent pot: ${bet*2} \n\n-# You have 90s to play before the house takes your wagers`)
+
+			interaction.editReply({ embeds: [embed] })
 		})
 
 		collector.on("end", (collected, reason) =>
 		{
 			if(resolved) return
 
-				resolved = true
+			if(reason === "showdown") dev.log("showdown")
 
-				resolve(null)
+			resolved = true
+
+			resolve(null)
 		})
 	})
 }
 
 async function end(players, userID, embed, interaction, bet, tie)
 {
-	players[0].active_game    = false;
-	players[1]..active_game   = false;
+	players[0].active_game 	= false;
+	players[1].active_game	= false;
 
 	ch.remove(userID)
 	dh.userSave(players[0])
@@ -135,14 +149,14 @@ async function end(players, userID, embed, interaction, bet, tie)
 }
 
 
-async function draw(deck, current)
+async function draw(deck, hands, current)
 {
 	const drawn = await ch.draw(deck)
 
-	current.hand.push(drawn.suited)
-	current.str += drawn.emoji
+	hands[current].hand.push(drawn.suited)
+	hands[current].string += drawn.emoji
 
-	return current
+	return hands
 }
 
 async function calculate(interaction, cards)
