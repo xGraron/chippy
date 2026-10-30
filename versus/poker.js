@@ -78,11 +78,6 @@ async function main(userStats, opponentStats, interaction, embed, bet)
 	.setLabel("Call")
 	.setStyle(ButtonStyle.Success)
 
-	const raise = new ButtonBuilder()
-	.setCustomId("b_raise")
-	.setLabel("Raise")
-	.setStyle(ButtonStyle.Danger)
-
 	const fold = new ButtonBuilder()
 	.setCustomId("b_fold")
 	.setLabel("Fold")
@@ -93,7 +88,7 @@ async function main(userStats, opponentStats, interaction, embed, bet)
 	.setLabel("Click to see your cards")
 	.setStyle(ButtonStyle.Secondary)
 
-	const row 	= new ActionRowBuilder().addComponents(call, fold, raise)
+	const row 	= new ActionRowBuilder().addComponents(call, fold)
 	const row2  = new ActionRowBuilder().addComponents(view)
 
 	embed
@@ -113,34 +108,18 @@ async function main(userStats, opponentStats, interaction, embed, bet)
 			if(button.customId === "b_view") 					return button.reply({ content: hands[button.user.id].string, ephemeral: true})
 			if(button.user.id !== players[tracker % 2].userID)  return button.reply({ content: "Not your turn!", ephemeral: true})
 			if(button.customId === "b_fold")					return collector.stop("fold")
-			if(button.customId === "b_raise")
-			{
-				if(players[tracker % 2].chips < bet) return button.reply({ content: "You can't afford to raise!", ephemeral: true})
 
-				players[tracker % 2].chips -= bet
-				hands[players[tracker % 2].userID].contributed += bet
+			tracker++
 
-				advance(`\n<@${players[tracker % 2].userID}> raised by ${bet}`)
-			}
-			else
-			{
-				advance(" ")
-			}
+			if(tracker % 2 === 0) 	hands	= await draw(userID, hands, "community")
+			if(tracker === 6)		return collector.stop("showdown")
 
-			async function advance(str)
-			{
-				tracker++
+			embed
+			.setTitle("Poker")
+			.setDescription(`Community cards: \n${hands["community"].string} \n<@${players[tracker % 2].userID}>'s turn \nCurrent pot: ${hands[players[tracker % 2].userID].contributed + hands[players[(tracker+ 1) % 2].userID].contributed} Chips` )
 
-				if(tracker % 2 === 0) 	hands	= await draw(userID, hands, "community")
-				if(tracker === 6)		return collector.stop("showdown")
-
-				embed
-				.setTitle("Poker")
-				.setDescription(`Community cards: \n${hands["community"].string} \n<@${players[tracker % 2].userID}>'s turn \nCurrent pot: ${hands[players[tracker % 2].userID].contributed + hands[players[(tracker+ 1) % 2].userID].contributed} Chips` + str)
-
-				button.deferUpdate()
-				interaction.editReply({ embeds: [embed] })
-			}
+			button.deferUpdate()
+			interaction.editReply({ embeds: [embed] })
 		})
 
 		collector.on("end", async (collected, reason) =>
