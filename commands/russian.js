@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder, ContainerBuilder, MessageFlags } = require("discord.js")
+const { SlashCommandBuilder, InteractionContextType, ButtonBuilder, ButtonStyle, ActionRowBuilder, ContainerBuilder, MessageFlags } = require("discord.js")
 const { Random }                             = require("random-js")
 const fs    = require('fs')
 const path  = require('path')
@@ -17,7 +17,12 @@ module.exports =
 {
     data: new SlashCommandBuilder()
         .setName("russian")
-        .setDescription("Russian Roulette, are you really this broke?"),
+        .setDescription("Russian Roulette, are you really this broke?")
+		.setContexts(
+			InteractionContextType.Guild,
+			InteractionContextType.BotDM,
+			InteractionContextType.PrivateChannel
+		),
 
     async execute(interaction, userStats)
     {

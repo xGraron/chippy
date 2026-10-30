@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, EmbedBuilder, StringSelectMenuBuilder, StringSelectMenuOptionBuilder, ActionRowBuilder } = require("discord.js")
+const { SlashCommandBuilder, InteractionContextType, EmbedBuilder, StringSelectMenuBuilder, StringSelectMenuOptionBuilder, ActionRowBuilder } = require("discord.js")
 const dh    = require('../handlers/dataHandler.js')
 const dev   = require('../handlers/dev.js')
 const ah    = require('../handlers/assetHandler.js')
@@ -11,7 +11,12 @@ module.exports =
 {
     data: new SlashCommandBuilder()
     .setName("shop")
-    .setDescription("Open the shop"),
+    .setDescription("Open the shop")
+    .setContexts(
+        InteractionContextType.Guild,
+        InteractionContextType.BotDM,
+        InteractionContextType.PrivateChannel
+    ),
 
     async execute(interaction)
     {

@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, EmbedBuilder, } = require("discord.js")	
+const { SlashCommandBuilder, InteractionContextType, EmbedBuilder, } = require("discord.js")
 const dev   = require('../handlers/dev.js')
 const ah    = require('../handlers/assetHandler.js')
 
@@ -64,7 +64,12 @@ module.exports =
             .addChoices(
                 { name: "Public Badges", value: "public"},
                 { name: "Secret Badges", value: "secret"})
-        ),
+        )
+    .setContexts(
+        InteractionContextType.Guild,
+        InteractionContextType.BotDM,
+        InteractionContextType.PrivateChannel
+    ),
 
 	async execute(interaction, userStats)
 	{

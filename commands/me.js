@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, EmbedBuilder, } = require("discord.js")
+const { SlashCommandBuilder, InteractionContextType, EmbedBuilder, } = require("discord.js")
 const xh    = require('../handlers/xpHandler.js')
 const dev   = require('../handlers/dev.js')
 const ah    = require('../handlers/assetHandler.js')
@@ -9,7 +9,12 @@ module.exports =
 {
 	data: new SlashCommandBuilder()
 	.setName("me")
-	.setDescription("See your Chips, XP and Badges"),
+	.setDescription("See your Chips, XP and Badges")
+    .setContexts(
+        InteractionContextType.Guild,
+        InteractionContextType.BotDM,
+        InteractionContextType.PrivateChannel
+    ),
 
 	async execute(interaction, userStats)
 	{

@@ -1,6 +1,6 @@
 require("dotenv").config()
 
-const { SlashCommandBuilder, EmbedBuilder, } = require("discord.js")    
+const { SlashCommandBuilder, InteractionContextType, EmbedBuilder, } = require("discord.js")
 const { fetch }                             = require("undici")
 const eh    = require("../handlers/errorHandler.js")
 const dh    = require("../handlers/dataHandler.js")
@@ -27,6 +27,11 @@ module.exports =
             { name: "Chips", value: "chips" },
             { name: "XP", value: "xp" }   
         )
+    )
+    .setContexts(
+        InteractionContextType.Guild,
+        InteractionContextType.BotDM,
+        InteractionContextType.PrivateChannel
     ),
 
     async execute(interaction)

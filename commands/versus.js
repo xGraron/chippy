@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, EmbedBuilder, MessageAttachment, ButtonBuilder, ButtonStyle, ActionRowBuilder } = require("discord.js")	
+const { SlashCommandBuilder, InteractionContextType, EmbedBuilder, MessageAttachment, ButtonBuilder, ButtonStyle, ActionRowBuilder,  } = require("discord.js")
 const path		= require("path")
 const dh 		= require("../handlers/dataHandler.js")
 const eh 		= require("../handlers/errorHandler.js")
@@ -35,6 +35,10 @@ module.exports =
 	.setDescription("Your bet")
 	.setRequired(true)
 		)
+	)
+	.setContexts(
+		InteractionContextType.Guild,
+		InteractionContextType.PrivateChannel
 	),
 
 	async execute(interaction, userStats)

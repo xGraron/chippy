@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder, ContainerBuilder, MessageFlags, AttachmentBuilder } = require("discord.js")
+const { SlashCommandBuilder, InteractionContextType, EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder, ContainerBuilder, MessageFlags, AttachmentBuilder } = require("discord.js")
 const { createCanvas, loadImage }   = require('@napi-rs/canvas')
 const { Random }                    = require('random-js')                                                                            
 const dh    = require('../handlers/dataHandler.js')
@@ -36,6 +36,11 @@ module.exports =
     .addSubcommand(subcommand => subcommand
         .setName("egge")
         .setDescription("Get new accessoires")
+    )
+    .setContexts(
+        InteractionContextType.Guild,
+        InteractionContextType.BotDM,
+        InteractionContextType.PrivateChannel
     ),
 
     async execute(interaction, userStats)

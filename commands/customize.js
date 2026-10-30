@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, EmbedBuilder, } = require("discord.js")
+const { SlashCommandBuilder, InteractionContextType, EmbedBuilder, } = require("discord.js")
 const eh    = require("../handlers/errorHandler.js")
 const dh    = require("../handlers/dataHandler.js")
 const dev   = require('../handlers/dev.js')
@@ -19,7 +19,12 @@ module.exports =
             .setDescription("Image url")
             .setRequired(true)
             )
-        ),
+        )
+    .setContexts(
+        InteractionContextType.Guild,
+        InteractionContextType.BotDM,
+        InteractionContextType.PrivateChannel
+    ),
 
     async execute(interaction, userStats)
     {
