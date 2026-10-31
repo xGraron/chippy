@@ -94,6 +94,10 @@ module.exports =
 		.setDescription("Easy money, right?")
 	)
 	.addSubcommand(subcommand => subcommand
+		.setName("war")
+		.setDescription("Fight the casino!")
+	)
+	.addSubcommand(subcommand => subcommand
 		.setName("slots")
 		.setDescription("Pretty lights!")
 	)	
