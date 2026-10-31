@@ -4,6 +4,7 @@
 - Diceroll now grants you 10xp
 - Added /challange coinflip
 - Added /challenge russian
+- added new game "war"
 - fixed missing asset for badge 702
 - fixed dice being able to roll 0 
 - fixed bug causing leaderboard to stop compromise save data 
