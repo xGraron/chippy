@@ -37,6 +37,15 @@ async function main(userStats, opponentStats, interaction, embed, bet)
 
 	let hands 	= {}
 	let tracker	= 2
+	let current = bet
+	let round 	=
+	{
+		[userID]: bet,
+		[oppID]: bet
+	}
+
+	let acted = new Set()
+	let street = 0
 
 	hands[userID] =
 	{
@@ -88,7 +97,12 @@ async function main(userStats, opponentStats, interaction, embed, bet)
 	.setLabel("Click to see your cards")
 	.setStyle(ButtonStyle.Secondary)
 
-	const row 	= new ActionRowBuilder().addComponents(call, fold)
+	const raise = new ButtonBuilder()
+	.setCustomId("b_raise")
+	.setLabel("Raise")
+	.setStyle(ButtonStyle.Danger)
+
+	const row = new ActionRowBuilder().addComponents(call, raise, fold)
 	const row2  = new ActionRowBuilder().addComponents(view)
 
 	embed
@@ -101,26 +115,82 @@ async function main(userStats, opponentStats, interaction, embed, bet)
 		const collector = initial.createMessageComponentCollector({ time: 90_000 })
 		let resolved = false
 
+
 		collector.on("collect", async button =>
 		{
 			if(resolved) return
 
 			if(button.customId === "b_view") 					return button.reply({ content: hands[button.user.id].string, ephemeral: true})
-			if(button.user.id !== players[tracker % 2].userID)  return button.reply({ content: "Not your turn!", ephemeral: true})
+			if(button.user.id !== players[tracker % 2].userID) 	return button.reply({ content: "Not your turn!", ephemeral: true})
 			if(button.customId === "b_fold")					return collector.stop("fold")
 
-			tracker++
+			const playerID 	= button.user.id
+			const player 	= players[tracker % 2]
+			const callAmount = current - round[playerID]
 
-			if(tracker % 2 === 0) 	hands	= await draw(userID, hands, "community")
-			if(tracker === 6)		return collector.stop("showdown")
+			if(button.customId === "b_call")
+			{
+				if(callAmount > player.chips) return button.reply({ content: "Not enough chips!", ephemeral: true})
 
-			embed
-			.setTitle("Poker")
-			.setDescription(`Community cards: \n${hands["community"].string} \n<@${players[tracker % 2].userID}>'s turn \nCurrent pot: ${hands[players[tracker % 2].userID].contributed + hands[players[(tracker+ 1) % 2].userID].contributed} Chips` )
+				player.chips 				-= callAmount
+				round[playerID] 			+= callAmount
+				hands[playerID].contributed += callAmount
 
-			button.deferUpdate()
-			interaction.editReply({ embeds: [embed] })
+				acted.add(playerID)
+			}
+
+			if(button.customId === "b_raise")
+			{
+				const raiseAmount 	= bet
+				const total 		= callAmount + raiseAmount
+
+				if(total > player.chips) return button.reply({ content: "Not enough chips to raise!", ephemeral: true})
+
+				player.chips 				-= total
+				round[playerID] 			+= total
+				hands[playerID].contributed += total
+
+				current = round[playerID]
+
+				acted.clear()
+				acted.add(playerID)
+			}
+			else
+			{
+				await button.deferUpdate()
+			}
+			if(acted.size === 2 && round[userID] === current && round[oppID] === current)
+			{
+				street++
+
+				round[userID] 	= 0
+				round[oppID]	= 0
+
+				current = 0
+				acted.clear()
+
+				if(street === 1 || street === 2)
+				{
+					hands = await draw(userID, hands, "community")
+					tracker = 2
+				}
+				else
+				{
+					return collector.stop("showdown")
+				}
+			}
+			else
+			{
+				tracker++
+			}
+
+			embed.setDescription(
+				`Community cards: \n${hands["community"].string} \n<@${players[tracker % 2].userID}>'s turn \nCurrent pot: ${hands[userID].contributed + hands[oppID].contributed} Chips`
+			)
+
+			await interaction.editReply({ embeds: [embed] })
 		})
+
 
 		collector.on("end", async (collected, reason) =>
 		{
