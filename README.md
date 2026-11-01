@@ -1,6 +1,7 @@
-# Contributers: Gran 
-Ryzah (Bughunting, Financing, Advertisint), 
-Josephi, Crabs, Stefanescu, Via & The Community <3 (Ideas)
+# Contributers: Gran (Developer)
+Ryzah (Bughunting, Financing, Advertising), 
+Via & Nia (Playtesting)
+Josephi, Crabs, Stefanescu, & The Community <3 (Ideas, Encouragement)
 
 Play known games like Baccarat & Blackjack, or engage in betting on horses together with your friends!
 Bet *exclusively* "Chips", Chippy's currency. There is no way to acquire currency via money, making the bot 100% free!
