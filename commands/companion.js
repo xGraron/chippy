@@ -239,8 +239,6 @@ async function egg(interaction, userStats, parts)
     const n = random.integer(0, 9)
     img = await ah.gif(`eggs_${n}`)
 
-    dev.log(img)
-
     const embed = new EmbedBuilder()
     .setTitle("Crackin' an egge")
     .setImage(img)
