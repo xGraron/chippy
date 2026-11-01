@@ -23,7 +23,9 @@ const rules     =
 
     '**Coinflip** \nExtremely simple, pick which side the coin will show. \nGuess right, you win 50 Chips. \nGuess wrong, you lose 50.',
 
-    '**Diceroll** \n Guess which number the dice will show, \nor play it save and guess whether its even or odd. \nGuessing a number gives you 200 Chips , \nGuessing even or odd 50, \nGuessing wrong costs you 50 Chips'
+    '**Diceroll** \n Guess which number the dice will show, \nor play it save and guess whether its even or odd. \nGuessing a number gives you 200 Chips , \nGuessing even or odd 50, \nGuessing wrong costs you 50 Chips',
+
+    '**War** \n Try to have a higher card than the Dealer. \n You may choose to surrender & regain half your bet \n or play for it all. \nIf you win, you double your bet. \nIf you lose, you lose it all.'
 ]
 
 module.exports =
