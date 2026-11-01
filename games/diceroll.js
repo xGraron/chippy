@@ -88,11 +88,11 @@ async function main(interaction, bet, userStats, UID)
     even.setDisabled(true)
     odd.setDisabled(true)
 
-    const n = random.integer(0, 6)
+    const n = random.integer(1, 6)
 
     if(!press)                          
     {
-        chosen = random.integer(0, 6)
+        chosen = random.integer(1, 6)
         embed.setDescription("You didn't react, \nso Chippy chose for you")
     }
     else
@@ -114,8 +114,18 @@ async function main(interaction, bet, userStats, UID)
         userStats.chips += reward
     }
 
-    if(reward > 0)  embed.setDescription(`You won ${reward} Chips`)
-    else            embed.setDescription("You lost!")
+    if(reward > 0)  
+    {
+        embed.setDescription(`You won ${reward} Chips`)
+
+        xh.leveling(userStats, 5)
+        xh.achievements(userStats, userStats - reward, true, 10, reward, bet)
+    }
+    else            
+    {
+        embed.setDescription("You lost!")
+        xh.achievements(userStats, userStats, false, 10, 0, bet)
+    }
 
     end(userStats, interaction, embed, bet, UID, [row1, row2, row3])
 }

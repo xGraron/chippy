@@ -124,12 +124,15 @@ async function main(interaction, bet, userStats, UID)
 
         userStats.chips += reward
         await xh.leveling(userStats, xp_rew)
+        await xh.achievements(userStats, userStats.chips - bet, true, 3, reward, bet)
     }
     else
     {
         embed
         .setDescription(final_str + `\n-# *You lost*`)
         .setColor(colors.red)
+
+        await xh.achievements(userStats, userStats.chips, false, 3, 0, bet)
     }
 
     end(userStats, interaction, embed, bet, UID)

@@ -7,7 +7,7 @@ const dev   = require('../handlers/dev.js')
 const ah	= require('../handlers/assetHandler.js')
 
 const colors = ah.colors()
-const values = 
+const values =
 {
 	"Ace": 	11,
 	"Jack": 10,
@@ -45,7 +45,7 @@ async function main(interaction, bet, userStats, UID)
 	{
 		points 			= await player_draw(UID, hand, points, hand_em)
 		dealer_points 	= await dealer_draw(UID, dealer_hand, dealer_points, dealer_hand_em)
-	} 
+	}
 
 	hand_str 		= hand_em.join("")
 	dealer_hand_str = dealer_hand_em.join("")
@@ -103,7 +103,7 @@ async function main(interaction, bet, userStats, UID)
 				return resolved = true
 			}
 
-			if(points === 17) await xh.achievements(userStats, userStats.chips, false, 404, 0, 0, true)
+			if(points === 17) await xh.achievements(userStats, userStats.chips, false, 4, 0, 0, true)
 
 			points 		= await player_draw(UID, hand, points, hand_em)
 			hand_str 	= hand_em.join("")

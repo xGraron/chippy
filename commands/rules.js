@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, EmbedBuilder, ContainerBuilder, MessageFlags } = require("discord.js")
+const { SlashCommandBuilder, InteractionContextType, EmbedBuilder, ContainerBuilder, MessageFlags } = require("discord.js")
 const fs    = require
 const eh    = require('../handlers/errorHandler.js')
 const dev   = require('../handlers/dev.js')
@@ -30,7 +30,12 @@ module.exports =
 {
     data: new SlashCommandBuilder()
     .setName("rules")
-    .setDescription("Know how to play each game"),
+    .setDescription("Know how to play each game")
+    .setContexts(
+        InteractionContextType.Guild,
+        InteractionContextType.BotDM,
+        InteractionContextType.PrivateChannel
+    ),
 
     async execute(interaction, userStats)
     {

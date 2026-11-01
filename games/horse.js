@@ -158,7 +158,7 @@ async function getwinners(players, horse, winners, bet)
             await xh.leveling(s, xp_rew)
             await xh.achievements(s, s.chips - reward, true, 5, reward)
 
-            if(chosen === "yellow") await xh.achievements(s, s.chips, false, 503, 0, 0, true);
+            if(chosen === "yellow") await xh.achievements(s, s.chips, false, 50 0, 0, true);
         }
         else
         {

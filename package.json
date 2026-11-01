@@ -17,7 +17,7 @@
   "homepage": "https://github.com/LazyGran/gambling#readme",
   "description": "",
   "dependencies": {
-    "@napi-rs/canvas": "^0.1.71",
+    "@napi-rs/canvas": "^0.1.100",
     "discord.js": "^14.19.3",
     "dotenv": "^16.5.0",
     "jsonfile": "^6.1.0",

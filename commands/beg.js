@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, EmbedBuilder, } = require("discord.js")    
+const { SlashCommandBuilder, InteractionContextType, EmbedBuilder, } = require("discord.js")
 const { Random }                             = require("random-js")
 const fs    = require('fs')
 const path  = require('path')
@@ -10,7 +10,12 @@ const dev   = require('../handlers/dev.js')
 module.exports = {
     data: new SlashCommandBuilder()
         .setName("beg")
-        .setDescription("Broke? Beg for money"),
+        .setDescription("Broke? Beg for money")
+        .setContexts(
+            InteractionContextType.Guild,
+            InteractionContextType.BotDM,
+            InteractionContextType.PrivateChannel
+        ),
                     
     async execute(interaction, userStats)
     {
