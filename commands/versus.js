@@ -53,6 +53,7 @@ module.exports =
 		if(!userStats.active_game)
 		{			
 			if(bet > userStats.chips) 	{ return eh.error(interaction, "You don't have enough chips!") }
+			if(bet > 1)					{ return eh.error(interaction, "you cant do a negative bet") }
 
 			const embed = new EmbedBuilder()
 			.setTitle(`Them vs You`)
