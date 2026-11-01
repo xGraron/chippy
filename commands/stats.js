@@ -15,6 +15,7 @@ const available =
     8: "Poker",
     9: "Card Rush",
     10: "Dice Roll",
+    11: "War"
 }
 
 module.exports =
@@ -40,7 +41,6 @@ module.exports =
             const named = available[game[0]]
             const stats = game[1]
 
-            dev.log(stats)
             embed.addFields({ name: named, value: `${stats.won}/${stats.played} games played were won \nWon a total of ${stats.earned} Chips`})
         })
 
