@@ -83,7 +83,10 @@ async function main(interaction, bet, userStats, UID)
                 userStats.chips += Math.floor(bet / 2)
                 xh.achievements(userStats, userStats.chips, false, 11, 0)
 
-                return folded = true
+
+                folded = true
+
+                resolve("folded")
             }
 
             resolve(null)
@@ -101,7 +104,8 @@ async function main(interaction, bet, userStats, UID)
         await xh.achievements(userStats, userStats.chips + 50, false, 1, 0)
         return end(userStats, interaction, embed, bet, UID)
     }
-    if(folded) return end(userStats, interaction, embed, bet, UID);
+
+    if(press === "folded") return end(userStats, interaction, embed, bet, UID);
 
     await press.deferUpdate()
 
