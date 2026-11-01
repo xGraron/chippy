@@ -61,7 +61,7 @@ async function main(userStats, opponentStats, interaction, embed, bet)
 
             embed.setDescription(`<@${players[(tracker + 1) % 2].userID}>'s turn`)
 
-            button.reply({ content: "You're save", ephemeral: true})
+            button.reply({ content: "You're safe", ephemeral: true})
             await interaction.editReply({ embeds: [embed]})
 
             tracker++
