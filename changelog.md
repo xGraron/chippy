@@ -9,3 +9,4 @@
 - fixed dice being able to roll 0 
 - fixed bug causing leaderboard to stop compromise save data 
 - added companion system
+- added contributers to readme
