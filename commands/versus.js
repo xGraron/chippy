@@ -22,13 +22,13 @@ module.exports =
 		.setName("russian")
 		.setDescription("The ultimate showdown")
 		.addIntegerOption(option => option
-			.setName("bet")>
+			.setName("bet")
 			.setDescription("Your bet")
 			.setRequired(true)
 		)
 	)
 	.addSubcommand(subcommand => subcommand
-		.setNamedItem("war")
+		.setName("war")
 		.setDescription("Fight your enemy")
 		.addIntegerOption(option => option
 			.setName("bet")
