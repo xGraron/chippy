@@ -19,15 +19,6 @@ module.exports =
 		)
 	)
 	.addSubcommand(subcommand => subcommand
-	.setName("poker")
-	.setDescription("Make them fold.")
-	.addIntegerOption(option => option
-	.setName("bet")
-	.setDescription("Your bet")
-	.setRequired(true)
-		)
-	)
-	.addSubcommand(subcommand => subcommand
 	.setName("russian")
 	.setDescription("The ultimate showdown")
 	.addIntegerOption(option => option
