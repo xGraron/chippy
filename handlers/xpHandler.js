@@ -26,6 +26,10 @@ const games_con = [
 	{ gameID: 9, plays: 5, wins: 0, earnings: 0, achievementID: "901" },
 	{ gameID: 9, plays: 25, wins: 0, earnings: 0, achievementID: "902" },
 	{ gameID: 9, plays: 100, wins: 0, earnings: 0, achievementID: "903" },
+	//war
+	{ gameID: 11, plays: 5, wins: 0, earnings: 0, achievementID: "1101" },
+	{ gameID: 11, plays: 25, wins: 0, earnings: 0, achievementID: "1102" },
+	{ gameID: 11, plays: 100, wins: 0, earnings: 0, achievementID: "1103" },
 ]
 
 

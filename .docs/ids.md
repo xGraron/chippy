@@ -39,6 +39,9 @@
 901:    "In a hurry! 🥉",                   "Play 5 games of 'Card Rush'" 
 902:    "In a hurry! 🥈",                   "Play 25 games of 'Card Rush'" 
 903:    "In a hurry! 🥇",                   "Play 100 games of 'Card Rush'" 
+1101:   "Somali 🥉"                         "Play 5 games of 'War'" 
+1102:   "Local Warlord 🥈"                  "Play 25 games of 'War'" 
+1103:   "Certified Z 🥇"                    "Play 100 games of 'War'" 
 
 #Games
 1: High Or Low
