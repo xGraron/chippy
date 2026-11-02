@@ -47,6 +47,9 @@ const titles =
     901: { name: "In a hurry! 🥉",               description: "Play 5 games of 'Card Rush'" },
     902: { name: "In a hurry! 🥈",               description: "Play 25 games of 'Card Rush'" },
     903: { name: "In a hurry! 🥇",               description: "Play 100 games of 'Card Rush'" },
+    1101:{ name: "Somali 🥉",                       description: "Play 5 games of 'War'" },
+    1102:{ name: "Local Warlord 🥈",                description: "Play 25 games of 'War'" },
+    1103:{ name: "Certified Z 🥇",                  description: "Play 100 games of 'War'" },
 }
 
 const publics = [ 11, 12, 13, 21, 22, 90, 101, 102, 103, 201, 202, 203, 401, 402, 403, 501, 601, 602, 701, 702, 901, 902, 903 ]
