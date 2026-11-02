@@ -36,7 +36,7 @@ module.exports =
 	{
 	    await interaction.deferReply()
 
-		const bet 			= interaction.options.getInteger('bet')
+		let bet 			= interaction.options.getInteger('bet')
 		const subcommand 	= interaction.options.getSubcommand();
 		const UID			= interaction.user.id
 		const game 			= require(`../versus/${subcommand}.js`) 
