@@ -2,6 +2,7 @@ const { SlashCommandBuilder, InteractionContextType, EmbedBuilder, } = require("
 const xh        = require('../handlers/xpHandler.js')
 const dev       = require('../handlers/dev.js')
 const ah        = require('../handlers/assetHandler.js')
+const dh        = require('../handlers/dataHandler.js')
 const jsonfile	= require("jsonfile")
 
 const emojis = ah.badges()
@@ -11,7 +12,7 @@ module.exports =
     data: new SlashCommandBuilder()
     .setName("referal")
     .setDescription("Redeem a referal code")
-    .addIntegerOption(option => option
+    .addStringOption(option => option
         .setName("code")
         .setDescription("Enter your referal code")
         .setRequired(true)
@@ -26,7 +27,7 @@ module.exports =
     {
         await interaction.deferReply()
 
-        const code      = interaction.options.getInteger('code')
+        const code      = interaction.options.getString('code')
         const userdata  = jsonfile.readFileSync("database/userdata.json")
 
         if(!(code in userdata)) return interaction.editReply("Referal code does not exist")
@@ -37,11 +38,9 @@ module.exports =
         userStats.chips         += 2500
         userStats["referred"]   = true
 
-        interaction.editReply(`Successfully claimed 2500 Chips for you and <@${code}`)
+        interaction.editReply(`Successfully claimed 2500 Chips for you and <@${code}>`)
 
         dh.userSave(referStats)
         dh.userSave(userStats.chips)
-
-        await interaction.editReply({ embeds: [embed] })
     }
 }
