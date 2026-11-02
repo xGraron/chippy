@@ -23,9 +23,17 @@ const rules     =
 
     '**Coinflip** \nExtremely simple, pick which side the coin will show. \nGuess right, you win 50 Chips. \nGuess wrong, you lose 50.',
 
-    '**Diceroll** \n Guess which number the dice will show, \nor play it save and guess whether its even or odd. \nGuessing a number gives you 200 Chips , \nGuessing even or odd 50, \nGuessing wrong costs you 50 Chips',
+    '**Diceroll** \nGuess which number the dice will show, \nor play it save and guess whether its even or odd. \nGuessing a number gives you 200 Chips , \nGuessing even or odd 50, \nGuessing wrong costs you 50 Chips',
 
-    '**War** \n Try to have a higher card than the Dealer. \n You may choose to surrender & regain half your bet \n or play for it all. \nIf you win, you double your bet. \nIf you lose, you lose it all.'
+    '**War** \nTry to have a higher card than the Dealer. \nYou may choose to surrender & regain half your bet \nor play for it all. \nIf you win, you double your bet. \nIf you lose, you lose it all. \n-# Face cards have a value of 10',
+
+    '### Multiplayer games \nUse /challenge [game] to send a challenge request into the channel.',
+
+    '**Coinflip** \nThe challenged player gets to call "heads" or "tails" \nIf the coin lands on their side, they win your wager. \nIf it lands on the other, you win theirs.',
+
+    '**Russian** \nThe challenger has to start. \n Choose to pull the trigger, \nhaving a 1/6 chance to reset your stats, \nor quit, giving the other player your wager. \nThen its the other players turn, facing the same decisions. \nThe game lasts until: \na) One player dies, \nb) One player quits \nc) 30s pass, in which case you both lose your wager',
+
+    '**War** \nThe same rules as singleplayer war, except the challenger acts as the dealer. \nThe challenged gets to decide whether to surrender, \ngiving the challenger half their wager and keeping the other half, \nor go to war. \nWhoever has the highest card wins the pot. \nIf you have equal cards, the house keeps your wagers.'
 ]
 
 module.exports =
@@ -44,7 +52,6 @@ module.exports =
         await interaction.deferReply()
 
         const container = new ContainerBuilder()
-        .setAccentColor(colors.blue)
         .addTextDisplayComponents((textDisplay) => textDisplay.setContent('## Rules \n Maximum bet for each game is 1.000 Chips! \n You will lose if you fail to react in time!'))
 
         rules.forEach(rule =>
