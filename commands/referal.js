@@ -29,7 +29,18 @@ module.exports =
         const code      = interaction.options.getInteger('code')
         const userdata  = jsonfile.readFileSync("database/userdata.json")
 
-        if(!(code in userdata)) return eh.error("Code doesn't exist", interaction)
+        if(!(code in userdata)) return interaction.editReply("Referal code does not exist")
+        if(userStats.referred)  return interaction.editReply("You've already redeemed a code")
+
+        let referStats = await dh.userGet(code)
+        referStats.chips        += 2500
+        userStats.chips         += 2500
+        userStats["referred"]   = true
+
+        interaction.editReply(`Successfully claimed 2500 Chips for you and <@${code}`)
+
+        dh.userSave(referStats)
+        dh.userSave(userStats.chips)
 
         await interaction.editReply({ embeds: [embed] })
     }
