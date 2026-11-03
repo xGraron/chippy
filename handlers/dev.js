@@ -116,7 +116,7 @@ async function devTools()
 
             case "get":
             {
-                const UID = args
+                const [ UID, key ] = args
 
                 if(!UID)
                 {
@@ -126,13 +126,13 @@ async function devTools()
 
                 const userStats = dh.devGet(UID)
 
-                if (userStats === 0) 
+                if(userStats === 0)
                 {
                     log("User not found!", 5)
                     break;
                 }
-
-                log('\n' + JSON.stringify(userStats, null, 2), 3)
+                if(userStats[key])  log('\n' + JSON.stringify(userStats[key], null, 2), 3)
+                else                log('\n' + JSON.stringify(userStats, null, 2), 3)
 
                 break;
             }
