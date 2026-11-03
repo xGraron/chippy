@@ -2,6 +2,7 @@ const readline  = require("readline");
 const fs        = require("fs")
 const path      = require("path")
 const dh        = require('../handlers/dataHandler.js')
+const jsonfile	= require("jsonfile")
 
 const rl = readline.createInterface(
 {
@@ -25,6 +26,26 @@ async function devTools()
 
         switch (command) 
         {
+            case "code":
+            {
+                const codes             = jsonfile.readFileSync("database/codes.json")
+                const [ code, value ]   = args
+
+                if(!code || !value)
+                {
+                    log("Usage: code <name> <value> \nExample: \ncode testing 500", 2)
+                    break;
+                }
+
+                codes[code] = value
+
+                jsonfile.writeFileSync("database/codes.json", codes)
+
+                log(`Successfully added ${code}`, 3)
+
+                break;
+            }
+
             case "set":
             {
                 const [ UID, key, value ] = args;
