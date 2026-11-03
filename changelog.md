@@ -1,3 +1,4 @@
 - added new badges for war
 - added war 1v1
-
+- added rules for war
+- added rules for all versus games
