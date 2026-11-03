@@ -10,11 +10,11 @@ const emojis = ah.badges()
 module.exports =
 {
     data: new SlashCommandBuilder()
-    .setName("referal")
-    .setDescription("Redeem a referal code")
+    .setName("referral")
+    .setDescription("Redeem a referral code")
     .addStringOption(option => option
         .setName("code")
-        .setDescription("Enter your referal code")
+        .setDescription("Enter your referral code")
         .setRequired(true)
     )
     .setContexts(
@@ -27,20 +27,17 @@ module.exports =
     {
         await interaction.deferReply()
 
-        const code      = interaction.options.getString('code')
-        const userdata  = jsonfile.readFileSync("database/userdata.json")
+        const code   = interaction.options.getString('code')
+        const codes = jsonfile.readFileSync("database/codes.json")
 
-        if(!(code in userdata)) return interaction.editReply("Referal code does not exist")
+        if(!(code in codes))    return interaction.editReply("Referal code does not exist")
         if(userStats.referred)  return interaction.editReply("You've already redeemed a code")
 
-        let referStats = await dh.userGet(code)
-        referStats.chips        += 2500
-        userStats.chips         += 2500
+        userStats.chips         += Number(codes[code])
         userStats["referred"]   = true
 
-        interaction.editReply(`Successfully claimed 2500 Chips for you and <@${code}>`)
+        interaction.editReply(`Successfully claimed ${codes[code]} Chips for code "${code}"`)
 
-        dh.userSave(referStats)
-        dh.userSave(userStats.chips)
+        dh.userSave(userStats)
     }
 }
