@@ -1,8 +1,11 @@
-const { SlashCommandBuilder, InteractionContextType, EmbedBuilder, MessageAttachment, ButtonBuilder, ButtonStyle, ActionRowBuilder } = require("discord.js")
+const { SlashCommandBuilder, InteractionContextType, EmbedBuilder, MessageAttachment, ButtonBuilder, ButtonStyle, ActionRowBuilder } 	= require("discord.js")
+const { Random }                             																							= require("random-js")
 const path		= require("path")
 const dh 		= require("../handlers/dataHandler.js")
 const eh 		= require("../handlers/errorHandler.js")
 const dev   	= require('../handlers/dev.js')
+
+const random	= new Random()
 
 module.exports =
 {
@@ -15,7 +18,7 @@ module.exports =
 	)
 	.addSubcommand(subcommand => subcommand
 		.setName("allin")
-		.setDescription("Go all in, big man")
+		.setDescription("Go big or go home")
 	)
 	.setContexts(
 		InteractionContextType.Guild,
@@ -32,12 +35,18 @@ module.exports =
 
 		const subcommand 	= interaction.options.getSubcommand();
 		const UID			= interaction.user.id
+		const games 		= [ "poker", "blackjack", "baccarat" ]
+		const game 			= require(`../games/${games[random.integer(0, games.length - 1)]}.js`)
 
 		let bet;
 
         if(subcommand === "allin")  bet = userStats.chips
         else                        bet = Math.floor(userStats.chips / 10)
 
-        interaction.editReply("Testing " + bet)
+		userStats.active_game 	= true
+		userStats.chips 		= userStats.chips - bet
+
+		game.main(interaction, bet, userStats, UID)
+		await dh.userSave(interaction.user.id, userStats)
 	}
 }
