@@ -22,7 +22,10 @@ const titles =
     201: { name: "My Head Is Spinning 🥉",      description: "Play 5 games of 'Roulette'" },
     202: { name: "My Head Is Spinning 🥈",      description: "Play 25 games of 'Roulette'" },
     203: { name: "My Head Is Spinning 🥇",      description: "Play 100 games of 'Roulette'" },
-    204: { name: "Go Big Or Go Home",               description: "Put in the maximum bet & lose in 'Roulette'" },
+    204: { name: "Go Big Or Go Home",           description: "Put in the maximum bet & lose in 'Roulette'" },
+    301: { name: "Two numba niineess 🥉",       description: "Play 5 games of 'Baccarat'" },
+    302: { name: "Two numba niineess 🥈",       description: "Play 25 games of 'Baccarat'" },
+    303: { name: "Two numba niineess 🥇",       description: "Play 100 games of 'Baccarat'" },
     401: { name: "Basic Strategy, Trust Me 🥉", description: "Play 5 games of 'Blackjack'" },
     402: { name: "Basic Strategy, Trust Me 🥈", description: "Play 25 games of 'Blackjack'" },
     403: { name: "Basic Strategy, Trust Me 🥇", description: "Play 100 games of 'Blackjack'" },
@@ -52,7 +55,7 @@ const titles =
     1103:{ name: "Certified Z 🥇",                  description: "Play 100 games of 'War'" },
 }
 
-const publics = [ 11, 12, 13, 21, 22, 90, 101, 102, 103, 201, 202, 203, 401, 402, 403, 501, 601, 602, 701, 702, 901, 902, 903 ]
+const publics = [ 11, 12, 13, 21, 22, 90, 101, 102, 103, 201, 202, 203, 301, 302, 303 401, 402, 403, 501, 601, 602, 701, 702, 901, 902, 903, 1101, 1102, 1103 ]
 const secrets = [ 14, 15, 16, 67, 69, 204, 404, 502, 503, 603, 802, 803, 804, 805, 806, 807, 808, 809, 810 ]
 
 module.exports = 
