@@ -12,6 +12,10 @@ const games_con = [
 	{ gameID: 2, plays: 5, wins: 0, earnings: 0, achievementID: "201" },
 	{ gameID: 2, plays: 25, wins: 0, earnings: 0, achievementID: "202" },
 	{ gameID: 2, plays: 100, wins: 0, earnings: 0, achievementID: "203" },
+	//Baccarat
+	{ gameID: 3, plays: 5, wins: 0, earnings: 0, achievementID: "301" },
+	{ gameID: 3, plays: 25, wins: 0, earnings: 0, achievementID: "302" },
+	{ gameID: 3, plays: 100, wins: 0, earnings: 0, achievementID: "303" },
 	//Blackjack
 	{ gameID: 4, plays: 5, wins: 0, earnings: 0, achievementID: "401" },
 	{ gameID: 4, plays: 25, wins: 0, earnings: 0, achievementID: "402" },
