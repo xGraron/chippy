@@ -101,6 +101,10 @@ module.exports =
 		.setName("slots")
 		.setDescription("Pretty lights!")
 	)	
+	.addSubcommand(subcommand =>
+		.setName("luckyseven")
+		.setDescription("Spin the lucky wheel!")
+	)
 	.addSubcommand(subcommand => subcommand
 		.setName("poker")
 		.setDescription("Casino Hold'em.")
