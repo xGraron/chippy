@@ -35,17 +35,24 @@ async function main(interaction, bet, userStats, UID)
             embed
             .setDescription(`You won ${reward} Chips`)
             .setColor(colors.green)
+
+            xh.leveling(userStats, 5)
+            xh.achievements(userStats, userStats.chips, true, 12, reward)
         }
         else if(final === 6)
         {
             embed
             .setDescription(`You won nothing, but also lost nothing`)
+
+            xh.achievements(userStats, userStats.chips, false, 12, 0)
         }
         else
         {
             embed
             .setDescription(`You lost ${bet - reward} Chips`)
             .setColor(colors.red)
+
+            xh.achievements(userStats, userStats.chips, false, 12, 0)
         }
 
 		end(userStats, interaction, embed, reward, interaction.user.id)
