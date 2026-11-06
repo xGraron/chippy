@@ -1,4 +1,8 @@
 - added new badges for war
 - added war 1v1
 - added rules for war
-- added rules for all versus games
+- added rules for all challenge games
+- added Lucky 7
+- added highroller system
+- added new badges for baccarat
+- added referal system
