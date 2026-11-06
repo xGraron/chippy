@@ -58,6 +58,7 @@
 9: Card Rush
 10: Dice Roll
 11: War
+12: Lucky Seven
 
 #Commands
 Explanation: Commands relating to
