@@ -12,7 +12,8 @@ const random 	= new Random()
 
 async function main(interaction, bet, userStats, UID)
 {
-    let mult = random.integer(1, 20) / 10
+    let mult 	= random.integer(1, 20) / 10
+	let reward 	= 0
 
     const hit = new ButtonBuilder()
     .setCustomId("b_hit")
@@ -27,15 +28,18 @@ async function main(interaction, bet, userStats, UID)
     const row 	= new ActionRowBuilder().addComponents(hit, out)
     const embed = new EmbedBuilder()
     .setTitle(`Crash`)
-    .setDescription(`Current multiplier: **${mult}** \n-# You get 30s to play`)
+    .setDescription(`Current multiplier: **${mult}** \n-# You get 20s to play`)
 
     const initial   = await interaction.editReply({ embeds: [embed], components:[row] })
     const press = await new Promise(resolve =>
     {
-        const collector = initial.createMessageComponentCollector({ time: 35_000 })
+        const collector = initial.createMessageComponentCollector({ time: 22_000 })
+
+        let resolved;
 
 		collector.on("collect", async button =>
 		{
+            if(resolved) return
 			if(button.user.id !== UID)       return button.reply({ content: "This isn't your game!", ephemeral: true })
             if(button.customId === "b_out")  return collector.stop("out")
 
@@ -57,15 +61,19 @@ async function main(interaction, bet, userStats, UID)
 
 		collector.on("end", (collected, reason) =>
 		{
-            if(reason === "out")        embed.setDescription("Cashout")
-            else if(reason === "lost")  embed.setDescription("Lost")
+            reward = Math.floor(bet * mult)
+
+            if(reason === "out") 	embed.setDescription(`Cashed out with **x${mult} and won ${reward}`).setColor(colors.green)
+            else					embed.setDescription(`You got to greedy and got nothing`).setColor(colors.red)
 
 			resolved = true
 			resolve(null)
 		})
     })
 
-    end(userStats, interaction, embed, bet * mult)
+	if(!press) embed.setDescription(`You took too long and got nothing`).setColor(colors.red)
+
+	end(userStats, interaction, embed, reward)
 }
 
 async function end(userStats, interaction, embed, reward)
