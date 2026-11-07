@@ -6,3 +6,4 @@
 - added highroller system
 - added new badges for baccarat
 - added referal system
+- added Crash
