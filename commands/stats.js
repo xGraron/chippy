@@ -17,6 +17,7 @@ const available =
     10: "Dice Roll",
     11: "War",
     12: "Lucky Seven",
+    13, "Crash"
 }
 
 module.exports =
