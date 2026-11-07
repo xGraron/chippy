@@ -106,6 +106,10 @@ module.exports =
 		.setDescription("Spin the lucky wheel!")
 	)
 	.addSubcommand(subcommand => subcommand
+		.setName("crash")
+		.setDescription("Samir you are breaking the mult!")
+	)
+	.addSubcommand(subcommand => subcommand
 		.setName("poker")
 		.setDescription("Casino Hold'em.")
 		.addIntegerOption(option => option
