@@ -68,18 +68,6 @@ async function main(interaction, bet, userStats, UID)
 
 			if(button.customId === "b_yes")  return collector.stop("yes")
 			if(button.customId === "b_no")  return collector.stop("no")
-
-            if(random.bool(0.2))        mult = 0
-            else if(random.bool(0.3))   mult -= random.integer(1, 10) / 10
-            else                        mult += random.integer(1, 10) / 10
-
-            if(mult <= 0) return collector.stop("lost")
-            else
-            {
-                embed.setDescription(`Current multiplier: **${mult}** \n-# You get 30s to play`)
-
-                interaction.editReply({ embeds: [embed], components:[row] })
-            }
 		})
 
 		collector.on("end", (collected, reason) =>
