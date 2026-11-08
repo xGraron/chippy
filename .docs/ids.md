@@ -60,6 +60,7 @@
 11: War
 12: Lucky Seven
 13: Crash
+14: Rage
 
 #Commands
 Explanation: Commands relating to
