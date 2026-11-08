@@ -97,7 +97,7 @@ async function main(interaction, bet, userStats, UID)
         .setColor(colors.red)
 		.setDescription("You lost! Didn't react in time \n-# The house gives you 5s")
 
-		xh.achievements(userStats, userStats.chips, false, 13, 0)
+		xh.achievements(userStats, userStats.chips, false, 14, 0)
 	}
 	else if(press === "won")
 	{
@@ -108,7 +108,7 @@ async function main(interaction, bet, userStats, UID)
 		userStats.chips += 50
 
 		xh.leveling(userStats, 5)
-		xh.achievements(userStats, userStats.chips - 50, true, 13, 50)
+		xh.achievements(userStats, userStats.chips - 50, true, 14, 50)
 	}
 	else
 	{
@@ -116,7 +116,7 @@ async function main(interaction, bet, userStats, UID)
 		.setColor(colors.red)
 		.setDescription(`You lost! \nCards: ${emojis[0]}${emojis[1]}, last: ${emojis[2]}`)
 
-		xh.achievements(userStats, userStats.chips, false, 13, 0)
+		xh.achievements(userStats, userStats.chips, false, 14, 0)
 	}
 
 	end(userStats, interaction, embed, bet, UID)
