@@ -7,3 +7,4 @@
 - added new badges for baccarat
 - added referal system
 - added Crash
+- added rules for new games
