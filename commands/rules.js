@@ -27,6 +27,10 @@ const rules     =
 
     '**War** \nTry to have a higher card than the Dealer. \nYou may choose to surrender & regain half your bet \nor play for it all. \nIf you win, you double your bet. \nIf you lose, you lose it all. \n-# Face cards have a value of 10',
 
+    '**Crash** \nTry to get the highest multiplier. \nYou may choose to cash out at any time. \n"Trying your luck" attempts to increase the multiplier, \nbut has a chance to decrease it slightly or set it to 0 (Crash it) \nIf it falls to 0, you lose your bet.
+
+    '**Rage** \nTry to predict the next card \nVery simple, predict whether the next card falls between the two you already drew or not. \nGuess correctly and you win 50 Chips, \nguess wrong and you lose 50'
+
     '### Multiplayer games \nUse /challenge [game] to send a challenge request into the channel.',
 
     '**Coinflip** \nThe challenged player gets to call "heads" or "tails" \nIf the coin lands on their side, they win your wager. \nIf it lands on the other, you win theirs.',
