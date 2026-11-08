@@ -9,10 +9,10 @@ const ah	= require('../handlers/assetHandler.js')
 const colors = ah.colors()
 const values =
 {
-	"Ace": 	2,
-	"Jack": 10,
-	"Queen": 10,
-	"King": 10
+	"Ace": 	1,
+	"Jack": 11,
+	"Queen": 12,
+	"King": 13
 }
 
 const secretcard	= ah.cards(true)
@@ -31,7 +31,7 @@ async function main(interaction, bet, userStats, UID)
     {
         const drawn = await ch.draw(UID)
 
-        emojis.push(drawn.emojis)
+        emojis.push(drawn.emoji)
         points.push(values[drawn.card] || drawn.card)
     }
 
@@ -66,6 +66,16 @@ async function main(interaction, bet, userStats, UID)
             //game logic
             button.deferUpdate()
 
+			const third = await ch.draw(UID)
+			const val	= values[third.card] || third.card
+
+			emojis.push(third.emoji)
+
+			dev.log(third)
+
+			if(val < points[0] && val > points[1])		between = true
+			else if(val > points[0] && val < points[1]) between = true
+
 			if(button.customId === "b_yes")  return collector.stop("yes")
 			if(button.customId === "b_no")  return collector.stop("no")
 		})
@@ -73,15 +83,33 @@ async function main(interaction, bet, userStats, UID)
 		collector.on("end", (collected, reason) =>
 		{
 			if(resolved) return
-
 			resolved = true
-			resolve(null)
+
+			if(between && reason === "yes") 		resolve("won")
+			else if(!between && reason === "no")	resolve("won")
+			else									resolve("lost")
 		})
 	})
 
 	if(!press)
 	{
-        //loss
+        embed
+        .setColor(colors.red)
+		.setDescription("You lost! Didn't react in time \n-# The house gives you 5s")
+	}
+	else if(press === "won")
+	{
+		embed
+		.setColor(colors.green)
+		.setDescription(`You won! \nCards: ${emojis[0]}${emojis[1]}, last: ${emojis[2]}`)
+
+		userStats.chips += 50
+	}
+	else
+	{
+		embed
+		.setColor(colors.red)
+		.setDescription(`You lost! \nCards: ${emojis[0]}${emojis[1]}, last: ${emojis[2]}`)
 	}
 
 	end(userStats, interaction, embed, bet, UID)
