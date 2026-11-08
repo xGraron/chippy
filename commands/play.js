@@ -89,6 +89,33 @@ module.exports =
 			.setRequired(false)
 		)
 	)
+		.addSubcommand(subcommand => subcommand
+		.setName("poker")
+		.setDescription("Casino Hold'em.")
+		.addIntegerOption(option => option
+			.setName("bet")
+			.setDescription("Your bet")
+			.setRequired(false)
+		)
+	)
+	.addSubcommand(subcommand => subcommand
+		.setName("cardrush")
+		.setDescription("Can't stop now!")
+		.addIntegerOption(option => option
+			.setName("bet")
+			.setDescription("Your bet")
+			.setRequired(false)
+		)
+	)
+	.addSubcommand(subcommand => subcommand
+		.setName("diceroll")
+		.setDescription("Even, Odd, Anything?")
+		.addIntegerOption(option => option
+			.setName("bet")
+			.setDescription("Your bet")
+			.setRequired(false)
+		)
+	)
 	.addSubcommand(subcommand => subcommand
 		.setName("coinflip")
 		.setDescription("Easy money, right?")
@@ -110,31 +137,8 @@ module.exports =
 		.setDescription("Samir you are breaking the mult!")
 	)
 	.addSubcommand(subcommand => subcommand
-		.setName("poker")
-		.setDescription("Casino Hold'em.")
-		.addIntegerOption(option => option
-			.setName("bet")
-			.setDescription("Your bet")
-			.setRequired(false)
-		)
-	)
-	.addSubcommand(subcommand => subcommand 
-		.setName("cardrush")
-		.setDescription("Can't stop now!")
-		.addIntegerOption(option => option
-			.setName("bet")
-			.setDescription("Your bet")
-			.setRequired(false)
-		)
-	)
-	.addSubcommand(subcommand => subcommand
-		.setName("diceroll")
-		.setDescription("Even, Odd, Anything?")
-		.addIntegerOption(option => option
-			.setName("bet")
-			.setDescription("Your bet")
-			.setRequired(false)
-		)
+		.setName("rage")
+		.setDescription("Calm down man")
 	)
 	.setContexts(
 		InteractionContextType.Guild,
