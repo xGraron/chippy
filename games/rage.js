@@ -103,7 +103,7 @@ async function main(interaction, bet, userStats, UID)
 		.setColor(colors.green)
 		.setDescription(`You won! \nCards: ${emojis[0]}${emojis[1]}, last: ${emojis[2]}`)
 
-		userStats.chips += 50
+		userStats.chips += 100
 
 		xh.leveling(userStats, 5)
 		xh.achievements(userStats, userStats.chips - 50, true, 14, 50)
