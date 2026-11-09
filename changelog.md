@@ -1,12 +1,10 @@
-- fixed missing asset for badge 69
-- fixed badge 67 not being applied
-- added /stats
-- Diceroll now grants you 10xp
-- Added /challange coinflip
-- Added /challenge russian
-- added new game "war"
-- fixed missing asset for badge 702
-- fixed dice being able to roll 0 
-- fixed bug causing leaderboard to stop compromise save data 
-- added companion system
-- added contributers to readme
+- added new badges for war
+- added war 1v1
+- added rules for war
+- added rules for all challenge games
+- added Lucky 7
+- added highroller system
+- added new badges for baccarat
+- added referal system
+- added Crash
+- added rules for new games

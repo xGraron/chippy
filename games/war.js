@@ -101,7 +101,7 @@ async function main(interaction, bet, userStats, UID)
         .setDescription(`You didn't react in time \n\n-# *You've lost ${bet} Chips*`)
         .setFooter({ text: `The house gives you five seconds` });
 
-        await xh.achievements(userStats, userStats.chips + 50, false, 1, 0)
+        await xh.achievements(userStats, userStats.chips + 50, false, 11, 0)
         return end(userStats, interaction, embed, bet, UID)
     }
 

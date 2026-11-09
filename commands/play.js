@@ -89,19 +89,7 @@ module.exports =
 			.setRequired(false)
 		)
 	)
-	.addSubcommand(subcommand => subcommand
-		.setName("coinflip")
-		.setDescription("Easy money, right?")
-	)
-	.addSubcommand(subcommand => subcommand
-		.setName("war")
-		.setDescription("Fight the casino!")
-	)
-	.addSubcommand(subcommand => subcommand
-		.setName("slots")
-		.setDescription("Pretty lights!")
-	)	
-	.addSubcommand(subcommand => subcommand
+		.addSubcommand(subcommand => subcommand
 		.setName("poker")
 		.setDescription("Casino Hold'em.")
 		.addIntegerOption(option => option
@@ -110,7 +98,7 @@ module.exports =
 			.setRequired(false)
 		)
 	)
-	.addSubcommand(subcommand => subcommand 
+	.addSubcommand(subcommand => subcommand
 		.setName("cardrush")
 		.setDescription("Can't stop now!")
 		.addIntegerOption(option => option
@@ -127,6 +115,30 @@ module.exports =
 			.setDescription("Your bet")
 			.setRequired(false)
 		)
+	)
+	.addSubcommand(subcommand => subcommand
+		.setName("coinflip")
+		.setDescription("Easy money, right?")
+	)
+	.addSubcommand(subcommand => subcommand
+		.setName("war")
+		.setDescription("Fight the casino!")
+	)
+	.addSubcommand(subcommand => subcommand
+		.setName("slots")
+		.setDescription("Pretty lights!")
+	)	
+	.addSubcommand(subcommand => subcommand
+		.setName("luckyseven")
+		.setDescription("Spin the lucky wheel!")
+	)
+	.addSubcommand(subcommand => subcommand
+		.setName("crash")
+		.setDescription("Samir you are breaking the mult!")
+	)
+	.addSubcommand(subcommand => subcommand
+		.setName("rage")
+		.setDescription("Calm down man")
 	)
 	.setContexts(
 		InteractionContextType.Guild,

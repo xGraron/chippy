@@ -16,6 +16,9 @@
 202:    "My Head Is Spinning 🥈",           "Play 25 games of 'Roulette'" 
 203:    "My Head Is Spinning 🥇",           "Play 100 games of 'Roulette'" 
 204:    "Go Big Or Go Home",                "Put in the maximum bet & lose in 'Roulette'" 
+301:    "Two numba niineess 🥉",            "Play 5 games of 'Baccarat'" 
+302:    "Two numba niineess 🥈",            "Play 25 games of 'Baccarat'" 
+303:    "Two numba niineess 🥇",            "Play 100 games of 'Baccarat'" 
 401:    "Basic Strategy, Trust Me 🥉",      "Play 5 games of 'Blackjack'" 
 402:    "Basic Strategy, Trust Me 🥈",      "Play 25 games of 'Blackjack'" 
 403:    "Basic Strategy, Trust Me 🥇",      "Play 100 games of 'Blackjack'" 
@@ -55,6 +58,9 @@
 9: Card Rush
 10: Dice Roll
 11: War
+12: Lucky Seven
+13: Crash
+14: Rage
 
 #Commands
 Explanation: Commands relating to

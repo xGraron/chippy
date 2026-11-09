@@ -52,7 +52,7 @@ async function main(interaction, bet, userStats)
 			userStats.active_game 	= false
 
 			xh.leveling(userStats, xp_rew)
-			xh.achievements(userStats, userStats - reward, true, 7, reward)
+			xh.achievements(userStats, userStats.chips - reward, true, 7, reward)
 		}
     	else if(reward > 0)
     	{
@@ -66,7 +66,7 @@ async function main(interaction, bet, userStats)
     		userStats.active_game 	= false
 
     		xh.leveling(userStats, xp_rew)
-    		xh.achievements(userStats, userStats - reward, true, 7, reward)
+    		xh.achievements(userStats, userStats.chips - reward, true, 7, reward)
     	}
     	else 
     	{
@@ -76,7 +76,7 @@ async function main(interaction, bet, userStats)
 
     		userStats.active_game 	= false
 
-    		xh.achievements(userStats, userStats - reward, false, 7, reward)
+    		xh.achievements(userStats, userStats.chips - reward, false, 7, reward)
     	}
 
 		end(userStats, interaction, embed, bet, interaction.user.id)
