@@ -70,7 +70,8 @@ async function main(interaction, bet, userStats, UID)
 			else 			xh.achievements(userStats, userStats.chips, false, 13, 0)
 
 			resolved = true
-			resolve(null)
+			if(reason === "time") 	resolve(null)
+            else					resolve("played")
 		})
     })
 
