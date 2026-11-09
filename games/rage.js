@@ -71,8 +71,6 @@ async function main(interaction, bet, userStats, UID)
 
 			emojis.push(third.emoji)
 
-			dev.log(third)
-
 			if(val < points[0] && val > points[1])		between = true
 			else if(val > points[0] && val < points[1]) between = true
 
