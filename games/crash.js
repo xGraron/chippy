@@ -63,7 +63,7 @@ async function main(interaction, bet, userStats, UID)
 		{
             reward = Math.floor(bet * mult)
 
-            if(reason === "out") 	embed.setDescription(`Cashed out with **x${mult} and won ${reward}`).setColor(colors.green)
+            if(reason === "out") 	embed.setDescription(`Cashed out with **x${mult}** and won ${reward}`).setColor(colors.green)
             else					embed.setDescription(`You got to greedy and got nothing`).setColor(colors.red)
 
 			if(reward > 50) xh.achievements(userStats, userStats.chips, true, 13, reward)
