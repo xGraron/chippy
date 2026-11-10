@@ -54,7 +54,7 @@ function leveling(userStats, reward)
 
 function achievements(userStats, pre, won, gameID, reward, bet, additional)
 {
-	gameID = Number(gameID)
+	if(gameID !== 0) gameID = Number(gameID)
 
 	if(!userStats.games[gameID])
 	{
