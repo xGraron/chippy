@@ -1,1 +1,5 @@
-
+- updated /rules
+- fixed a bug causing /rules not to load
+- fixed a bug causing /me not to load
+- fixed a bug causing /me to show a longer bar than intended
+- fixed incorrect description when timer ends on "Crash"
