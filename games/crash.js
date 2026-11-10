@@ -75,7 +75,7 @@ async function main(interaction, bet, userStats, UID)
 		})
     })
 
-	if(!press) embed.setDescription(`You took too long and got nothing`).setColor(colors.red)
+	if(!press) embed.setDescription(`You took too long and got forced to cash out with **x${mult}**`).setColor(colors.red)
 
 	end(userStats, interaction, embed, reward)
 }
