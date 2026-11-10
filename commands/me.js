@@ -29,7 +29,7 @@ module.exports =
 
         let badge_str   = ""
         let bar         = ""
-        let remaining = 10
+        let remaining   = 10
 
         for(const badge of userStats.achievements)
         {
@@ -49,10 +49,7 @@ module.exports =
         const embed = new EmbedBuilder()
         .setTitle(`About you:`)
         .setThumbnail(thumb)
-        .setDescription(`**Chips:** ${chips} \n**Level:** ${level} \n-# Next level: ${bar}`)
-        .addFields(
-            { name: "Badges", value: badge_str, inline: true },
-        )
+        .setDescription(`**Chips:** ${chips} \n**Level:** ${level} \n-# Next level: ${bar} \n\n${badge_str}`)
 
         if(userStats.dead) embed.setFooter({ text: `Died` }).setTimestamp(new Date(userStats.lastrussian));
 
