@@ -41,7 +41,7 @@ module.exports =
 
         Object.entries(userStats.games).forEach(game =>
         {
-            const named = available[game[0]]
+            const named = available[game[0]] || "error"
             const stats = game[1]
 
             embed.addFields({ name: named, value: `${stats.won}/${stats.played} games played were won \nWon a total of ${stats.earned} Chips`})
