@@ -50,8 +50,8 @@ function leveling(userStats, reward)
 		xpreq	= 20 * (userStats.level * userStats.level) - userStats.xp
 	}
 
-	if(userStats.level === 10) achievements(userStats, userStats.chips, true, 0, 0, 0, 21)
-	if(userStats.level === 100) achievements(userStats, userStats.chips, true, 0, 0, 0, 22)
+	if(userStats.level >= 10) achievements(userStats, userStats.chips, true, 0, 0, 0, 21)
+	if(userStats.level >= 100) achievements(userStats, userStats.chips, true, 0, 0, 0, 22)
 
 	dh.userSave(userStats)
 }
