@@ -42,9 +42,13 @@ function leveling(userStats, reward)
 {
 	userStats.xp = userStats.xp + reward
 	
-	const xpreq	= 20 * (userStats.level * userStats.level) - userStats.xp
+	let xpreq	= 20 * (userStats.level * userStats.level) - userStats.xp
 
-	if(xpreq <= 0) userStats.level ++;
+	while(xpreq <= 0)
+	{
+		userStats.level ++;
+		xpreq	= 20 * (userStats.level * userStats.level) - userStats.xp
+	}
 
 	if(userStats.level === 10) achievements(userStats, userStats.chips, true, 0, 0, 0, 21)
 	if(userStats.level === 100) achievements(userStats, userStats.chips, true, 0, 0, 0, 22)
