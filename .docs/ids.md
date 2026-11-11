@@ -61,6 +61,7 @@
 12: Lucky Seven
 13: Crash
 14: Rage
+15: Royal Poker
 
 #Commands
 Explanation: Commands relating to

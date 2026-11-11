@@ -24,19 +24,6 @@ const values =
 	"king": 	13
 }
 
-const multipliers =
-{
-	"Royal Flush": 		100,
-	"Straight Flush": 	20,
-	"Four Of A Kind": 	15,
-	"Full House": 		10,
-	"Flush":  			8,
-	"Straight":  		5,
-	"Three Of A Kind":  3,
-	"Two Pair": 		2,
-	"Pair":             1,
-}
-
 const secretcard	= ah.cards(true)
 
 async function main(interaction, bet, userStats, UID)
@@ -158,20 +145,20 @@ async function main(interaction, bet, userStats, UID)
 		.setDescription(`Dealer: ${dealer_hand_str} *(${final.hands[1]})*, You: ${hand_str} *(${final.hands[0]})* \n Community cards: ${community_hand_str} \n\n-# *You've lost ${bet} Chips*`)
 		.setFooter({ text: `Calling isn't always a good move!` });
 
-		await xh.achievements(userStats, userStats.chips + (bet * 3), false, 8, 0)
+		await xh.achievements(userStats, userStats.chips + (bet * 3), false, 15, 0)
 	}
 	else if(final.won === 1) //won
 	{
-		reward = (multipliers[final.hands[0]] * bet) + (bet * 2)
+		reward = bet * 2
 
 		embed
 		.setColor('#1aa32a')
 		.setTitle(`You won!`)
 		.setDescription(`Dealer: ${dealer_hand_str} *(${final.hands[1]})*, You: ${hand_str} *(${final.hands[0]})* \n Community cards: ${community_hand_str} \n\n-# *You won ${reward} Chips*`)
 
-		userStats.chips += reward + (bet * 3)
+		userStats.chips += reward
 		await xh.leveling(userStats, xp_rew)
-		await xh.achievements(userStats, userStats.chips - reward, true, 8, reward, bet, final.hands[0])
+		await xh.achievements(userStats, userStats.chips - reward, true, 15, reward, bet, final.hands[0])
 	}
 	else if(final.won === 2) //tied
 	{
@@ -181,18 +168,8 @@ async function main(interaction, bet, userStats, UID)
 		.setDescription(`Dealer: ${dealer_hand_str} *(${final.hands[1]})*, You: ${hand_str} *(${final.hands[0]})* \n Community cards: ${community_hand_str} \n\n-# *You didn't lose any Chips*`)
 		.setFooter({ text: `Lucky...` });
 
-		userStats.chips += (bet)
-		await xh.achievements(userStats, userStats.chips, false, 8, 0)
-	}
-	else //lost, didnt qualify
-	{
-		embed
-		.setColor('#e80400')
-		.setTitle(`You didn't qualify!`)
-		.setDescription(`Dealer: ${dealer_hand_str} *(${final.hands[1]})*, You: ${hand_str} *(${final.hands[0]})* \n Community cards: ${community_hand_str} \n\n-# *You've lost ${bet} Chips*`)
-		.setFooter({ text: `Unlucky...` });
-
-		await xh.achievements(userStats, userStats.chips + (bet * 3), false, 8, 0)
+		userStats.chips += bet
+		await xh.achievements(userStats, userStats.chips, false, 15, 0)
 	}
 
 	return end(userStats, interaction, embed, bet, UID)
@@ -233,13 +210,6 @@ async function wincon(interaction, player_cards, dealer_cards)
 	const playerFinal = await ch.calculate(player_cards, values)
 	const dealerFinal = await ch.calculate(dealer_cards, values)
 
-	const qualified = qualifier(playerFinal)
-
-	if(!qualified)
-	{
-		return { won: 3, hands: [playerFinal.hand, dealerFinal.hand] };
-	}
-
 	if(playerFinal.rank > dealerFinal.rank) return { won: 1, hands: [playerFinal.hand, dealerFinal.hand] }
 	if(playerFinal.rank	< dealerFinal.rank) return { won: 0, hands: [playerFinal.hand, dealerFinal.hand] }
 
@@ -257,12 +227,6 @@ async function wincon(interaction, player_cards, dealer_cards)
 	}
 
 	return { won: 2, hands: [playerFinal.hand, dealerFinal.hand] }
-}
-
-function qualifier(final)
-{
-	if (final.rank === 1) 	return false;
-	else					return true;
 }
 
 
