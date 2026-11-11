@@ -158,7 +158,7 @@ async function main(interaction, bet, userStats, UID)
 
 		userStats.chips += reward
 		await xh.leveling(userStats, xp_rew)
-		await xh.achievements(userStats, userStats.chips - reward, true, 15, reward, bet, final.hands[0])
+		await xh.achievements(userStats, userStats.chips - reward, true, 15, reward, bet)
 	}
 	else if(final.won === 2) //tied
 	{
