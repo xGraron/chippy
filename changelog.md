@@ -1,1 +1,2 @@
 - fixed a bug causing users not being able to have multiple level-ups at once
+- /play poker changed to /play poker regular (for new poker games)
