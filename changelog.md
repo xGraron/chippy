@@ -1,2 +1,2 @@
-- fixed a bug causing users not being able to have multiple level-ups at once
+- fixed a bug causing level 100 badge not being applied
 - /play poker changed to /play poker regular (for new poker games)
