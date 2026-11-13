@@ -62,6 +62,7 @@
 13: Crash
 14: Rage
 15: Royal Poker
+16: Three Card Poker
 
 #Commands
 Explanation: Commands relating to

@@ -96,18 +96,27 @@ module.exports =
 			.setName("regular")
 			.setDescription("Casino Hold'em")
 			.addIntegerOption(option => option
-			.setName("bet")
-			.setDescription("Your bet")
-			.setRequired(false)
+				.setName("bet")
+				.setDescription("Your bet")
+				.setRequired(false)
 			)
 		)
 		.addSubcommand(subcommand => subcommand
 			.setName("royal")
 			.setDescription("Your majesty")
 			.addIntegerOption(option => option
-			.setName("bet")
-			.setDescription("Your bet")
-			.setRequired(false)
+				.setName("bet")
+				.setDescription("Your bet")
+				.setRequired(false)
+			)
+		)
+		.addSubcommand(subcommand => subcommand
+			.setName("threecard")
+			.setDescription("Three cards, one chance")
+			.addIntegerOption(option => option
+				.setName("bet")
+				.setDescription("Your bet")
+				.setRequired(false)
 			)
 		)
 	)
