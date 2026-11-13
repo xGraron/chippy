@@ -122,7 +122,7 @@ async function main(interaction, bet, userStats, UID)
 
 		userStats.chips += Math.floor(bet / 2)
 
-		await xh.achievements(userStats, userStats.chips + bet, false, 8, 0)
+		await xh.achievements(userStats, userStats.chips + bet, false, 15, 0)
 		return end(userStats, interaction, embed, bet, UID)
 	}
 
