@@ -162,6 +162,10 @@ module.exports =
 		.setName("rage")
 		.setDescription("Calm down man")
 	)
+	.addSubcommand(subcommand => subcommand
+		.setName("limbo")
+		.setDescription("Sir get down")
+	)
 	.setContexts(
 		InteractionContextType.Guild,
 		InteractionContextType.BotDM,
