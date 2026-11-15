@@ -63,6 +63,7 @@
 14: Rage
 15: Royal Poker
 16: Three Card Poker
+17: Pinapple Poker
 
 #Commands
 Explanation: Commands relating to

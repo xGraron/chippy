@@ -119,6 +119,15 @@ module.exports =
 				.setRequired(false)
 			)
 		)
+		.addSubcommand(subcommand => subcommand
+			.setName("pinapple")
+			.setDescription("That weird with thing the pinapple")
+			.addIntegerOption(option => option
+				.setName("bet")
+				.setDescription("Your bet")
+				.setRequired(false)
+			)
+		)
 	)
 	.addSubcommand(subcommand => subcommand
 		.setName("cardrush")
