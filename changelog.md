@@ -4,3 +4,4 @@
 - added three card poker
 - added limbo
 - changed beg timer to a minute
+- added pinapple poker
