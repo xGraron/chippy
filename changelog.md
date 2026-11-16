@@ -5,3 +5,4 @@
 - added limbo
 - changed beg timer to a minute
 - added pinapple poker
+- fixed poker paying too much
