@@ -115,7 +115,7 @@ async function main(interaction, bet, userStats, UID)
 
 			userStats.chips += Math.floor(bet / 2)
 
-			await xh.achievements(userStats, userStats.chips + bet, false, 16, 0)
+			await xh.achievements(userStats, userStats.chips + bet, false, 8, 0)
 			return end(userStats, interaction, embed, bet, UID)
 		}
 
@@ -131,7 +131,7 @@ async function main(interaction, bet, userStats, UID)
 			.setDescription(`Dealer: ${dealer_hand_str} *(${final.hands[1]})*, You: ${hand_str} *(${final.hands[0]})*`)
 			.setFooter({ text: `Calling isn't always a good move!` });
 
-			await xh.achievements(userStats, userStats.chips + (bet * 3), false, 16, 0)
+			await xh.achievements(userStats, userStats.chips + (bet * 3), false, 8, 0)
 		}
 		else if(final.won === 1) //won
 		{
@@ -144,7 +144,7 @@ async function main(interaction, bet, userStats, UID)
 
 			userStats.chips += reward
 			await xh.leveling(userStats, xp_rew)
-			await xh.achievements(userStats, userStats.chips - reward, true, 16, reward, bet)
+			await xh.achievements(userStats, userStats.chips - reward, true, 8, reward, bet)
 		}
 		else if(final.won === 2) //tied
 		{
@@ -155,7 +155,7 @@ async function main(interaction, bet, userStats, UID)
 			.setFooter({ text: `Lucky...` });
 
 			userStats.chips += bet
-			await xh.achievements(userStats, userStats.chips, false, 16, 0)
+			await xh.achievements(userStats, userStats.chips, false, 8, 0)
 		}
 
 		return end(userStats, interaction, embed, bet, UID)
