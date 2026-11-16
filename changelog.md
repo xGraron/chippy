@@ -3,3 +3,4 @@
 - added royal poker
 - added three card poker
 - added limbo
+- changed beg timer to a minute
