@@ -19,9 +19,7 @@ const available =
     12: "Lucky Seven",
     13: "Crash",
     14: "Rage",
-    15: "Royal Poker",
-    16: "Three Card Poker",
-    17: "Pinapple Poker",
+    15: "Limbo",
 }
 
 module.exports =

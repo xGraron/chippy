@@ -66,12 +66,16 @@ async function main(interaction, bet, userStats, UID)
 				embed
 				.setColor(colors.orange)
 				.setDescription(`You took too long and have been cashed out at **x${guess}** and won ${reward} Chips \n-# The max was x${mult}!`)
+
+				xh.achievements(userStats, userStats.chips - reward, true, 15, reward)
 			}
 			if(reason === "greed")
 			{
 				embed
 				.setColor(colors.red)
 				.setDescription("You greedy person! That's above the limit. \nYou lose your bet.")
+
+				xh.achievements(userStats, userStats.chips , false, 15, 50)
 			}
 			if(reason === "cashout")
 			{
@@ -80,6 +84,8 @@ async function main(interaction, bet, userStats, UID)
 				embed
 				.setColor(colors.green)
 				.setDescription(`Successfully cashed out at **x${guess}** and won ${reward} Chips. \n-# The max was x${mult}!`)
+
+				xh.achievements(userStats, userStats.chips - reward, true, 15, reward)
 			}
 
 			resolve(null)
