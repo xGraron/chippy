@@ -162,14 +162,15 @@ async function main(interaction, bet, userStats, UID)
 	}
 	else if(final.won === 1) //won
 	{
-		reward = (multipliers[final.hands[0]] * bet) + (bet * 2)
+		reward = (multipliers[final.hands[0]] * bet) + bet
 
 		embed
 		.setColor('#1aa32a')
 		.setTitle(`You won!`)
 		.setDescription(`Dealer: ${dealer_hand_str} *(${final.hands[1]})*, You: ${hand_str} *(${final.hands[0]})* \n Community cards: ${community_hand_str} \n\n-# *You won ${reward} Chips*`)
 
-		userStats.chips += reward + (bet * 3)
+		userStats.chips += reward
+
 		await xh.leveling(userStats, xp_rew)
 		await xh.achievements(userStats, userStats.chips - reward, true, 8, reward, bet, final.hands[0])
 	}
