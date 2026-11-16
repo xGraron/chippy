@@ -128,7 +128,7 @@ async function main(interaction, bet, userStats, UID)
 	if(folded)
 	{
 		embed
-		.setColor('#e80400')
+		.setColor(colors.red)
 		.setTitle(`You folded!`)
 		.setDescription(`Probably for the better.. \n\n-# *You've lost ${Math.floor(bet / 2)} Chips*`)
 		.setFooter({ text: `Calling isn't always the best move!` });
@@ -153,7 +153,7 @@ async function main(interaction, bet, userStats, UID)
 	if(final.won === 0) //lost, dealer had better hand
 	{
 		embed
-		.setColor('#e80400')
+		.setColor(colors.red)
 		.setTitle(`You lost!`)
 		.setDescription(`Dealer: ${dealer_hand_str} *(${final.hands[1]})*, You: ${hand_str} *(${final.hands[0]})* \n Community cards: ${community_hand_str} \n\n-# *You've lost ${bet} Chips*`)
 		.setFooter({ text: `Calling isn't always a good move!` });
@@ -165,7 +165,7 @@ async function main(interaction, bet, userStats, UID)
 		reward = (multipliers[final.hands[0]] * bet) + bet
 
 		embed
-		.setColor('#1aa32a')
+		.setColor(colors.green)
 		.setTitle(`You won!`)
 		.setDescription(`Dealer: ${dealer_hand_str} *(${final.hands[1]})*, You: ${hand_str} *(${final.hands[0]})* \n Community cards: ${community_hand_str} \n\n-# *You won ${reward} Chips*`)
 
@@ -177,7 +177,7 @@ async function main(interaction, bet, userStats, UID)
 	else if(final.won === 2) //tied
 	{
 		embed
-		.setColor('#f58916')
+		.setColor(colors.orange)
 		.setTitle(`Tied!`)
 		.setDescription(`Dealer: ${dealer_hand_str} *(${final.hands[1]})*, You: ${hand_str} *(${final.hands[0]})* \n Community cards: ${community_hand_str} \n\n-# *You didn't lose any Chips*`)
 		.setFooter({ text: `Lucky...` });
@@ -188,7 +188,7 @@ async function main(interaction, bet, userStats, UID)
 	else //lost, didnt qualify
 	{
 		embed
-		.setColor('#e80400')
+		.setColor(colors.red)
 		.setTitle(`You didn't qualify!`)
 		.setDescription(`Dealer: ${dealer_hand_str} *(${final.hands[1]})*, You: ${hand_str} *(${final.hands[0]})* \n Community cards: ${community_hand_str} \n\n-# *You've lost ${bet} Chips*`)
 		.setFooter({ text: `Unlucky...` });
