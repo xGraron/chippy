@@ -54,16 +54,14 @@
 5: Horse Races
 6: Coinflip
 7: Slots
-8: Poker
+8: Poker, Royal Poker, Three Card Poker, Pinapple Poker
 9: Card Rush
 10: Dice Roll
 11: War
 12: Lucky Seven
 13: Crash
 14: Rage
-15: Royal Poker
-16: Three Card Poker
-17: Pinapple Poker
+
 
 #Commands
 Explanation: Commands relating to
