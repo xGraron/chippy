@@ -140,7 +140,7 @@ async function main(interaction, bet, userStats, UID)
 	if(final.won === 0) //lost, dealer had better hand
 	{
 		embed
-		.setColor('#e80400')
+		.setColor(colors.red)
 		.setTitle(`You lost!`)
 		.setDescription(`Dealer: ${dealer_hand_str} *(${final.hands[1]})*, You: ${hand_str} *(${final.hands[0]})* \n Community cards: ${community_hand_str} \n\n-# *You've lost ${bet} Chips*`)
 		.setFooter({ text: `Calling isn't always a good move!` });
@@ -152,7 +152,7 @@ async function main(interaction, bet, userStats, UID)
 		reward = bet * 2
 
 		embed
-		.setColor('#1aa32a')
+		.setColor(colors.green)
 		.setTitle(`You won!`)
 		.setDescription(`Dealer: ${dealer_hand_str} *(${final.hands[1]})*, You: ${hand_str} *(${final.hands[0]})* \n Community cards: ${community_hand_str} \n\n-# *You won ${reward} Chips*`)
 
@@ -163,7 +163,7 @@ async function main(interaction, bet, userStats, UID)
 	else if(final.won === 2) //tied
 	{
 		embed
-		.setColor('#f58916')
+		.setColor(colors.orange)
 		.setTitle(`Tied!`)
 		.setDescription(`Dealer: ${dealer_hand_str} *(${final.hands[1]})*, You: ${hand_str} *(${final.hands[0]})* \n Community cards: ${community_hand_str} \n\n-# *You didn't lose any Chips*`)
 		.setFooter({ text: `Lucky...` });
