@@ -193,7 +193,7 @@ async function main(interaction, bet, userStats, UID)
 		.setDescription(`Dealer: ${dealer_hand_str} *(${final.hands[1]})*, You: ${hand_str} *(${final.hands[0]})* \n Community cards: ${community_hand_str} \n\n-# *You've lost ${bet} Chips*`)
 		.setFooter({ text: `Unlucky...` });
 
-		await xh.achievements(userStats, userStats.chips + (bet * 3), false, 8, 0)
+		await xh.achievements(userStats, userStats.chips + bet, false, 8, 0)
 	}
 
 	return end(userStats, interaction, embed, bet, UID)
