@@ -10,10 +10,10 @@ const ah	= require('../handlers/assetHandler.js')
 const colors = ah.colors()
 const values =
 {
-    "Ace": 	14,
-    "Jack": 11,
-    "Queen": 12,
-    "King": 13
+    "Ace": 	2,
+    "Jack": 10,
+    "Queen": 10,
+    "King": 10
 }
 
 async function main(userStats, opponentStats, interaction, embed, bet)
