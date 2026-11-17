@@ -79,7 +79,7 @@ module.exports =
         const initial	= await interaction.editReply({ components: [container], flags: MessageFlags.IsComponentsV2 })
         const select	= await new Promise(resolve =>
         {
-            const collector = initial.createMessageComponentCollector({ time: 30_000 })
+            const collector = initial.createMessageComponentCollector({ time: 5_000 })
 
             collector.on("collect", async selection =>
             {
@@ -96,8 +96,7 @@ module.exports =
 
             collector.on("end", (collected, reason) =>
             {
-				container = new ContainerBuilder()
-				.addTextDisplayComponents((textDisplay) => textDisplay.setContent('## Rules \n Maximum bet for each game is 1.000 Chips! \n You will lose if you fail to react in time!'))
+                menu.setDisabled(true)
 
 				interaction.editReply({ components: [container], flags: MessageFlags.IsComponentsV2 })
 
