@@ -79,7 +79,7 @@ module.exports =
         const initial	= await interaction.editReply({ components: [container], flags: MessageFlags.IsComponentsV2 })
         const select	= await new Promise(resolve =>
         {
-            const collector = initial.createMessageComponentCollector({ time: 5_000 })
+            const collector = initial.createMessageComponentCollector({ time: 30_000 })
 
             collector.on("collect", async selection =>
             {
