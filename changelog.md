@@ -7,3 +7,4 @@
 - added pinapple poker
 - fixed poker paying too much
 - fixed a bug causing rules embed to display nothing once the timer ran out
+- added rules for new poker games
