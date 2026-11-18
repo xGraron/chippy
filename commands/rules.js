@@ -19,6 +19,12 @@ const rules     =
 
     '## Poker \nYour goal is to have a better Five-card Poker hand than the Dealer. \nInitially, you & the dealer get two cards and three community cards. \nYou can not see the dealers cards. \nYou may fold if you believe you dont have a good chance. \nIf you fold, you only lose half of your bet \n-# Played with a standard deck of 52 cards',
 
+    '## Pinapple Poker \nRankings are the same as poker, \nbut you get dealt three cards and must discard one.',
+
+    '## Royal Poker \nRankings are the same as poker, \nbut the deck only includes 10s, Jacks, Queens, Kings & Aces',
+
+    '## Three Card Poker \nRankings are the same as poker, \nbut you get dealt three cards & those are your hand. \nThere are no community cards! \n"Four of a kind" & "Full house" are not possible',
+
     '## Card Rush \nSame as High or Low, but you must play three rounds before being able to "Cash out" \nAfterwards, you have the option to cash out after each round, \nsecuring your winnings. \nIf you lose, you lose everything you earnt up until that point \n-# Go long enough to be cashed out automatically, granting you a huge reward',
 
     '## Coinflip \nExtremely simple, pick which side the coin will show. \nGuess right, you win 50 Chips. \nGuess wrong, you lose 50.',
