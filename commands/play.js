@@ -89,13 +89,44 @@ module.exports =
 			.setRequired(false)
 		)
 	)
-		.addSubcommand(subcommand => subcommand
+	.addSubcommandGroup(group => group
 		.setName("poker")
-		.setDescription("Casino Hold'em.")
-		.addIntegerOption(option => option
-			.setName("bet")
-			.setDescription("Your bet")
-			.setRequired(false)
+		.setDescription("Different kinds of poker")
+		.addSubcommand(subcommand => subcommand
+			.setName("regular")
+			.setDescription("Casino Hold'em")
+			.addIntegerOption(option => option
+				.setName("bet")
+				.setDescription("Your bet")
+				.setRequired(false)
+			)
+		)
+		.addSubcommand(subcommand => subcommand
+			.setName("royal")
+			.setDescription("Your majesty")
+			.addIntegerOption(option => option
+				.setName("bet")
+				.setDescription("Your bet")
+				.setRequired(false)
+			)
+		)
+		.addSubcommand(subcommand => subcommand
+			.setName("threecard")
+			.setDescription("Three cards, one chance")
+			.addIntegerOption(option => option
+				.setName("bet")
+				.setDescription("Your bet")
+				.setRequired(false)
+			)
+		)
+		.addSubcommand(subcommand => subcommand
+			.setName("pinapple")
+			.setDescription("That weird with thing the pinapple")
+			.addIntegerOption(option => option
+				.setName("bet")
+				.setDescription("Your bet")
+				.setRequired(false)
+			)
 		)
 	)
 	.addSubcommand(subcommand => subcommand
@@ -140,6 +171,10 @@ module.exports =
 		.setName("rage")
 		.setDescription("Calm down man")
 	)
+	.addSubcommand(subcommand => subcommand
+		.setName("limbo")
+		.setDescription("Sir get down")
+	)
 	.setContexts(
 		InteractionContextType.Guild,
 		InteractionContextType.BotDM,
@@ -154,9 +189,14 @@ module.exports =
 		if(bet < 0)	bet = 50 		
 
 		const chosen		= interaction.options.getString("fields") || interaction.options.getString("horse") || "none"
+		const group			= interaction.options.getSubcommandGroup()
 		const subcommand 	= interaction.options.getSubcommand();
 		const UID			= interaction.user.id
-		const game 			= require(`../games/${subcommand}.js`) 
+
+		let game;
+
+		if(group === "poker")	game = require(`../games/poker/${subcommand}.js`)
+		else					game = require(`../games/${subcommand}.js`)
 
 		if(!userStats.active_game)
 		{			

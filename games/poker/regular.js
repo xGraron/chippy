@@ -1,10 +1,10 @@
 const { EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder } 	= require("discord.js")
-const dh 	= require("../handlers/dataHandler.js")
-const eh 	= require("../handlers/errorHandler.js")
-const ch    = require('../handlers/cardHandler.js')
-const xh	= require('../handlers/xpHandler.js')
-const dev   = require('../handlers/dev.js')
-const ah	= require('../handlers/assetHandler.js')
+const dh 	= require("../../handlers/dataHandler.js")
+const eh 	= require("../../handlers/errorHandler.js")
+const ch    = require('../../handlers/cardHandler.js')
+const xh	= require('../../handlers/xpHandler.js')
+const dev   = require('../../handlers/dev.js')
+const ah	= require('../../handlers/assetHandler.js')
 
 const colors = ah.colors()
 const values = 
@@ -128,7 +128,7 @@ async function main(interaction, bet, userStats, UID)
 	if(folded)
 	{
 		embed
-		.setColor('#e80400')
+		.setColor(colors.red)
 		.setTitle(`You folded!`)
 		.setDescription(`Probably for the better.. \n\n-# *You've lost ${Math.floor(bet / 2)} Chips*`)
 		.setFooter({ text: `Calling isn't always the best move!` });
@@ -153,7 +153,7 @@ async function main(interaction, bet, userStats, UID)
 	if(final.won === 0) //lost, dealer had better hand
 	{
 		embed
-		.setColor('#e80400')
+		.setColor(colors.red)
 		.setTitle(`You lost!`)
 		.setDescription(`Dealer: ${dealer_hand_str} *(${final.hands[1]})*, You: ${hand_str} *(${final.hands[0]})* \n Community cards: ${community_hand_str} \n\n-# *You've lost ${bet} Chips*`)
 		.setFooter({ text: `Calling isn't always a good move!` });
@@ -162,21 +162,22 @@ async function main(interaction, bet, userStats, UID)
 	}
 	else if(final.won === 1) //won
 	{
-		reward = (multipliers[final.hands[0]] * bet) + (bet * 2)
+		reward = (multipliers[final.hands[0]] * bet) + bet
 
 		embed
-		.setColor('#1aa32a')
+		.setColor(colors.green)
 		.setTitle(`You won!`)
 		.setDescription(`Dealer: ${dealer_hand_str} *(${final.hands[1]})*, You: ${hand_str} *(${final.hands[0]})* \n Community cards: ${community_hand_str} \n\n-# *You won ${reward} Chips*`)
 
-		userStats.chips += reward + (bet * 3)
+		userStats.chips += reward
+
 		await xh.leveling(userStats, xp_rew)
 		await xh.achievements(userStats, userStats.chips - reward, true, 8, reward, bet, final.hands[0])
 	}
 	else if(final.won === 2) //tied
 	{
 		embed
-		.setColor('#f58916')
+		.setColor(colors.orange)
 		.setTitle(`Tied!`)
 		.setDescription(`Dealer: ${dealer_hand_str} *(${final.hands[1]})*, You: ${hand_str} *(${final.hands[0]})* \n Community cards: ${community_hand_str} \n\n-# *You didn't lose any Chips*`)
 		.setFooter({ text: `Lucky...` });
@@ -187,12 +188,12 @@ async function main(interaction, bet, userStats, UID)
 	else //lost, didnt qualify
 	{
 		embed
-		.setColor('#e80400')
+		.setColor(colors.red)
 		.setTitle(`You didn't qualify!`)
 		.setDescription(`Dealer: ${dealer_hand_str} *(${final.hands[1]})*, You: ${hand_str} *(${final.hands[0]})* \n Community cards: ${community_hand_str} \n\n-# *You've lost ${bet} Chips*`)
 		.setFooter({ text: `Unlucky...` });
 
-		await xh.achievements(userStats, userStats.chips + (bet * 3), false, 8, 0)
+		await xh.achievements(userStats, userStats.chips + bet, false, 8, 0)
 	}
 
 	return end(userStats, interaction, embed, bet, UID)

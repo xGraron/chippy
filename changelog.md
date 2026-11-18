@@ -1,5 +1,10 @@
-- updated /rules
-- fixed a bug causing /rules not to load
-- fixed a bug causing /me not to load
-- fixed a bug causing /me to show a longer bar than intended
-- fixed incorrect description when timer ends on "Crash"
+- fixed a bug causing level 100 badge not being applied
+- /play poker changed to /play poker regular (for new poker games)
+- added royal poker
+- added three card poker
+- added limbo
+- changed beg timer to a minute
+- added pinapple poker
+- fixed poker paying too much
+- fixed a bug causing rules embed to display nothing once the timer ran out
+- added rules for new poker games
