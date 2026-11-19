@@ -55,6 +55,10 @@ module.exports =
 			if(bet < 0)	bet = 50
 			if(bet > userStats.chips) 	{ return eh.error(interaction, "You don't have enough chips!") }
 
+			userStats.active_game 		= true
+			userStats.chips 			= userStats.chips - bet
+			await dh.userSave(interaction.user.id, userStats)
+
 			const embed = new EmbedBuilder()
 			.setTitle(`Them vs You`)
 			.setDescription(`${interaction.user} challenges the chat! \n**Game:** ${subcommand} \n**Wager:** ${bet} Chips`)
@@ -90,6 +94,10 @@ module.exports =
 					embed.setDescription(`Nobody wanted to play with ${interaction.user}`)
 
 					interaction.editReply({ embeds: [embed], components:[] })
+
+					userStats.active_game 		= false
+					userStats.chips 			+= bet
+					await dh.userSave(interaction.user.id, userStats)
 				}
 			})	
         }
@@ -102,12 +110,9 @@ module.exports =
 
 async function final(userStats, opponentStats, interaction, embed, bet, game)
 {
-	userStats.active_game 		= true
 	opponentStats.active_game 	= true
-	userStats.chips 			= userStats.chips - bet
 	opponentStats.chips			= opponentStats.chips - bet 
 
-	await dh.userSave(interaction.user.id, userStats)	
 	await dh.userSave(opponentStats.userID, opponentStats)
 	game.main(userStats, opponentStats, interaction, embed, bet)
 }
