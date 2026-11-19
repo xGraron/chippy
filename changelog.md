@@ -1,10 +1,1 @@
-- fixed a bug causing level 100 badge not being applied
-- /play poker changed to /play poker regular (for new poker games)
-- added royal poker
-- added three card poker
-- added limbo
-- changed beg timer to a minute
-- added pinapple poker
-- fixed poker paying too much
-- fixed a bug causing rules embed to display nothing once the timer ran out
-- added rules for new poker games
+- fixed user being able to play game and challenge simultaneously 
