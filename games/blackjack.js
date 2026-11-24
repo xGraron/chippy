@@ -27,14 +27,21 @@ async function main(interaction, bet, userStats, UID)
 
 	let reward 			= bet * 2
   	let lost  			= bet
-	var	hand			= []
-	var hand_em			= []
-	var hand_str 		= ""
-	var points			= 0
-	var dealer_hand		= []
-	var dealer_hand_em	= []
-	var dealer_hand_str	= ""
-	var dealer_points	= 0
+  	let hands =
+  	{
+		player:
+		{
+			hand: [],
+			emojis: [],
+			points: 0
+		},
+		dealer:
+		{
+			hand: [],
+			emojis: [],
+			points: 0
+		},
+	}
 	let busted			= false
     let doubled 		= false
 
@@ -42,12 +49,9 @@ async function main(interaction, bet, userStats, UID)
 
 	for(let i = 0; i < 2; i++)
 	{
-		points 			= await player_draw(UID, hand, points, hand_em)
-		dealer_points 	= await dealer_draw(UID, dealer_hand, dealer_points, dealer_hand_em)
+		hands.player = await draw(UID, hands.player)
+		hands.dealer = await draw(UID, hands.dealer)
 	}
-
-	hand_str 		= hand_em.join("")
-	dealer_hand_str = dealer_hand_em.join("")
 
 	const hit = new ButtonBuilder()
 	.setCustomId("b_hit")
@@ -67,7 +71,7 @@ async function main(interaction, bet, userStats, UID)
 	const row 	= new ActionRowBuilder().addComponents(hit, stand, double)
 	const embed = new EmbedBuilder()
 	.setTitle("Blackjack")
-	.setDescription(`Your hand: ${hand_str} *(${points}p)* \nDealer's hand: ${dealer_hand_str.split('>')[0]}>${secretcard}`)
+	.setDescription(`Your hand: ${hands.player.emojis.join("")} *(${hands.player.points}p)* \nDealer's hand: ${hands.dealer.emojis[0]}${secretcard}`)
 
 	initial = await interaction.editReply({ embeds: [embed], components:[row] })
 
@@ -102,14 +106,13 @@ async function main(interaction, bet, userStats, UID)
 				return resolved = true
 			}
 
-			if(points === 17) await xh.achievements(userStats, userStats.chips, false, 4, 0, 0, true)
+			if(hands.player.points === 17) await xh.achievements(userStats, userStats.chips, false, 4, 0, 0, true)
 
-			points 		= await player_draw(UID, hand, points, hand_em)
-			hand_str 	= hand_em.join("")
+			hands.player 		= await draw(UID, hands.player)
 
-			embed.setDescription(`Your hand: ${hand_str} *(${points}p)* \nDealer's hand: ${dealer_hand_str.split('>')[0]}>${secretcard}`)
+			embed.setDescription(`Your hand: ${hands.player.emojis.join("")} *(${hands.player.points}p)* \nDealer's hand: ${hands.dealer.emojis[0]}${secretcard}`)
 
-			if(points > 21)
+			if(hands.player.points > 21)
 			{
 				busted = true
 
@@ -144,10 +147,9 @@ async function main(interaction, bet, userStats, UID)
 	stand	.setDisabled(true)
 	double	.setDisabled(true)
 
-	while(dealer_points < 17)
+	while(hands.dealer.points < 17)
 	{
-		dealer_points	= await dealer_draw(UID, dealer_hand, dealer_points, dealer_hand_em)
-		dealer_hand_str = dealer_hand_em.join("")
+		hands.dealer	= await draw(UID, hands.dealer)
 	}
 
 	if(busted)
@@ -157,21 +159,21 @@ async function main(interaction, bet, userStats, UID)
 		embed
 		.setColor('#e80400')
 		.setTitle(`You lost!`)
-		.setDescription(`Your hand: ${hand_str} *(${points}p)* \nDealer's hand: ${dealer_hand_str} *(${dealer_points}p)* \n\n-# *You've lost ${lost} Chips*`)
+		.setDescription(`Your hand: ${hands.player.emojis.join("")} *(${hands.player.points}p)* \nDealer's hand: ${hands.dealer.emojis.join("")} *(${hands.dealer.points}p)* \n\n-# *You've lost ${lost} Chips*`)
 		.setFooter({ text: `The house always wins...` });
 
 		await xh.achievements(userStats, userStats.chips, false, 4, 0)
 
 		return end(userStats, interaction, embed, bet, UID)
 	}
-	else if(dealer_points > 21)
+	else if(hands.dealer.points > 21)
 	{
 		if(doubled) reward = reward * 2;
 
 		embed
 		.setColor('#1aa32a')
 		.setTitle(`You won!`)
-		.setDescription(`Your hand: ${hand_str} *(${points}p)* \nDealer's hand: ${dealer_hand_str} *(${dealer_points}p)* \n\n-# *You won ${reward} Chips*`)
+		.setDescription(`Your hand: ${hands.player.emojis.join("")} *(${hands.player.points}p)* \nDealer's hand: ${hands.dealer.emojis.join("")} *(${hands.dealer.points}p)* \n\n-# *You won ${reward} Chips*`)
 
 		userStats.chips = userStats.chips + reward
 		await xh.leveling(userStats, xp_rew)
@@ -179,28 +181,28 @@ async function main(interaction, bet, userStats, UID)
 
 		return end(userStats, interaction, embed, bet, UID)
 	}
-	else if(dealer_points === 21 && dealer_hand.length === 2)
+	else if(hands.dealer.points === 21 && hands.dealer.hand.length === 2)
 	{
 		if(doubled) lost = lost * 2;
 
 		embed
 		.setColor('#e80400')
 		.setTitle(`You lost!`)
-		.setDescription(`Your hand: ${hand_str} *(${points}p)* \nDealer's hand: ${dealer_hand_str} *(${dealer_points}p)* \n\n-# *You lost ${lost} Chips*`)
+		.setDescription(`Your hand: ${hands.player.emojis.join("")} *(${hands.player.points}p)* \nDealer's hand: ${hands.dealer.emojis.join("")} *(${hands.dealer.points}p)* \n\n-# *You lost ${lost} Chips*`)
 		.setFooter({ text: `Dealer has a Blackjack!` });
 
 		await xh.achievements(userStats, userStats.chips, false, 4, 0)
 
 		return end(userStats, interaction, embed, bet, UID)
 	}
-	else if(points > dealer_points)
+	else if(hands.player.points > hands.dealer.points)
 	{
 		if(doubled) reward = reward * 2;
 
 		embed
 		.setColor('#1aa32a')
 		.setTitle(`You won!`)
-		.setDescription(`Your hand: ${hand_str} *(${points}p)* \nDealer's hand: ${dealer_hand_str} *(${dealer_points}p)* \n\n-# *You won ${reward} Chips*`)
+		.setDescription(`Your hand: ${hands.player.emojis.join("")} *(${hands.player.points}p)* \nDealer's hand: ${hands.dealer.emojis.join("")} *(${hands.dealer.points}p)* \n\n-# *You won ${reward} Chips*`)
 
 		userStats.chips = userStats.chips + reward
 		await xh.leveling(userStats, xp_rew)
@@ -208,12 +210,12 @@ async function main(interaction, bet, userStats, UID)
 
 		return end(userStats, interaction, embed, bet, UID)
 	}
-	else if(points === dealer_points)
+	else if(hands.player.points === hands.dealer.points)
 	{
 		embed
 		.setColor('#f58916')
 		.setTitle(`Push!`)
-		.setDescription(`Your hand: ${hand_str} *(${points}p)* \nDealer's hand: ${dealer_hand_str} *(${dealer_points}p)* \n\n-# *You didn't lose any Chips*`)
+		.setDescription(`Your hand: ${hands.player.emojis.join("")} *(${hands.player.points}p)* \nDealer's hand: ${hands.dealer.emojis.join("")} *(${hands.dealer.points}p)* \n\n-# *You didn't lose any Chips*`)
 		.setFooter({ text: `Lucky...` });
 
 		if(doubled) userStats.chips += bet * 2
@@ -230,7 +232,7 @@ async function main(interaction, bet, userStats, UID)
 		embed
 		.setColor('#e80400')
 		.setTitle(`You lost!`)
-		.setDescription(`Your hand: ${hand_str} *(${points}p)* \nDealer's hand: ${dealer_hand_str} *(${dealer_points}p)* \n\n-# *You lost ${lost} Chips*`)
+		.setDescription(`Your hand: ${hands.player.emojis.join("")} *(${hands.player.points}p)* \nDealer's hand: ${hands.dealer.emojis.join("")} *(${hands.dealer.points}p)* \n\n-# *You lost ${lost} Chips*`)
 		.setFooter({ text: `The house always wins...` });
 
 		await xh.achievements(userStats, userStats.chips, false, 4, 0)
@@ -239,32 +241,15 @@ async function main(interaction, bet, userStats, UID)
 	}
 }
 
-async function player_draw(UID, hand, points, hand_em)
+async function draw(ID, current)
 {
-	const drawn = await ch.draw(UID)
+	const drawn = await ch.draw(ID)
 
-	hand.push(drawn.card)
-	hand_em.push(drawn.emoji)
+	current.hand.push(drawn.card)
+	current.emojis.push(drawn.emoji)
+	current.points = await calculate(current.hand)
 
-	return calculate(hand)
-}
-
-async function dealer_draw(UID, dealer_hand, dealer_points, dealer_hand_em)
-{
-	const drawn = await ch.draw(UID)
-
-	dealer_hand.push(drawn.card)
-	dealer_hand_em.push(drawn.emoji)
-
-	//this line shouldnt matter
-	//dealer point need to be equal to whatever "calculate" function returns
-	//according to what I see, thats the case
-	//so setting dealer points in here has no impact since it seems
-	//a) wrong, b) to get overwritten anyway?
-	//Edit 28/09/2026: This line does in fact matter!
-	dealer_points 	+= values[drawn.card] || drawn.card
-
-	return calculate(dealer_hand)
+	return current
 }
 
 async function calculate(hand)
