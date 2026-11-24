@@ -35,7 +35,6 @@ async function main(interaction, bet, userStats, UID)
 	var dealer_hand_em	= []
 	var dealer_hand_str	= ""
 	var dealer_points	= 0
-	var played 			= false
 	var busted			= false
     var doubled 		= false
 
