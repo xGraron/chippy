@@ -25,13 +25,13 @@ async function main(interaction, bet, userStats, UID)
 
     if(!deck.success) return eh.error(interaction, deck.reason)
 
-    var reward 			= bet * 2
-    var player          = 0
-    var player_hand_str = ""
-    var banker          = 0
-    var banker_hand_str = ""
-    var chosen          = 0
-    var outcome         = 0
+    let reward 			= bet * 2
+    let player          = 0
+    let player_hand_str = ""
+    let banker          = 0
+    let banker_hand_str = ""
+    let chosen          = 0
+    let outcome         = 0
 
     const initial_draw  = await ch.draw(UID)
     const toburn        = values[initial_draw.card] || initial_draw.card
