@@ -25,8 +25,8 @@ async function main(interaction, bet, userStats, UID)
 
 	if(!deck.success) return eh.error(interaction, deck.reason)
 
-	var reward 			= bet * 2
-  	var lost  			= bet
+	let reward 			= bet * 2
+  	let lost  			= bet
 	var	hand			= []
 	var hand_em			= []
 	var hand_str 		= ""
@@ -35,8 +35,8 @@ async function main(interaction, bet, userStats, UID)
 	var dealer_hand_em	= []
 	var dealer_hand_str	= ""
 	var dealer_points	= 0
-	var busted			= false
-    var doubled 		= false
+	let busted			= false
+    let doubled 		= false
 
 	let inital;
 
